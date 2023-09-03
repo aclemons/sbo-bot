@@ -1,6 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
-  ]
+    "config:best-practices",
+    "workarounds:typesNodeVersioning",
+    "regexManagers:githubActionsVersions",
+    ":maintainLockFilesMonthly"
+  ],
+  "rangeStrategy": "pin"
 }
