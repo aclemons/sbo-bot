@@ -1,4 +1,4 @@
-FROM node:20.5.1-slim@sha256:75404fc5825f24222276501c09944a5bee8ed04517dede5a9934f1654ca84caf
+FROM node:20.6.0-slim@sha256:e1eb4a77df4da741c10c17497cec32898692d849d4b4c5a7d214b13604b9fa7d
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 RUN npm ci --production && npm cache clean --force
