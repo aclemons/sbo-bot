@@ -30,7 +30,7 @@ export = (app: Probot) => {
     }
 
     const comment = payload.comment.body.trim();
-    const matches = comment.match("^(@sbo-bot: build) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-]+)$");
+    const matches = comment.match("^(@sbo-bot: build) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\.]+)$");
 
     if (!matches) {
       context.log.info('Comment not a build request.');
