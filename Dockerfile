@@ -1,4 +1,4 @@
-FROM aclemons/slackware:current@sha256:d6fc0ca3cd0208e12bf02d66ab6d45bfbba14bee112e728aa8f1dd541259cdcb as base
+FROM aclemons/slackware:current@sha256:ccb69d1dc63142dddf7b0943a0b4cce56f2dcc1ad02954af81cdc903e186063f as base
 
 RUN export TERSE=0 && \
     sed -i '/^WGETFLAGS/s/"$/ -q"/' /etc/slackpkg/slackpkg.conf && \
