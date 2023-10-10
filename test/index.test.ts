@@ -11,10 +11,7 @@ const issueCreatedBody = { body: "Thanks for opening this issue!" };
 const fs = require("fs");
 const path = require("path");
 
-const privateKey = fs.readFileSync(
-  path.join(__dirname, "fixtures/mock-cert.pem"),
-  "utf-8"
-);
+const privateKey = fs.readFileSync(path.join(__dirname, "fixtures/mock-cert.pem"), "utf-8");
 
 describe("My Probot app", () => {
   let probot: any;
