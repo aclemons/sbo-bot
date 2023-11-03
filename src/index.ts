@@ -31,7 +31,7 @@ export = (app: Probot) => {
 
     const comment = payload.comment.body.trim();
     const matches = comment.match(
-      '^(@sbo-bot: build) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$',
+      '^@sbo-bot: (single-build|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$',
     );
 
     if (!matches) {
@@ -39,12 +39,13 @@ export = (app: Probot) => {
       return;
     }
 
+    const action = matches[1] == 'lint' ? 'lint' : 'build';
     const build_arch = matches[3];
     const build_package = matches[4];
 
     if (build_arch) {
       context.log.info(
-        `Triggering build of package ${build_package} with requested arch: ${build_arch}.`,
+        `Triggering ${action} of package ${build_package} with requested arch: ${build_arch}.`,
       );
       const { data, status } = await axios.post(
         process.env.JENKINS_WEBHOOK,
@@ -53,6 +54,7 @@ export = (app: Probot) => {
           gh_pr: payload.issue.number,
           build_package: build_package,
           repo: `${context.repo().owner}/${context.repo().repo}`,
+          action: action,
         },
         {
           headers: {
@@ -77,7 +79,7 @@ export = (app: Probot) => {
         context.log.info('No job triggered.');
       }
     } else {
-      context.log.info(`Triggering build of package ${build_package} for both i586 and x86_64.`);
+      context.log.info(`Triggering ${action} of package ${build_package} for both i586 and x86_64.`);
 
       const { data, status } = await axios.post(
         process.env.JENKINS_WEBHOOK,
@@ -86,6 +88,7 @@ export = (app: Probot) => {
           gh_pr: payload.issue.number,
           build_package: build_package,
           repo: `${context.repo().owner}/${context.repo().repo}`,
+          action: action,
         },
         {
           headers: {
@@ -107,6 +110,7 @@ export = (app: Probot) => {
             gh_pr: payload.issue.number,
             build_package: build_package,
             repo: `${context.repo().owner}/${context.repo().repo}`,
+            action: action,
           },
           {
             headers: {
