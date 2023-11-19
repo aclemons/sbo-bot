@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.6.0
+
 FROM aclemons/slackware:current@sha256:1ca55219ea7badb7acb2a90abd7a5cf43b6c3c456336a1fe683722fbd1e5d89a as base
 
 RUN export TERSE=0 && \
