@@ -79,7 +79,9 @@ export = (app: Probot) => {
         context.log.info('No job triggered.');
       }
     } else {
-      context.log.info(`Triggering ${action} of package ${build_package} for both i586 and x86_64.`);
+      context.log.info(
+        `Triggering ${action} of package ${build_package} for both i586 and x86_64.`,
+      );
 
       const { data, status } = await axios.post(
         process.env.JENKINS_WEBHOOK,
