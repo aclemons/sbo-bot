@@ -21,7 +21,7 @@
   "dependencies": {
     "axios": "1.6.2",
     "probot": "12.3.3",
-    "smee-client": "1.2.5"
+    "smee-client": "2.0.0"
   },
   "devDependencies": {
     "@types/jest": "29.5.10",
