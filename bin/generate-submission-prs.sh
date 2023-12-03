@@ -45,7 +45,7 @@ printf 'Syncing data...\n'
 )
 
 {
-  find "$TMP_FOLDER/pending" -name '*.tar*' -maxdepth 1 -print0 | xargs -0 -I xx basename xx | sed 's/\.tar.*$//' | while read -r package ; do
+   find "$TMP_FOLDER/pending" -name '*.tar*' -type f -maxdepth 1 -printf '%T@ %p\0' | sort -zk 1n | sed -z 's/^[^ ]* //' | xargs -0 -I xx basename xx | sed 's/\.tar.*$//' | while read -r package ; do
     printf "Checking submission %s\n" "$package"
 
     checksum="$(md5sum "$TMP_FOLDER/pending"/"$package".tar* | awk '{ print $1 }')"
