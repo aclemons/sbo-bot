@@ -1,5 +1,6 @@
 locals {
   project_name = "sbobot"
+  githubapp_function_name        = "${local.project_name}-github-app"
 }
 
 resource "aws_ecr_repository" "sbo_bot" {
@@ -100,7 +101,38 @@ resource "aws_iam_role_policy_attachment" "sbo_bot_ssm" {
   role       = aws_iam_role.iam_for_sbo_bot_lambda.id
 }
 
-resource "aws_cloudwatch_log_group" "sbo_bot_lambda" {
-  name              = "/aws/lambda/${local.project_name}"
+import {
+  id = "/aws/lambda/sbobot-github-app"
+  to = aws_cloudwatch_log_group.sbo_bot_github_app_lambda
+}
+
+resource "aws_cloudwatch_log_group" "sbo_bot_github_app_lambda" {
+  name              = "/aws/lambda/${local.project_name}-github-app"
   retention_in_days = 14
+}
+
+resource "aws_lambda_function" "githubapp_lambda" {
+  function_name = local.githubapp_function_name
+  description   = "sbo-bot github app"
+  role          = aws_iam_role.iam_for_sbo_bot_lambda.arn
+
+  package_type = "Image"
+  image_uri    = "${aws_ecr_repository.sbo_bot.repository_url}:github-app-${var.docker_image_version}"
+
+  timeout = 30
+
+  architectures = ["arm64"]
+
+  depends_on = [
+    aws_cloudwatch_log_group.sbo_bot_github_app_lambda
+  ]
+}
+
+resource "aws_lambda_function_url" "github_app" {
+  function_name      = local.githubapp_function_name
+  authorization_type = "NONE"
+
+  depends_on = [
+    aws_lambda_function.githubapp_lambda
+  ]
 }
