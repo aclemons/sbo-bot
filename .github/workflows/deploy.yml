@@ -49,13 +49,13 @@ jobs:
         with:
           mask-password: 'true'
 
-      - name: Build and push imapfilter
+      - name: Build and push github-app
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
         with:
           push: true
           platforms: linux/arm64
           cache-from: type=gha,scope=githubapp
-          cache-to: type=gha,mode=max,scope=imapfilter
+          cache-to: type=gha,mode=max,scope=githubapp
           context: .
           file: Dockerfile
           provenance: false
