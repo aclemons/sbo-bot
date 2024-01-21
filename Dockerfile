@@ -1,6 +1,10 @@
 # syntax=docker/dockerfile:1.6.0@sha256:ac85f380a63b13dfcefa89046420e1781752bab202122f8f50032edf31be0021
 
+FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.7.2@sha256:2371ccb317400f534f5101141e852f3dade2433f3f13c704a25a3cda46997d37 AS aws-lambda-adapter
+
 FROM aclemons/slackware:current@sha256:5c3a0aee611140b4cb9bb7e96841f3115c84a0f5052027fcbd79dd4e7022a6ac as base
+
+COPY --from=aws-lambda-adapter --link /lambda-adapter /opt/extensions/lambda-adapter
 
 RUN export TERSE=0 && \
     sed -i '/^WGETFLAGS/s/"$/ -q"/' /etc/slackpkg/slackpkg.conf && \
@@ -33,10 +37,14 @@ RUN npm run build
 
 
 FROM base
-ENV NODE_ENV production
-ENV LOG_LEVEL debug
 WORKDIR /usr/src/app
 USER node
+
+ENV NODE_ENV production
+ENV LOG_LEVEL debug
+ENV AWS_LWA_PORT="3000"
+ENV AWS_LWA_READINESS_CHECK_PORT="3000"
+ENV AWS_LWA_READINESS_CHECK_PATH="/healthz"
 
 RUN npm config set update-notifier false
 

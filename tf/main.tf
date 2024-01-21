@@ -34,7 +34,7 @@ resource "aws_ecr_lifecycle_policy" "sbo_bot" {
             "description": "Keep that last 2 git sha tagged images (last 2 merges to master).",
             "selection": {
                 "tagStatus": "tagged",
-                "tagPrefixList": ["git"],
+                "tagPrefixList": ["github-app-git"],
                 "countType": "imageCountMoreThan",
                 "countNumber": 2
             },
