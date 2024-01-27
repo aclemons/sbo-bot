@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.6.0@sha256:ac85f380a63b13dfcefa89046420e1781752bab202122f8f50032edf31be0021
 
-FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.7.2@sha256:2371ccb317400f534f5101141e852f3dade2433f3f13c704a25a3cda46997d37 AS aws-lambda-adapter
+FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.1@sha256:330e3bd51eb8ee18a1aa0e77690d1e59fed9c138167af96d63d1710d039c8ae3 AS aws-lambda-adapter
 
 FROM aclemons/slackware:current@sha256:ed433f4924f18ba929d320ee3701b6eced23282973984f9c963f060adbc23e2c as base
 
