@@ -68,7 +68,7 @@ async def webhook(
         return
 
     mr = gitlab.projects.get(payload["project_id"], lazy=True).mergerequests.get(
-        payload["merge_request"]["id"]
+        payload["merge_request"]["iid"], lazy=True
     )
     note = mr.notes.get(payload["object_attributes"]["id"], lazy=True)
 
