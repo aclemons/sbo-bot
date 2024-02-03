@@ -24,4 +24,4 @@ docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> sbo-bot
 
 ## License
 
-[MIT](LICENSE) © 2023 Andrew Clemons
+[MIT](LICENSE) © 2023-2024 Andrew Clemons
