@@ -1,9 +1,21 @@
+import * as Sentry from '@sentry/node';
 import { Probot } from 'probot';
 import axios from 'axios';
 
-const allowedCommentors = (process.env.GITHUB_ADMINS || '').split(',');
+Sentry.init({
+  enableTracing: false,
+});
+
+const shutdown = () => {
+  console.log('Shutting down server...');
+  Sentry.flush();
+};
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
 
 export = (app: Probot) => {
+  const allowedCommentors = (process.env.GITHUB_ADMINS || '').split(',');
+
   app.on('issue_comment.created', async (context) => {
     context.log.info('Processing comment');
 
