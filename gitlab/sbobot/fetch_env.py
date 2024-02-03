@@ -5,6 +5,9 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import boto3
+import structlog
+
+log = structlog.get_logger()
 
 if TYPE_CHECKING:
     from mypy_boto3_ssm.client import SSMClient
@@ -12,6 +15,8 @@ if TYPE_CHECKING:
 
 
 def run() -> None:
+    log.info("Fetching env from ssm")
+
     session = boto3.session.Session()
 
     client = None
@@ -20,6 +25,7 @@ def run() -> None:
 
         if not client:
             msg = "Could not create SSM client"
+            log.warning(msg)
             raise ValueError(msg)
 
         response: GetParameterResultTypeDef = client.get_parameter(
@@ -28,9 +34,11 @@ def run() -> None:
         parameter: ParameterTypeDef = response.get("Parameter")
 
         if value := parameter.get("Value"):
-            with Path("/tmp/.env").open(mode="w", encoding="utf-8") as f:  # noqa: S108
+            log.info("Parameter found, writing .env file to /tmp")
+            with Path("/tmp/.env").open(mode="wt", encoding="utf-8") as f:  # noqa: S108
                 f.write(value)
         else:
+            log.info("Parameter value was empty")
             sys.exit(1)
 
     finally:

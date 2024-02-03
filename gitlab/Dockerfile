@@ -54,6 +54,6 @@ ENV AWS_LWA_READINESS_CHECK_PORT="8000"
 ENV AWS_LWA_READINESS_CHECK_PATH="/healthz"
 
 COPY --from=builder /usr/src/app/.venv .venv
-COPY --chown=python.python sbobot sbobot
+COPY --chown=python:python sbobot sbobot
 
 CMD ["/usr/src/app/lambda-entrypoint.sh"]
