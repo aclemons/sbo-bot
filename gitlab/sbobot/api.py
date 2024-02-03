@@ -85,20 +85,22 @@ async def webhook(
             arch=build_arch,
         )
 
+        request_data = {
+            "build_arch": build_arch,
+            "gl_mr": mr_id,
+            "build_package": build_package,
+            "action": action,
+            "repo": payload["project"]["path_with_namespace"],
+        }
+
         response = await http_client.post(
             url=JENKINS_WEBHOOK,
-            data={
-                "build_arch": build_arch,
-                "gl_mr": mr_id,
-                "build_package": build_package,
-                "action": action,
-                "repo": payload["target"]["path_with_namespace"],
-            },
+            data=request_data,
             headers={"token": JENKINS_WEBHOOK_SECRET},
         )
         data = await response.json()
 
-        log.info("Received jenkins response", data=data)
+        log.info("Received jenkins response", request=request_data, data=data)
 
         if (
             response.status == status.HTTP_200_OK
@@ -118,20 +120,26 @@ async def webhook(
             package=build_package,
         )
 
+        request_data = {
+            "build_arch": "i586",
+            "gl_mr": mr_id,
+            "build_package": build_package,
+            "action": action,
+            "repo": payload["project"]["path_with_namespace"],
+        }
+
         response = await http_client.post(
             url=JENKINS_WEBHOOK,
-            data={
-                "build_arch": "i586",
-                "gl_mr": mr_id,
-                "build_package": build_package,
-                "action": action,
-                "repo": payload["target"]["path_with_namespace"],
-            },
+            data=request_data,
             headers={"token": JENKINS_WEBHOOK_SECRET},
         )
         data = await response.json()
 
-        log.info("Received jenkins response for i586 trigger", data=data)
+        log.info(
+            "Received jenkins response for i586 trigger",
+            request=request_data,
+            data=data,
+        )
 
         if (
             response.status == status.HTTP_200_OK
@@ -139,20 +147,26 @@ async def webhook(
         ):
             log.info("Build (i586) was successfully scheduled.")
 
+            request_data = {
+                "build_arch": "x86_64",
+                "gl_mr": mr_id,
+                "build_package": build_package,
+                "action": action,
+                "repo": payload["project"]["path_with_namespace"],
+            }
+
             response = await http_client.post(
                 url=JENKINS_WEBHOOK,
-                data={
-                    "build_arch": "x86_64",
-                    "gl_mr": mr_id,
-                    "build_package": build_package,
-                    "action": action,
-                    "repo": payload["target"]["path_with_namespace"],
-                },
+                data=request_data,
                 headers={"token": JENKINS_WEBHOOK_SECRET},
             )
             data = await response.json()
 
-            log.info("Received jenkins response for x86_64 trigger", data=data)
+            log.info(
+                "Received jenkins response for x86_64 trigger",
+                request=request_data,
+                data=data,
+            )
 
             if (
                 response.status == status.HTTP_200_OK
