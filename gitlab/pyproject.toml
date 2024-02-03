@@ -8,9 +8,11 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "3.9.18"
 
+aiohttp = "3.9.3"
 boto3 = "1.34.34"
 fastapi = "0.109.0"
 orjson = "3.9.12"
+python-gitlab = "4.4.0"
 structlog = "24.1.0"
 uvicorn = {version = "0.27.0", extras = ["standard"]}
 yarl = "1.9.4"
@@ -36,3 +38,6 @@ ignore = [
  "ISC001", # conflicts with ruff format
 ]
 target-version = "py39"
+
+[tool.ruff.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Body", "fastapi.Depends", "fastapi.Security"]

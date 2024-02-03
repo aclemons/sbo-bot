@@ -6,6 +6,8 @@ from fastapi.responses import ORJSONResponse
 
 
 def build_uvicorn_app() -> FastAPI:
+    import gitlab
+    from aiohttp import ClientSession, ClientTimeout
     from api import healthcheck_router, webhook_router
 
     app = FastAPI(
@@ -23,6 +25,9 @@ def build_uvicorn_app() -> FastAPI:
 
     app.include_router(healthcheck_router)
     app.include_router(webhook_router)
+
+    app.state.gitlab = gitlab.Gitlab(private_token=os.environ["GITLAB_AUTH_TOKEN"])
+    app.state.aiohttp_session = ClientSession(timeout=ClientTimeout(total=10))
 
     return app
 
