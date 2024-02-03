@@ -121,6 +121,8 @@ resource "aws_lambda_function" "githubapp_lambda" {
 
   timeout = 30
 
+  publish = true
+
   architectures = ["arm64"]
 
   depends_on = [
@@ -128,11 +130,34 @@ resource "aws_lambda_function" "githubapp_lambda" {
   ]
 }
 
+resource "aws_lambda_alias" "current" {
+  name        = "current"
+  description = "Current version of lambda"
+
+  depends_on = [aws_lambda_function.githubapp_lambda]
+
+  function_name    = local.githubapp_function_name
+  function_version = aws_lambda_function.githubapp_lambda.version
+}
+
 resource "aws_lambda_function_url" "github_app" {
-  function_name      = local.githubapp_function_name
+  function_name      = aws_lambda_alias.current.arn
   authorization_type = "NONE"
 
   depends_on = [
     aws_lambda_function.githubapp_lambda
   ]
+}
+
+resource "aws_ssm_parameter" "accounts_data" {
+  name        = "/${local.project_name}/github-app/env"
+  description = "Env file for github bot"
+  type        = "SecureString"
+  tier        = "Intelligent-Tiering"
+  value       = "[]"
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [value]
+  }
 }

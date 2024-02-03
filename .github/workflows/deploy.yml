@@ -96,3 +96,11 @@ jobs:
       - name: Terraform apply
         run: terraform apply -auto-approve -input=false -var docker_image_version=${{ env.DOCKER_IMAGE_VERSION }}
         working-directory: tf
+
+      - name: Clean up old lambda versions
+        run: |
+          name="sbobot-github-app"
+          aws lambda list-versions-by-function --function-name "$name" | jq -r '.Versions | .[] | [select(.Version != "$LATEST")] | .[].Version' | tac | sed '1,10d' | tac | while read -r version ; do
+            printf 'Removing version %s of function %s\n' "$version" "$name"
+            aws lambda delete-function --function-name "$name" --qualifier "$version"
+          done

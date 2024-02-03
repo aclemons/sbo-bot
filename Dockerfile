@@ -40,6 +40,8 @@ FROM base
 WORKDIR /usr/src/app
 USER node
 
+COPY lambda-entrypoint.sh /usr/src/app/lambda-entrypoint.sh
+
 ENV NODE_ENV production
 ENV LOG_LEVEL debug
 ENV AWS_LWA_PORT="3000"
@@ -54,4 +56,4 @@ RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=builder /usr/src/app/lib lib
 
-CMD ["node_modules/.bin/probot", "run", "/usr/src/app/lib/index.js"]
+CMD ["/usr/src/app/lambda-entrypoint.sh"]
