@@ -48,7 +48,7 @@ repos:
 
       - id: prettier
         name: prettier
-        entry: npm run format
+        entry: bash -c 'cd github && npm run format'
         language: system
         pass_filenames: false
         files: ^.*\.([tj]s)$

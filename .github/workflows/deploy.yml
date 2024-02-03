@@ -56,8 +56,8 @@ jobs:
           platforms: linux/arm64/v8
           cache-from: type=gha,scope=githubapp
           cache-to: type=gha,mode=max,scope=githubapp
-          context: .
-          file: Dockerfile
+          context: github
+          file: github/Dockerfile
           provenance: false
           tags: |
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/sbobot/bot:github-app-latest
