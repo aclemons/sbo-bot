@@ -1,9 +1,7 @@
 import os
 import re
-import sys
 from typing import TYPE_CHECKING
 
-import orjson
 import structlog
 from deps import get_gitlab, get_http_client
 from fastapi import APIRouter, Depends, status
@@ -41,9 +39,7 @@ async def webhook(
     gitlab: "gitlab.Gitlab" = Depends(get_gitlab),
     http_client: "ClientSession" = Depends(get_http_client),
 ) -> None:
-    sys.stdout.buffer.write(orjson.dumps(payload, option=orjson.OPT_SORT_KEYS))
-
-    log.info("Processing comment")
+    log.info("Processing incoming webhook payload", payload=payload)
 
     if (
         payload["object_kind"] != "note"
