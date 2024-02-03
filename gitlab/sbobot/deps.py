@@ -12,4 +12,4 @@ async def get_gitlab(request: Request) -> "gitlab.Gitlab":
 
 
 async def get_http_client(request: Request) -> "ClientSession":
-    return request.app.state.gitlab
+    return request.app.state.aiohttp_session
