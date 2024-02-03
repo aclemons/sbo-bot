@@ -44,3 +44,7 @@ def run() -> None:
     finally:
         if client is not None:
             client.close()
+
+
+if __name__ == "__main__":
+    run()
