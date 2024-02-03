@@ -12,10 +12,10 @@ RUN export TERSE=0 && \
     EXIT_CODE=0 && slackpkg -default_answer=yes -batch=on upgrade-all || EXIT_CODE=$? && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     slackpkg -default_answer=yes -batch=on install brotli ca-certificates cyrus-sasl curl dcron nghttp2 perl && \
+    c_rehash && update-ca-certificates && \
     slackpkg -default_answer=yes -batch=on install nodejs libuv icu4c && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
-    touch /var/lib/slackpkg/current && \
-    c_rehash && update-ca-certificates
+    touch /var/lib/slackpkg/current
 
 RUN groupadd --gid 1000 node && \
     useradd --uid 1000 --gid node --shell /bin/bash --create-home node && \

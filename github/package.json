@@ -1,8 +1,8 @@
 {
-  "name": "sbo-bot",
+  "name": "sbo-bot-github",
   "version": "0.0.1",
   "private": true,
-  "description": "Bot for automating SBo submissions.",
+  "description": "github bot for automating SBo submissions.",
   "author": "Andrew Clemons",
   "license": "MIT",
   "homepage": "https://github.com/aclemons/sbo-bot",

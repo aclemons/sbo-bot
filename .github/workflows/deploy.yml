@@ -63,6 +63,20 @@ jobs:
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/sbobot/bot:github-app-latest
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/sbobot/bot:github-app-${{ env.DOCKER_IMAGE_VERSION }}
 
+      - name: Build and push gitlab-webhook
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
+        with:
+          push: true
+          platforms: linux/arm64/v8
+          cache-from: type=gha,scope=gitlabwebhook
+          cache-to: type=gha,mode=max,scope=gitlabwebhook
+          context: gitlab
+          file: gitlab/Dockerfile
+          provenance: false
+          tags: |
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/sbobot/bot:gitlab-webhook-latest
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/sbobot/bot:gitlab-webhook-${{ env.DOCKER_IMAGE_VERSION }}
+
       - name: Configure terraform plugin cache
         run: |
           printf 'plugin_cache_dir = "%s/.terraform.d/plugin-cache"\n' "$HOME" > ~/.terraformrc
@@ -100,6 +114,12 @@ jobs:
       - name: Clean up old lambda versions
         run: |
           name="sbobot-github-app"
+          aws lambda list-versions-by-function --function-name "$name" | jq -r '.Versions | .[] | [select(.Version != "$LATEST")] | .[].Version' | tac | sed '1,10d' | tac | while read -r version ; do
+            printf 'Removing version %s of function %s\n' "$version" "$name"
+            aws lambda delete-function --function-name "$name" --qualifier "$version"
+          done
+
+          name="sbobot-gitlab-webhook"
           aws lambda list-versions-by-function --function-name "$name" | jq -r '.Versions | .[] | [select(.Version != "$LATEST")] | .[].Version' | tac | sed '1,10d' | tac | while read -r version ; do
             printf 'Removing version %s of function %s\n' "$version" "$name"
             aws lambda delete-function --function-name "$name" --qualifier "$version"
