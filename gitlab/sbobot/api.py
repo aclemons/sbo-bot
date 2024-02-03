@@ -6,8 +6,9 @@ from typing import TYPE_CHECKING
 import orjson
 import structlog
 from deps import get_gitlab, get_http_client
-from fastapi import APIRouter, Depends, Security, status
-from fastapi.security.api_key import APIKeyHeader
+from fastapi import APIRouter, Depends, status
+
+from sbobot.auth import auth
 
 if TYPE_CHECKING:
     import gitlab
@@ -33,7 +34,7 @@ log = structlog.get_logger()
 @webhook_router.post(
     "/webhook",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Security(APIKeyHeader(name="x-gitlab-token", auto_error=True))],
+    dependencies=[Depends(auth)],
 )
 async def webhook(
     payload: dict,
