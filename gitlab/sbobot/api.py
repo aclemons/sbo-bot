@@ -95,7 +95,7 @@ async def webhook(
 
         response = await http_client.post(
             url=JENKINS_WEBHOOK,
-            data=request_data,
+            json=request_data,
             headers={"token": JENKINS_WEBHOOK_SECRET},
         )
         data = await response.json()
@@ -130,7 +130,7 @@ async def webhook(
 
         response = await http_client.post(
             url=JENKINS_WEBHOOK,
-            data=request_data,
+            json=request_data,
             headers={"token": JENKINS_WEBHOOK_SECRET},
         )
         data = await response.json()
@@ -157,7 +157,7 @@ async def webhook(
 
             response = await http_client.post(
                 url=JENKINS_WEBHOOK,
-                data=request_data,
+                json=request_data,
                 headers={"token": JENKINS_WEBHOOK_SECRET},
             )
             data = await response.json()
