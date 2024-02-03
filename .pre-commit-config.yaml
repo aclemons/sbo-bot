@@ -52,3 +52,29 @@ repos:
         language: system
         pass_filenames: false
         files: ^.*\.([tj]s)$
+
+      - id: ruff-lint
+        name: ruff-lint
+        entry: bash -c 'cd gitlab && poetry run ruff --fix --exit-non-zero-on-fix --force-exclude'
+        language: python
+        require_serial: true
+        args: []
+        types_or: [python, pyi]
+        additional_dependencies: []
+
+      - id: ruff-format
+        name: ruff-format
+        entry: bash -c 'cd gitlab && poetry run ruff format --force-exclude'
+        language: python
+        require_serial: true
+        args: []
+        types_or: [python, pyi]
+        additional_dependencies: []
+
+      - id: pyright
+        name: pyright
+        entry: bash -c 'cd gitlab && poetry run pyright'
+        language: python
+        require_serial: true
+        types_or: [python, pyi]
+        additional_dependencies: []

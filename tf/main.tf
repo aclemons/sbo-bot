@@ -128,6 +128,19 @@ resource "aws_ssm_parameter" "accounts_data" {
   }
 }
 
+resource "aws_ssm_parameter" "gitlab_webhook_env" {
+  name        = "/${local.project_name}/gitlab-webhook/env"
+  description = "Env file for gitlab webhook"
+  type        = "SecureString"
+  tier        = "Intelligent-Tiering"
+  value       = "[]"
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [value]
+  }
+}
+
 resource "aws_cloudwatch_log_group" "sbo_bot_github_app_lambda" {
   name              = "/aws/lambda/${local.project_name}-github-app"
   retention_in_days = 14
