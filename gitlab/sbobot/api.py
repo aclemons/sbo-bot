@@ -67,8 +67,9 @@ async def webhook(
         log.info("Comment not a build request.")
         return
 
+    mr_id = payload["merge_request"]["iid"]
     mr = gitlab.projects.get(payload["project_id"], lazy=True).mergerequests.get(
-        payload["merge_request"]["iid"], lazy=True
+        mr_id, lazy=True
     )
     note = mr.notes.get(payload["object_attributes"]["id"], lazy=True)
 
@@ -88,9 +89,10 @@ async def webhook(
             url=JENKINS_WEBHOOK,
             data={
                 "build_arch": build_arch,
-                "gl_mr": mr.get_id(),
-                build_package: build_package,
+                "gl_mr": mr_id,
+                "build_package": build_package,
                 "action": action,
+                "repo": payload["target"]["path_with_namespace"],
             },
             headers={"token": JENKINS_WEBHOOK_SECRET},
         )
@@ -120,9 +122,10 @@ async def webhook(
             url=JENKINS_WEBHOOK,
             data={
                 "build_arch": "i586",
-                "gl_mr": mr.get_id(),
-                build_package: build_package,
+                "gl_mr": mr_id,
+                "build_package": build_package,
                 "action": action,
+                "repo": payload["target"]["path_with_namespace"],
             },
             headers={"token": JENKINS_WEBHOOK_SECRET},
         )
@@ -140,9 +143,10 @@ async def webhook(
                 url=JENKINS_WEBHOOK,
                 data={
                     "build_arch": "x86_64",
-                    "gl_mr": mr.get_id(),
-                    build_package: build_package,
+                    "gl_mr": mr_id,
+                    "build_package": build_package,
                     "action": action,
+                    "repo": payload["target"]["path_with_namespace"],
                 },
                 headers={"token": JENKINS_WEBHOOK_SECRET},
             )
