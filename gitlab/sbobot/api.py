@@ -34,6 +34,6 @@ async def webhook(
     sys.stdout.buffer.write(orjson.dumps(payload, option=orjson.OPT_SORT_KEYS))
 
 
-@healthcheck_router.post("/healthz", status_code=status.HTTP_200_OK)
+@healthcheck_router.get("/healthz", status_code=status.HTTP_200_OK)
 async def healthz() -> str:
     return "OK"
