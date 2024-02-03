@@ -8,8 +8,8 @@ if TYPE_CHECKING:
 
 
 async def get_gitlab(request: Request) -> "gitlab.Gitlab":
-    return request.state.gitlab
+    return request.app.state.gitlab
 
 
 async def get_http_client(request: Request) -> "ClientSession":
-    return request.state.gitlab
+    return request.app.state.gitlab
