@@ -1,36 +1,28 @@
 #!/bin/bash
 
-# Open PRs for slackbuilds submitted via the form on the slackbuilds.org website.
+# Open MRs for slackbuilds submitted via the form on the slackbuilds.org website.
 
 set -e
 set -o pipefail
 
-if ! command -v go-github-apps > /dev/null 2>&1 ; then
-  printf 'This scripts needs "go-github-apps". (https://github.com/nabeken/go-github-apps)\n'
+if ! command -v glab > /dev/null 2>&1 ; then
+  printf 'This scripts needs "glab". (https://gitlab.com/gitlab-org/cli)\n'
   exit 1
 fi
 
-if ! command -v gh > /dev/null 2>&1 ; then
-  printf 'This scripts needs "gh". (https://github.com/cli/cli)\n'
-  exit 1
+if [ -z "$GITLAB_TOKEN" ] ; then
+  printf 'This scripts needs a token for gitlab in the env "GITLAB_TOKEN".\n'
+  exit 2
 fi
 
-BOT_NAME="sbo-bot[bot]"
-BOT_ID="143931017"
-
-GIT_REPO=SlackBuildsOrg/slackbuilds
-
-APP_INSTALLATION_ID=41634818
+GIT_REPO=SlackBuilds.org/slackbuilds
 
 ORIGPWD="$(pwd)"
-CWD="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
 TMP_FOLDER="$(mktemp -d)"
 trap 'cd "$ORIGPWD" && rm -rf "$TMP_FOLDER"' INT TERM HUP QUIT EXIT
 
-# shellcheck source=/dev/null
-GITHUB_TOKEN="$(source "$CWD/../.env" && GITHUB_PRIV_KEY="$(echo -e "$PRIVATE_KEY")" go-github-apps -app-id "$APP_ID" -inst-id "$APP_INSTALLATION_ID")"
-export GITHUB_TOKEN
+export GITLAB_TOKEN
 
 printf 'Syncing data...\n'
 
@@ -38,12 +30,10 @@ printf 'Syncing data...\n'
   cd "$TMP_FOLDER"
   rsync -avPSH slackbuilds.org:/slackbuilds/www/pending/ pending
 
-  gh repo clone "https://github.com/$GIT_REPO.git" slackbuilds -- --filter=tree:0
+  glab repo clone "https://gitlab.com/$GIT_REPO.git" slackbuilds -- --filter=tree:0
 
   cd slackbuilds
   git config --local commit.gpgsign false
-  git config --local user.name "$BOT_NAME"
-  git config --local user.email "$BOT_ID+$BOT_NAME@users.noreply.github.com"
 )
 
 {
@@ -119,8 +109,8 @@ printf 'Syncing data...\n'
 
     (
       cd "$TMP_FOLDER/slackbuilds"
-      git push --set-upstream "https://$BOT_NAME:$GITHUB_TOKEN@github.com/$GIT_REPO.git" HEAD
-      gh pr create --repo="$GIT_REPO" --head "$package-$checksum" --label submission-form --fill-first
+      git push --set-upstream "https://gitlab-ci-token:$GITLAB_TOKEN@gitlab.com/$GIT_REPO.git" HEAD
+      GITLAB_TOKEN="$GITLAB_TOKEN" glab mr create --source-branch "$package-$checksum" --repo="$GIT_REPO" --label submission-form --fill --yes
     )
   done
 } 3<&0
