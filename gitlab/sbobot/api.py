@@ -3,10 +3,9 @@ import re
 from typing import TYPE_CHECKING
 
 import structlog
+from auth import auth
 from deps import get_gitlab, get_http_client
 from fastapi import APIRouter, Depends, status
-
-from sbobot.auth import auth
 
 if TYPE_CHECKING:
     import gitlab

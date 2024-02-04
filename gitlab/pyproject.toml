@@ -30,8 +30,8 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
-select = ["ALL"]
-ignore = [
+lint.select = ["ALL"]
+lint.ignore = [
  "D", # disable docstring checks
  "E501", # black handles long line wrapping
  "COM812", # conflicts with ruff format
@@ -39,5 +39,5 @@ ignore = [
 ]
 target-version = "py39"
 
-[tool.ruff.flake8-bugbear]
+[tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = ["fastapi.Body", "fastapi.Depends", "fastapi.Security"]
