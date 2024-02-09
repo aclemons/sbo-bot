@@ -17,10 +17,31 @@ RUN export TERSE=0 && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
     touch /var/lib/slackpkg/current
 
+ENV EXTENSION_VERSION=1.0.273.0
+ENV EXTENSION_CHECKSUM_ARM64=e5fab2b54d46e056a26fc198290305097f1dfd45094a026ad6b84b0f7924d366afe1ea9e9142ea38d66604137c191db30332d25cdc984d6d62720b681d26b208
+ENV EXTENSION_CHECKSUM_AMD64=0338b923a89fd3dc86672f2776a04d41961a888fa4d360b7a2309ecb81f24d37c52c92ff350e184f3fbd6dce31605b7d40c77a9e4fb22fd1ba43d72fc2c35992
+
+WORKDIR /
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN export TERSE=0 && \
+    slackpkg -default_answer=yes -batch=on update && \
+    EXIT_CODE=0 && slackpkg -default_answer=yes -batch=on upgrade-all || EXIT_CODE=$? && \
+    if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
+    slackpkg -default_answer=yes -batch=on install cpio icu4c libgcrypt libgpg-error lua patchelf rpm sqlite b&& \
+    rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
+    touch /var/lib/slackpkg/current && \
+    if [ "$(uname -m)" = "x86_64" ] ; then curl -o "/tmp/lambda-insights-extension.rpm" -L "https://lambda-insights-extension.s3-ap-northeast-1.amazonaws.com/amazon_linux/lambda-insights-extension.$EXTENSION_VERSION.rpm" ; fi && \
+    if [ "$(uname -m)" = "x86_64" ] ; then echo "$EXTENSION_CHECKSUM_AMD64 /tmp/lambda-insights-extension.rpm" | sha512sum --strict --check ; fi && \
+    if [ "$(uname -m)" = "aarch64" ] ; then curl -o "/tmp/lambda-insights-extension.rpm" -L "https://lambda-insights-extension-arm64.s3-ap-northeast-1.amazonaws.com/amazon_linux/lambda-insights-extension-arm64.$EXTENSION_VERSION.rpm" ; fi && \
+    if [ "$(uname -m)" = "aarch64" ] ; then echo "$EXTENSION_CHECKSUM_ARM64 /tmp/lambda-insights-extension.rpm" | sha512sum --strict --check ; fi && \
+    rpm2cpio < "/tmp/lambda-insights-extension.rpm" | cpio -imdv && \
+    rm -f /tmp/lambda-insights-extension-arm64*.rpm && \
+    if [ "$(uname -m)" = "aarch64" ] ; then patchelf --set-interpreter /lib64/ld-linux-aarch64.so.1 /opt/extensions/cloudwatch_lambda_agent ; fi && \
+    removepkg cpio icu4c libgcrypt libgpg-error lua patchelf rpm sqlite
+
 RUN groupadd --gid 1000 python && \
     useradd --uid 1000 --gid python --shell /bin/bash --create-home python && \
     mkdir -p /usr/src/app && chown python:python /usr/src/app
-
 
 FROM base as builder
 WORKDIR /usr/src/app
