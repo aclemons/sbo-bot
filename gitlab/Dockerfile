@@ -2,7 +2,7 @@
 
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.1@sha256:330e3bd51eb8ee18a1aa0e77690d1e59fed9c138167af96d63d1710d039c8ae3 AS aws-lambda-adapter
 
-FROM aclemons/slackware:current@sha256:b8775eed7ca7f9110db12ca6e61c16b8d1d610afd3305fbba0578f354f1068fa as base
+FROM aclemons/slackware:current@sha256:d9c3f0b19bfd8762f43ef9b26e99403ba52475d0813282e11e0448280ca648cd as base
 
 COPY --from=aws-lambda-adapter --link /lambda-adapter /opt/extensions/lambda-adapter
 
