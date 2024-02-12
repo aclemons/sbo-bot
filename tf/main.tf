@@ -1,7 +1,7 @@
 locals {
-  project_name = "sbobot"
-  githubapp_function_name        = "${local.project_name}-github-app"
-  gitlabwebhook_function_name        = "${local.project_name}-gitlab-webhook"
+  project_name                = "sbobot"
+  githubapp_function_name     = "${local.project_name}-github-app"
+  gitlabwebhook_function_name = "${local.project_name}-gitlab-webhook"
 }
 
 resource "aws_ecr_repository" "sbo_bot" {
@@ -160,6 +160,12 @@ resource "aws_lambda_function" "githubapp_lambda" {
 
   architectures = ["arm64"]
 
+  environment {
+    variables = {
+      GITHUB_ADMINS = "aclemons,willysr,Ponce"
+    }
+  }
+
   depends_on = [
     aws_cloudwatch_log_group.sbo_bot_github_app_lambda
   ]
@@ -203,6 +209,12 @@ resource "aws_lambda_function" "gitlabwebhook_lambda" {
   publish = true
 
   architectures = ["arm64"]
+
+  environment {
+    variables = {
+      GITLAB_ADMINS = "clemonsa,willysr,Ponce"
+    }
+  }
 
   depends_on = [
     aws_cloudwatch_log_group.sbo_bot_gitlab_webhook_lambda
