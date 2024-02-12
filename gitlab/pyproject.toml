@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "sbo-bot-gitlab-webhook"
+name = "sbobot"
 version = "0.0.1"
 description = ""
 authors = ["Andrew Clemons <andrew.clemons@gmail.com>"]
