@@ -19,11 +19,6 @@ export = (app: Probot) => {
   app.on('issue_comment.created', async (context) => {
     context.log.info('Processing comment');
 
-    if (context.isBot) {
-      context.log.info('Ignoring bots (and self).');
-      return;
-    }
-
     const { payload } = context;
 
     if (!payload.issue.pull_request) {
@@ -32,7 +27,7 @@ export = (app: Probot) => {
     }
 
     if (!allowedCommentors.includes(payload.comment.user.login)) {
-      context.log.info('Comment was not made by an admin.');
+      context.log.info(`Comment was not made by an admin. (${payload.comment.user.login})`);
       return;
     }
 
