@@ -47,11 +47,12 @@ FROM base as builder
 WORKDIR /usr/src/app
 USER python
 
-COPY --chown=python:python pyproject.toml poetry.lock ./
+COPY --chown=python:python .python-version pyproject.toml poetry.lock ./
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # hadolint ignore=SC1091
 RUN echo "Running with python $(python3 --version)" && \
+    [[ "$(cat .python-version)" == "$(python3 --version | cut -d' ' -f2)" ]] || { echo "Python version mismatch" ; exit 1 ; } && \
     curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.2 python3 - && \
     export PATH="/home/python/.local/bin:$PATH" && \
     poetry config warnings.export false && \
@@ -59,7 +60,7 @@ RUN echo "Running with python $(python3 --version)" && \
     poetry export --no-interaction --format=requirements.txt --output requirements.txt && \
     curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.2 python3 - --uninstall && \
     rm -rf /home/python/.local && rm -rf /home/python/.config && rm -rf /home/python/.cache && \
-    rm -rf pyproject.toml poetry.lock && \
+    rm -rf .python-version pyproject.toml poetry.lock && \
     python3 -m venv .venv && \
     source .venv/bin/activate && \
     pip3 install --disable-pip-version-check --no-color --no-python-version-warning --no-cache-dir --timeout 100 --no-input -r requirements.txt && \
