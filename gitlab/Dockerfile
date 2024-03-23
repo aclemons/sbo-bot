@@ -51,12 +51,12 @@ COPY --chown=python:python pyproject.toml poetry.lock ./
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # hadolint ignore=SC1091
-RUN curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.7.1 python3 - && \
+RUN curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.2 python3 - && \
     export PATH="/home/python/.local/bin:$PATH" && \
     poetry config warnings.export false && \
     poetry self add poetry-plugin-export==1.6.0 && \
     poetry export --no-interaction --format=requirements.txt --output requirements.txt && \
-    curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.7.1 python3 - --uninstall && \
+    curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.2 python3 - --uninstall && \
     rm -rf /home/python/.local && rm -rf /home/python/.config && rm -rf /home/python/.cache && \
     rm -rf pyproject.toml poetry.lock && \
     python3 -m venv .venv && \
