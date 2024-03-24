@@ -22,7 +22,7 @@
     "@aws-sdk/client-ssm": "3.540.0",
     "@sentry/node": "7.108.0",
     "axios": "1.6.8",
-    "probot": "13.0.2"
+    "probot": "13.1.0"
   },
   "devDependencies": {
     "@types/jest": "29.5.12",
