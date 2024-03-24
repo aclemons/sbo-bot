@@ -175,17 +175,17 @@ tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "p
 
 [[package]]
 name = "boto3"
-version = "1.34.66"
+version = "1.34.69"
 description = "The AWS SDK for Python"
 optional = false
-python-versions = ">= 3.8"
+python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.34.66-py3-none-any.whl", hash = "sha256:036989117c0bc4029daaa4cf713c4ff8c227b3eac6ef0e2118eb4098c114080e"},
-    {file = "boto3-1.34.66.tar.gz", hash = "sha256:b1d6be3d5833e56198dc635ff4b428b93e5a2a2bd9bc4d94581a572a1ce97cfe"},
+    {file = "boto3-1.34.69-py3-none-any.whl", hash = "sha256:2e25ef6bd325217c2da329829478be063155897d8d3b29f31f7f23ab548519b1"},
+    {file = "boto3-1.34.69.tar.gz", hash = "sha256:898a5fed26b1351352703421d1a8b886ef2a74be6c97d5ecc92432ae01fda203"},
 ]
 
 [package.dependencies]
-botocore = ">=1.34.66,<1.35.0"
+botocore = ">=1.34.69,<1.35.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -595,13 +595,13 @@ xray = ["mypy-boto3-xray (>=1.34.0,<1.35.0)"]
 
 [[package]]
 name = "botocore"
-version = "1.34.66"
+version = "1.34.69"
 description = "Low-level, data-driven core of boto 3."
 optional = false
-python-versions = ">= 3.8"
+python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.34.66-py3-none-any.whl", hash = "sha256:92560f8fbdaa9dd221212a3d3a7609219ba0bbf308c13571674c0cda9d8f39e1"},
-    {file = "botocore-1.34.66.tar.gz", hash = "sha256:fd7d8742007c220f897cb126b8916ca0cf3724a739d4d716aa5385d7f9d8aeb1"},
+    {file = "botocore-1.34.69-py3-none-any.whl", hash = "sha256:d3802d076d4d507bf506f9845a6970ce43adc3d819dd57c2791f5c19ed6e5950"},
+    {file = "botocore-1.34.69.tar.gz", hash = "sha256:d1ab2bff3c2fd51719c2021d9fa2f30fbb9ed0a308f69e9a774ac92c8091380a"},
 ]
 
 [package.dependencies]
@@ -2078,4 +2078,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "3.9.18"
-content-hash = "a5a36eb72acebaabc58732d95408c5b8ca2c1d546bf45aef7009d3cbb04f85f6"
+content-hash = "e97d4c2e60f61f1c4947474a817d2ed88d36a495c17f21e8c43a0bb4365fa83f"
