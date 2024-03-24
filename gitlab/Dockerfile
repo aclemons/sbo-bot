@@ -13,7 +13,7 @@ RUN export TERSE=0 && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     slackpkg -default_answer=yes -batch=on install brotli ca-certificates cyrus-sasl curl dcron nghttp2 perl && \
     c_rehash && update-ca-certificates && \
-    slackpkg -default_answer=yes -batch=on install python3 && \
+    slackpkg -default_answer=yes -batch=on install python3 expat && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
     touch /var/lib/slackpkg/current
 
