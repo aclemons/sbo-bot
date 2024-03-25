@@ -1,5 +1,29 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "python-poetry/poetry",
+      "fileMatch": [
+        "gitlab/Dockerfile"
+      ],
+      "matchStrings": [
+        "POETRY_VERSION=(?<currentValue>.*) python3"
+      ]
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "python-poetry/poetry-plugin-export",
+      "fileMatch": [
+        "gitlab/Dockerfile"
+      ],
+      "matchStrings": [
+        "poetry-plugin-export==(?<currentValue>.*) &&"
+      ]
+    }
+  ],
   "extends": [
     "config:best-practices",
     ":maintainLockFilesMonthly",
