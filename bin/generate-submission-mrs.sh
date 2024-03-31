@@ -13,13 +13,14 @@ fi
 GIT_REPO=SlackBuilds.org/slackbuilds
 
 ORIGPWD="$(pwd)"
+CWD="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
 TMP_FOLDER="$(mktemp -d)"
 trap 'cd "$ORIGPWD" && rm -rf "$TMP_FOLDER"' INT TERM HUP QUIT EXIT
 
 if [ -z "$GITLAB_TOKEN" ] ; then
   # shellcheck source=/dev/null
-  GITLAB_TOKEN="$(source "$ORIGPWD/.env" && printf '%s\n' "$GITLAB_TOKEN")"
+  GITLAB_TOKEN="$(source "$CWD/../.env" && printf '%s\n' "$GITLAB_TOKEN")"
 fi
 
 if [ -z "$GITLAB_TOKEN" ] ; then
