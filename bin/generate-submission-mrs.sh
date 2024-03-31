@@ -10,17 +10,22 @@ if ! command -v glab > /dev/null 2>&1 ; then
   exit 1
 fi
 
-if [ -z "$GITLAB_TOKEN" ] ; then
-  printf 'This scripts needs a token for gitlab in the env "GITLAB_TOKEN".\n'
-  exit 2
-fi
-
 GIT_REPO=SlackBuilds.org/slackbuilds
 
 ORIGPWD="$(pwd)"
 
 TMP_FOLDER="$(mktemp -d)"
 trap 'cd "$ORIGPWD" && rm -rf "$TMP_FOLDER"' INT TERM HUP QUIT EXIT
+
+if [ -z "$GITLAB_TOKEN" ] ; then
+  # shellcheck source=/dev/null
+  GITLAB_TOKEN="$(source "$CWD/../.env" && printf '%s\n' "$GITLAB_TOKEN")"
+fi
+
+if [ -z "$GITLAB_TOKEN" ] ; then
+  printf 'This scripts needs a token for gitlab in the env "GITLAB_TOKEN".\n'
+  exit 2
+fi
 
 export GITLAB_TOKEN
 
