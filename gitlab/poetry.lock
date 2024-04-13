@@ -193,7 +193,6 @@ files = [
 botocore-stubs = "*"
 mypy-boto3-ssm = {version = ">=1.34.0,<1.35.0", optional = true, markers = "extra == \"ssm\""}
 types-s3transfer = "*"
-typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.12\""}
 
 [package.extras]
 accessanalyzer = ["mypy-boto3-accessanalyzer (>=1.34.0,<1.35.0)"]
@@ -1097,9 +1096,6 @@ files = [
     {file = "mypy-boto3-ssm-1.34.61.tar.gz", hash = "sha256:4cbc99f42b6913c536c6cc41c02d3f165920d1e7babb9bb17782b410556cde00"},
     {file = "mypy_boto3_ssm-1.34.61-py3-none-any.whl", hash = "sha256:8ce8d6fc185c07161b5cc3a589df10130d6bbe3182aeeb01549eb95b5580f51c"},
 ]
-
-[package.dependencies]
-typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.12\""}
 
 [[package]]
 name = "nodeenv"
@@ -2036,5 +2032,5 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "2.0"
-python-versions = "3.11.9"
-content-hash = "f05739d154b061c82c50f64007de32009fbb2a5c449cd39d2f6d6a39bf74a74b"
+python-versions = "3.12.3"
+content-hash = "5f4ec49078b31f6750b31d70054bb2f88762b26228f43f7bf25f04bbe0173f22"
