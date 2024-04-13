@@ -36,6 +36,15 @@
     "workarounds:typesNodeVersioning"
   ],
   "ignoreTests": false,
+  "packageRules": [
+    {
+      "description": "Disable pyproject.toml python updates, we sync this to AWS lambda/python Docker image",
+      "enabled": false,
+      "matchPackageNames": [
+        "python"
+      ]
+    }
+  ],
   "pre-commit": {
     "enabled": true
   },
