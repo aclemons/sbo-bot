@@ -15,6 +15,7 @@ process.on('SIGTERM', shutdown);
 
 export = (app: Probot) => {
   const allowedCommentors = (process.env.GITHUB_ADMINS || '').split(',');
+  const allowedContributors = (process.env.GITHUB_CONTRIBUTORS || '').split(',');
 
   app.on('issue_comment.created', async (context) => {
     context.log.info('Processing comment');
@@ -28,7 +29,18 @@ export = (app: Probot) => {
 
     if (!allowedCommentors.includes(payload.comment.user.login)) {
       context.log.info(`Comment was not made by an admin. (${payload.comment.user.login})`);
-      return;
+
+      if (!allowedContributors.includes(payload.comment.user.login)) {
+        context.log.info(`Comment was not made by a contributor. (${payload.comment.user.login})`);
+        return;
+      }
+
+      if (!allowedContributors.includes(payload.issue.user.login)) {
+        context.log.info(
+          `Comment was not on the contributors own PR. (${payload.issue.user.login})`,
+        );
+        return;
+      }
     }
 
     if (!process.env.JENKINS_WEBHOOK || !process.env.JENKINS_WEBHOOK_SECRET) {
