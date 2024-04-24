@@ -163,7 +163,7 @@ resource "aws_lambda_function" "githubapp_lambda" {
   environment {
     variables = {
       GITHUB_ADMINS = "aclemons,willysr,Ponce,fourtysixand2"
-      GITHUB_CONTRIBUTORS = "bassmadrigal"
+      GITHUB_CONTRIBUTORS = "bassmadrigal,Ythogtha"
       WEBHOOK_PATH  = "/"
     }
   }
