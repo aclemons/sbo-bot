@@ -22,36 +22,46 @@ export = (app: Probot) => {
 
     const { payload } = context;
 
-    if (!payload.issue.pull_request) {
-      context.log.info('Payload is not a pull request comment.');
-      return;
-    }
-
-    if (!allowedCommentors.includes(payload.comment.user.login)) {
-      context.log.info(`Comment was not made by an admin. (${payload.comment.user.login})`);
-
-      if (!allowedContributors.includes(payload.comment.user.login)) {
-        context.log.info(`Comment was not made by a contributor. (${payload.comment.user.login})`);
-        return;
-      }
-
-      if (!allowedContributors.includes(payload.issue.user.login)) {
-        context.log.info(
-          `Comment was not on the contributors own PR. (${payload.issue.user.login})`,
-        );
-        return;
-      }
-    }
-
     if (!process.env.JENKINS_WEBHOOK || !process.env.JENKINS_WEBHOOK_SECRET) {
       context.log.info('Jenkins webhook vars not configured');
       return;
     }
 
     const comment = payload.comment.body.trim();
-    const matches = comment.match(
-      '^@sbo-bot: (single-build|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$',
-    );
+
+    let matches = null;
+    if (payload.issue.pull_request) {
+      if (!allowedCommentors.includes(payload.comment.user.login)) {
+        context.log.info(`Comment was not made by an admin. (${payload.comment.user.login})`);
+
+        if (!allowedContributors.includes(payload.comment.user.login)) {
+          context.log.info(
+            `Comment was not made by a contributor. (${payload.comment.user.login})`,
+          );
+          return;
+        }
+
+        if (!allowedContributors.includes(payload.issue.user.login)) {
+          context.log.info(
+            `Comment was not on the contributors own PR. (${payload.issue.user.login})`,
+          );
+          return;
+        }
+      }
+
+      matches = comment.match(
+        '^@sbo-bot: (single-build|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$',
+      );
+    } else {
+      if (!allowedCommentors.includes(payload.comment.user.login)) {
+        context.log.info(`Comment was not made by an admin. (${payload.comment.user.login})`);
+        return;
+      }
+
+      matches = comment.match(
+        '^@sbo-bot: (single-build|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+|all)$',
+      );
+    }
 
     if (!matches) {
       context.log.info('Comment not a build request.');
@@ -70,7 +80,8 @@ export = (app: Probot) => {
         process.env.JENKINS_WEBHOOK,
         {
           build_arch: build_arch,
-          gh_pr: payload.issue.number,
+          gh_pr: payload.issue.pull_request ? payload.issue.number : null,
+          gh_issue: payload.issue.pull_request ? null : payload.issue.number,
           build_package: build_package,
           repo: `${context.repo().owner}/${context.repo().repo}`,
           action: action,
@@ -106,7 +117,8 @@ export = (app: Probot) => {
         process.env.JENKINS_WEBHOOK,
         {
           build_arch: 'i586',
-          gh_pr: payload.issue.number,
+          gh_pr: payload.issue.pull_request ? payload.issue.number : null,
+          gh_issue: payload.issue.pull_request ? null : payload.issue.number,
           build_package: build_package,
           repo: `${context.repo().owner}/${context.repo().repo}`,
           action: action,
@@ -128,7 +140,8 @@ export = (app: Probot) => {
           process.env.JENKINS_WEBHOOK,
           {
             build_arch: 'x86_64',
-            gh_pr: payload.issue.number,
+            gh_pr: payload.issue.pull_request ? payload.issue.number : null,
+            gh_issue: payload.issue.pull_request ? null : payload.issue.number,
             build_package: build_package,
             repo: `${context.repo().owner}/${context.repo().repo}`,
             action: action,
