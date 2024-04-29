@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-ssm": "3.564.0",
-    "@sentry/node": "7.110.1",
+    "@sentry/node": "7.112.2",
     "axios": "1.6.8",
     "probot": "13.2.0"
   },
