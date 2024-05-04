@@ -50,7 +50,7 @@ export = (app: Probot) => {
       }
 
       matches = comment.match(
-        '^@sbo-bot: (single-build|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$',
+        '^@sbo-bot: (single-build|rebuild|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$',
       );
     } else {
       if (!allowedCommentors.includes(payload.comment.user.login)) {
@@ -59,7 +59,7 @@ export = (app: Probot) => {
       }
 
       matches = comment.match(
-        '^@sbo-bot: (single-build|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+|all)$',
+        '^@sbo-bot: (single-build|rebuild|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+|all)$',
       );
     }
 
@@ -68,7 +68,7 @@ export = (app: Probot) => {
       return;
     }
 
-    const action = matches[1] == 'lint' ? 'lint' : 'build';
+    const action = matches[1] == 'lint' ? 'lint' : matches[1] == 'rebuild' ? 'rebuild' : 'build';
     const build_arch = matches[3];
     const build_package = matches[4];
 

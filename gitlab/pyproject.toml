@@ -41,3 +41,6 @@ target-version = "py39"
 
 [tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = ["fastapi.Body", "fastapi.Depends", "fastapi.Security"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12

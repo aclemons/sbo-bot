@@ -55,7 +55,7 @@ repos:
 
       - id: ruff-lint
         name: ruff-lint
-        entry: bash -c 'cd gitlab && poetry run ruff --fix --exit-non-zero-on-fix --force-exclude'
+        entry: bash -c 'cd gitlab && poetry run ruff check --fix --exit-non-zero-on-fix --force-exclude'
         language: python
         require_serial: true
         args: []

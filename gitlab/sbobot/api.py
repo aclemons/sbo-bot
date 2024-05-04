@@ -22,7 +22,7 @@ JENKINS_WEBHOOK = os.environ.get("JENKINS_WEBHOOK")
 JENKINS_WEBHOOK_SECRET = os.environ.get("JENKINS_WEBHOOK_SECRET")
 
 COMMENT_RE = re.compile(
-    "^@sbo-bot: (single-build|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$"
+    "^@sbo-bot: (single-build|rebuild|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$"
 )
 
 log = structlog.get_logger()
@@ -69,7 +69,13 @@ async def webhook(
     )
     note = mr.notes.get(payload["object_attributes"]["id"], lazy=True)
 
-    action = "lint" if match[1] == "lint" else "build"
+    if match[1] == "lint":
+        action = "lint"
+    elif match[1] == "rebuild":
+        action = "rebuild"
+    else:
+        action = "build"
+
     build_arch = match[3]
     build_package = match[4]
 
