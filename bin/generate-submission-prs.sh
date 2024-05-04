@@ -38,7 +38,7 @@ printf 'Syncing data...\n'
   cd "$TMP_FOLDER"
   rsync -avPSH slackbuilds.org:/slackbuilds/www/pending/ pending
 
-  gh repo clone "https://github.com/$GIT_REPO.git" slackbuilds -- --filter=tree:0
+  gh repo clone "https://github.com/$GIT_REPO.git" slackbuilds -- --depth=1
 
   cd slackbuilds
   git config --local commit.gpgsign false
