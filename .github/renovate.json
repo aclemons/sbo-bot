@@ -51,18 +51,18 @@
     {
       "description": "Disable pyproject.toml python updates, we sync this to AWS lambda/python Docker image",
       "enabled": false,
-      "matchPackageNames": [
+      "matchDepNames": [
         "python"
       ]
     },
     {
       "description": "Disable terraform updates (renovate does not yet support opentofu)",
       "enabled": false,
+      "matchDepNames": [
+        "hashicorp/terraform"
+      ],
       "matchDepTypes": [
         "required_version"
-      ],
-      "matchPackageNames": [
-        "hashicorp/terraform"
       ]
     }
   ],
