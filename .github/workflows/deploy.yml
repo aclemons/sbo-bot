@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   infra:
-    name: Apply terraform
+    name: Apply tofu
     runs-on: ubuntu-22.04
     permissions:
       id-token: write
@@ -28,14 +28,14 @@ jobs:
         with:
           show-progress: false
 
-      - name: Compute git sha
-        run: echo "DOCKER_IMAGE_VERSION=git$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
+
+      - name: Compute git sha
+        run: echo "DOCKER_IMAGE_VERSION=git$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
@@ -77,38 +77,38 @@ jobs:
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/sbobot/bot:gitlab-webhook-latest
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/sbobot/bot:gitlab-webhook-${{ env.DOCKER_IMAGE_VERSION }}
 
-      - name: Configure terraform plugin cache
+      - name: Configure tofu plugin cache
         run: |
-          printf 'plugin_cache_dir = "%s/.terraform.d/plugin-cache"\n' "$HOME" > ~/.terraformrc
-          mkdir -p ~/.terraform.d/plugin-cache
+          printf 'plugin_cache_dir = "%s/.tofu.d/plugin-cache"\n' "$HOME" > ~/.tofurc
+          mkdir -p ~/.tofu.d/plugin-cache
 
-      - name: Cache Terraform plugins
+      - name: Cache Tofu plugins
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
-          path: ~/.terraform.d/plugin-cache
-          key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
+          path: ~/.tofu.d/plugin-cache
+          key: ${{ runner.os }}-tofu-${{ hashFiles('**/.terraform.lock.hcl') }}
 
-      - name: Set terraform version
-        run: echo "TERRAFORM_VERSION=$(cat tf/.terraform-version)" >> "$GITHUB_ENV"
+      - name: Set tofu version
+        run: echo "TOFU_VERSION=$(cat tf/.opentofu-version)" >> "$GITHUB_ENV"
 
-      - uses: hashicorp/setup-terraform@97f030cf6dc0b4f5e0da352c7bca9cca34579800 # v3.1.0
+      - uses: opentofu/setup-opentofu@ae80d4ecaab946d8f5ff18397fbf6d0686c6d46a # v1.0.3
         with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
+          tofu_version: ${{ env.TOFU_VERSION }}
+          tofu_wrapper: false
 
-      - name: Configure AWS Credentials (for terraform)
+      - name: Configure AWS Credentials (for tofu)
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/sbobot-automation
           role-duration-seconds: ${{ env.SESSION_DURATION }}
 
-      - name: Terraform init
-        run: terraform init -lockfile=readonly
+      - name: Tofu init
+        run: tofu init -lockfile=readonly
         working-directory: tf
 
-      - name: Terraform apply
-        run: terraform apply -auto-approve -input=false -var docker_image_version=${{ env.DOCKER_IMAGE_VERSION }}
+      - name: Tofu apply
+        run: tofu apply -auto-approve -input=false -var docker_image_version=${{ env.DOCKER_IMAGE_VERSION }}
         working-directory: tf
 
       - name: Clean up old lambda versions
