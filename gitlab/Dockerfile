@@ -53,12 +53,12 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # hadolint ignore=SC1091
 RUN echo "Running with python $(python3 --version)" && \
     [[ "$(cat .python-version)" == "$(python3 --version | cut -d' ' -f2)" ]] || { echo "Python version mismatch" ; exit 1 ; } && \
-    curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.2 python3 - && \
+    curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.3 python3 - && \
     export PATH="/home/python/.local/bin:$PATH" && \
     poetry config warnings.export false && \
     poetry self add poetry-plugin-export==1.8.0 && \
     poetry export --no-interaction --format=requirements.txt --output requirements.txt && \
-    curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.2 python3 - --uninstall && \
+    curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.3 python3 - --uninstall && \
     rm -rf /home/python/.local && rm -rf /home/python/.config && rm -rf /home/python/.cache && \
     rm -rf .python-version pyproject.toml poetry.lock && \
     python3 -m venv .venv && \
