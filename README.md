@@ -1,26 +1,18 @@
 # sbo-bot
 
-> A GitHub App for automating SBo submissions.
+> Tools for automating for automating SBo submissions.
 
-## Setup
+## Github
 
-```sh
-# Install dependencies
-npm install
+A webhook for requesting builds of Github PRs. See [github](github) for details.
 
-# Run the bot
-npm start
-```
+## Gitlab
 
-## Docker
+A webhook for requesting builds of Gitlab MRs. See [gitlab](gitlab) for details.
 
-```sh
-# 1. Build container
-docker build -t sbo-bot .
+## Scripts
 
-# 2. Start container
-docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> sbo-bot
-```
+In [bin](bin), there are some scripts for generating PRs on github or MRs on gitlab for submission tarballs uploaded on slackbuilds.org.
 
 ## License
 
