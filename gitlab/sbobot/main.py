@@ -1,15 +1,55 @@
 import os
+from typing import TYPE_CHECKING
 
-import uvicorn
-from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
+import sbobot
+from sbobot.state import StateHolder, initialise_app_state
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from fastapi import FastAPI
 
 
-def build_uvicorn_app() -> FastAPI:
+def build_uvicorn_app() -> "FastAPI":
+    from contextlib import asynccontextmanager
+
     import gitlab
     from aiohttp import ClientSession, ClientTimeout
+    from fastapi import FastAPI
+    from fastapi.responses import ORJSONResponse
 
-    from sbobot.api import healthcheck_router, webhook_router
+    from sbobot.api import webhook_router
+    from sbobot.config import JenkinsConfiguration
+    from sbobot.healthcheck import healthcheck_router
+    from sbobot.parser import PayloadParser
+
+    @asynccontextmanager
+    async def lifespan(app: "FastAPI") -> "AsyncIterator[None]":
+        payload_parser = PayloadParser()
+
+        gitlab_client = gitlab.Gitlab(
+            private_token=os.environ["GITLAB_AUTH_TOKEN"],
+            url=os.environ.get("GITLAB_URL") or None,
+        )
+        gitlab_token = os.environ["GITLAB_TOKEN"]
+        jenkins_configuration = JenkinsConfiguration(
+            webhook_url=os.environ["JENKINS_WEBHOOK"],
+            webhook_secret=os.environ["JENKINS_WEBHOOK_SECRET"],
+        )
+
+        async with ClientSession(timeout=ClientTimeout(total=10)) as aiohttp_session:
+            state = StateHolder(
+                aiohttp_session=aiohttp_session,
+                gitlab=gitlab_client,
+                gitlab_token=gitlab_token,
+                jenkins_configuration=jenkins_configuration,
+                payload_parser=payload_parser,
+            )
+
+            initialise_app_state(state, app.state)
+
+            # run
+            yield
 
     app = FastAPI(
         default_response_class=ORJSONResponse,
@@ -17,26 +57,22 @@ def build_uvicorn_app() -> FastAPI:
         title="sbo-bot Gitlab Webhook",
         description="Webhook for events from slackbuilds.org gitlab.",
         contact={"name": "SBo Admins"},
-        version="0.0.0",
+        version=sbobot.__version__,
         responses={},
         debug=False,
-        lifespan=None,
+        lifespan=lifespan,
         servers=None,
     )
 
     app.include_router(healthcheck_router)
     app.include_router(webhook_router)
 
-    app.state.gitlab = gitlab.Gitlab(
-        private_token=os.environ["GITLAB_AUTH_TOKEN"],
-        url=os.environ.get("GITLAB_URL") or None,
-    )
-    app.state.aiohttp_session = ClientSession(timeout=ClientTimeout(total=10))
-
     return app
 
 
 if __name__ == "__main__":
+    import uvicorn
+
     uvicorn.run(
         "sbobot.main:build_uvicorn_app",
         host=os.getenv("UVICORN_HOST", "127.0.0.1"),

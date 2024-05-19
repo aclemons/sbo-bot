@@ -6,22 +6,23 @@ import structlog
 from fastapi import APIRouter, Depends, status
 
 from sbobot.auth import auth
-from sbobot.deps import get_gitlab, get_http_client
-from sbobot.parser import PayloadParser
+from sbobot.deps import (
+    get_aiohttp_session,
+    get_gitlab,
+    get_jenkins_configuration,
+    get_payload_parser,
+)
 
 if TYPE_CHECKING:
     import gitlab
     from aiohttp import ClientSession
 
+    from sbobot.config import JenkinsConfiguration
+    from sbobot.parser import PayloadParserProtocol
+
 webhook_router = APIRouter(tags=["webhook"])
-healthcheck_router = APIRouter(tags=["healthcheck"])
 
 ALLOWED_COMMENTORS = (os.environ.get("GITLAB_ADMINS") or "").split(",")
-
-GITLAB_TOKEN = os.environ.get("GITLAB_TOKEN")
-
-JENKINS_WEBHOOK = os.environ.get("JENKINS_WEBHOOK")
-JENKINS_WEBHOOK_SECRET = os.environ.get("JENKINS_WEBHOOK_SECRET")
 
 log = structlog.get_logger()
 
@@ -32,16 +33,18 @@ log = structlog.get_logger()
     dependencies=[Depends(auth)],
 )
 async def webhook(
-    payload: "dict[str, Any]",
+    payload: dict[str, Any],
     gitlab: "gitlab.Gitlab" = Depends(get_gitlab),
-    http_client: "ClientSession" = Depends(get_http_client),
+    http_client: "ClientSession" = Depends(get_aiohttp_session),
+    jenkins_configuration: "JenkinsConfiguration" = Depends(get_jenkins_configuration),
+    payload_parser: "PayloadParserProtocol" = Depends(get_payload_parser),
 ) -> None:
     log.info("Processing incoming webhook payload", payload=payload)
 
-    command = PayloadParser().parse(payload)
+    command = payload_parser.parse(payload)
 
     if command is None:
-        log.info("Payload was not a command..")
+        log.info("Payload was not a command.")
         return
 
     if command.commentator not in ALLOWED_COMMENTORS:
@@ -54,10 +57,6 @@ async def webhook(
     note = mr.notes.get(command.comment_id, lazy=True)
 
     async def schedule_job(build_arch: str) -> bool:
-        if not JENKINS_WEBHOOK or not JENKINS_WEBHOOK_SECRET:
-            log.info("Jenkins webhook vars not configured")
-            return True
-
         log.info(
             "Triggering job for package",
             action=command.command,
@@ -74,9 +73,9 @@ async def webhook(
         }
 
         response = await http_client.post(
-            url=JENKINS_WEBHOOK,
+            url=jenkins_configuration.webhook_url,
             json=request_data,
-            headers={"token": JENKINS_WEBHOOK_SECRET},
+            headers={"token": jenkins_configuration.webhook_secret},
         )
         data = await response.json()
 
@@ -130,8 +129,3 @@ async def webhook(
         note.awardemojis.create({"name": "thumbsup"})
 
         log.info("Confirmed build triggering by thumbs-upping comment.")
-
-
-@healthcheck_router.get("/healthz", status_code=status.HTTP_200_OK)
-async def healthz() -> str:
-    return "OK"
