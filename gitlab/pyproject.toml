@@ -14,7 +14,7 @@ fastapi-slim = "0.111.0"
 orjson = "3.10.3"
 python-gitlab = "4.6.0"
 structlog = "24.2.0"
-uvicorn = {version = "0.30.0", extras = ["standard"]}
+uvicorn = {version = "0.30.1", extras = ["standard"]}
 yarl = "1.9.4"
 
 [tool.poetry.group.dev.dependencies]
