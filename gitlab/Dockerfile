@@ -46,7 +46,7 @@ RUN export TERSE=0 && \
     removepkg cpio icu4c libgcrypt libgpg-error lua patchelf rpm sqlite
 
 
-FROM base as python-base
+FROM base AS python-base
 
 RUN export TERSE=0 && \
     slackpkg -default_answer=yes -batch=on update && \
@@ -64,7 +64,7 @@ RUN groupadd --gid 1000 python && \
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.3@sha256:f312209a538c102bcc112b99edf9b989140658a5f8d0c98d9a0c7ce12512e76a AS aws-lambda-adapter
 
 
-FROM python-base as builder
+FROM python-base AS builder
 WORKDIR /usr/src/app
 USER python
 
