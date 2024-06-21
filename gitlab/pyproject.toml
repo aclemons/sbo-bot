@@ -37,10 +37,14 @@ lint.ignore = [
  "COM812", # conflicts with ruff format
  "ISC001", # conflicts with ruff format
 ]
-target-version = "py39"
+target-version = "py311"
 
 [tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = ["fastapi.Body", "fastapi.Depends", "fastapi.Security"]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 12
+
+[tool.ruff.lint.pylint]
+max-branches = 30
+max-statements = 60
