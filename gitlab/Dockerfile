@@ -101,6 +101,7 @@ COPY startup.sh /startup.sh
 ENV AWS_LWA_PORT="8000"
 ENV AWS_LWA_READINESS_CHECK_PORT="8000"
 ENV AWS_LWA_READINESS_CHECK_PATH="/healthz"
+ENV AWS_LWA_ASYNC_INIT="true"
 
 COPY --link --from=builder /usr/src/app/.venv .venv
 COPY --chown=python:python sbobot sbobot
