@@ -85,7 +85,7 @@ RUN npm run build
 
 FROM node-base
 
-COPY --link --from=lambda-layers /opt /opt
+# COPY --link --from=lambda-layers /opt /opt
 COPY --link --from=aws-lambda-adapter /lambda-adapter /opt/extensions/lambda-adapter
 
 WORKDIR /usr/src/app
