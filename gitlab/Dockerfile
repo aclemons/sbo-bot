@@ -95,7 +95,8 @@ COPY --link --from=aws-lambda-adapter /lambda-adapter /opt/extensions/lambda-ada
 WORKDIR /usr/src/app
 USER python
 
-COPY lambda-entrypoint.sh /usr/src/app/lambda-entrypoint.sh
+COPY lambda-entrypoint.sh /lambda-entrypoint.sh
+COPY startup.sh /startup.sh
 
 ENV AWS_LWA_PORT="8000"
 ENV AWS_LWA_READINESS_CHECK_PORT="8000"
