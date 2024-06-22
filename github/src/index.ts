@@ -28,23 +28,21 @@ export = (app: Probot) => {
     }
 
     const comment = payload.comment.body.trim();
+    const commentator = payload.comment.user.login;
+    const owner = payload.issue.user.login;
 
     let matches = null;
-    if (payload.issue.pull_request) {
-      if (!allowedCommentors.includes(payload.comment.user.login)) {
-        context.log.info(`Comment was not made by an admin. (${payload.comment.user.login})`);
+    if ('pull_request' in payload.issue) {
+      if (!allowedCommentors.includes(commentator)) {
+        context.log.info(`Comment was not made by an admin. (${commentator})`);
 
-        if (!allowedContributors.includes(payload.comment.user.login)) {
-          context.log.info(
-            `Comment was not made by a contributor. (${payload.comment.user.login})`,
-          );
+        if (!allowedContributors.includes(commentator)) {
+          context.log.info(`Comment was not made by a contributor. (${commentator})`);
           return;
         }
 
-        if (!allowedContributors.includes(payload.issue.user.login)) {
-          context.log.info(
-            `Comment was not on the contributors own PR. (${payload.issue.user.login})`,
-          );
+        if (!allowedContributors.includes(owner)) {
+          context.log.info(`Comment was not on the contributors own PR. (${owner})`);
           return;
         }
       }
@@ -53,8 +51,8 @@ export = (app: Probot) => {
         '^@sbo-bot: (single-build|rebuild|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$',
       );
     } else {
-      if (!allowedCommentors.includes(payload.comment.user.login)) {
-        context.log.info(`Comment was not made by an admin. (${payload.comment.user.login})`);
+      if (!allowedCommentors.includes(commentator)) {
+        context.log.info(`Comment was not made by an admin. (${commentator})`);
         return;
       }
 
@@ -80,8 +78,8 @@ export = (app: Probot) => {
         process.env.JENKINS_WEBHOOK,
         {
           build_arch: build_arch,
-          gh_pr: payload.issue.pull_request ? payload.issue.number : null,
-          gh_issue: payload.issue.pull_request ? null : payload.issue.number,
+          gh_pr: 'pull_request' in payload.issue ? payload.issue.number : null,
+          gh_issue: 'pull_request' in payload.issue ? null : payload.issue.number,
           build_package: build_package,
           repo: `${context.repo().owner}/${context.repo().repo}`,
           action: action,
