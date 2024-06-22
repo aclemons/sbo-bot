@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -17,33 +16,38 @@ if TYPE_CHECKING:
 def run() -> None:
     log.info("Fetching env from ssm")
 
-    session = boto3.session.Session()
+    client: SSMClient | None = boto3.session.Session().client("ssm")
 
-    client = None
+    if not client:
+        msg = "Could not create SSM client"
+        log.warning(msg)
+        raise ValueError(msg)
+
+    parameter: ParameterTypeDef | None = None
+
     try:
-        client: SSMClient | None = session.client("ssm")
-
-        if not client:
-            msg = "Could not create SSM client"
-            log.warning(msg)
-            raise ValueError(msg)
-
         response: GetParameterResultTypeDef = client.get_parameter(
             Name="/sbobot/gitlab-webhook/env", WithDecryption=True
         )
-        parameter: ParameterTypeDef = response.get("Parameter")
+        parameter = response.get("Parameter")
 
-        if value := parameter.get("Value"):
-            log.info("Parameter found, writing .env file to /tmp")
-            with Path("/tmp/.env").open(mode="wt", encoding="utf-8") as f:  # noqa: S108
-                f.write(value)
-        else:
-            log.info("Parameter value was empty")
-            sys.exit(1)
-
+    except client.exceptions.ParameterNotFound:
+        msg = "No env file defined in SSM"
+        log.info(msg)
     finally:
-        if client is not None:
-            client.close()
+        client.close()
+
+    with Path("/tmp/.env").open(mode="wt", encoding="utf-8") as f:  # noqa: S108
+        if parameter is None:
+            log.info("Writing empty .env file to /tmp")
+            f.write("")
+        elif value := parameter.get("Value"):
+            log.info("Parameter found, writing .env file to /tmp")
+            f.write(value)
+        else:
+            msg = "Parameter value was empty"
+            log.warning(msg)
+            raise ValueError(msg)
 
 
 if __name__ == "__main__":
