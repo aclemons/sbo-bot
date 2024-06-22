@@ -37,7 +37,7 @@ services:
       - JENKINS_WEBHOOK=http://gw:9100/generic-webhook-trigger/invoke
       - JENKINS_WEBHOOK_SECRET=jenkinssecret
       - WEBHOOK_SECRET=AL1lYqj3G6Va3DnhUNkXKU93EtdShteb
-      - GHE_HOST=gw
+      - GHE_HOST=gw:9100
       - GHE_PROTOCOL=http
       - WEBHOOK_PATH=/
   github-local-api-gateway:
