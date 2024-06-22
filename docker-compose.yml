@@ -45,16 +45,17 @@ services:
     extra_hosts:
       - gw:host-gateway
     environment:
-      - AWS_DEFAULT_REGION=eu-central-1
-      - AWS_REGION=eu-central-1
       - AWS_ACCESS_KEY_ID=local
+      - AWS_DEFAULT_REGION=eu-central-1
+      - AWS_ENDPOINT_URL=http://gw:4566
+      - AWS_REGION=eu-central-1
       - AWS_SECRET_ACCESS_KEY=secret
       - AWS_SESSION_TOKEN=session
-      - AWS_ENDPOINT_URL=http://gw:4566
+      - GITLAB_ADMINS=testadmin1,testadmin2
       - GITLAB_AUTH_TOKEN=glapikey-123456
       - GITLAB_TOKEN=ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413
-      - GITLAB_ADMINS=testadmin1,testadmin2
-      - JENKINS_WEBHOOK=http://gw:9100
+      - GITLAB_URL=http://gw:9100
+      - JENKINS_WEBHOOK=http://gw:9100/generic-webhook-trigger/invoke
       - JENKINS_WEBHOOK_SECRET=jenkinssecret
   gitlab-local-api-gateway:
     image: bref/local-api-gateway:latest@sha256:cd1aa1f0d018a44003c3f7dda7bc3fb6d59782a95484210117230583b23c66ad
@@ -63,9 +64,9 @@ services:
     ports:
       - 9012:8000
     extra_hosts:
-      - 'gw:host-gateway'
+      - gw:host-gateway
   wiremock:
     image: wiremock/wiremock:3.6.0@sha256:1cf76043f9052c32d13fb06b562e3328e284fc46cf04c756595201f5de7d3c75
-    command: '--verbose --global-response-templating'
+    command: --verbose --global-response-templating
     ports:
       - 9100:8080

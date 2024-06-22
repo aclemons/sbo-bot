@@ -5,34 +5,30 @@
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "python-poetry/poetry",
-      "fileMatch": [
-        "gitlab/Dockerfile"
-      ],
-      "matchStrings": [
-        "POETRY_VERSION=(?<currentValue>.*) python3"
-      ]
+      "fileMatch": ["gitlab/Dockerfile"],
+      "matchStrings": ["POETRY_VERSION=(?<currentValue>.*) python3"]
     },
     {
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "python-poetry/poetry-plugin-export",
-      "fileMatch": [
-        "gitlab/Dockerfile"
-      ],
-      "matchStrings": [
-        "poetry-plugin-export==(?<currentValue>.*) &&"
-      ]
+      "fileMatch": ["gitlab/Dockerfile"],
+      "matchStrings": ["poetry-plugin-export==(?<currentValue>.*) &&"]
     },
     {
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
-      "fileMatch": [
-        "^tf/.opentofu-version$"
-      ],
+      "fileMatch": ["^tf/.opentofu-version$"],
+      "matchStrings": ["(?<currentValue>.*)"]
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^.pre-commit-config.yaml$"],
       "matchStrings": [
-        "(?<currentValue>.*)"
-      ]
+        "# renovate: datasource=(?<datasource>.*?)( versioning=(?<versioning>.*?))?\\s+-\\s+['\"]?(?<depName>@?[^@]+)(?:@(?<currentValue>[^'\"\\s]*))?"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ],
   "extends": [
@@ -51,19 +47,13 @@
     {
       "description": "Disable pyproject.toml python updates, we sync this to AWS lambda/python Docker image",
       "enabled": false,
-      "matchDepNames": [
-        "python"
-      ]
+      "matchDepNames": ["python"]
     },
     {
       "description": "Disable terraform updates (renovate does not yet support opentofu)",
       "enabled": false,
-      "matchDepNames": [
-        "hashicorp/terraform"
-      ],
-      "matchDepTypes": [
-        "required_version"
-      ]
+      "matchDepNames": ["hashicorp/terraform"],
+      "matchDepTypes": ["required_version"]
     }
   ],
   "pre-commit": {

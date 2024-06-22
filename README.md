@@ -12,7 +12,8 @@ A webhook for requesting builds of Gitlab MRs. See [gitlab](gitlab) for details.
 
 ## Scripts
 
-In [bin](bin), there are some scripts for generating PRs on github or MRs on gitlab for submission tarballs uploaded on slackbuilds.org.
+In [bin](bin), there are some scripts for generating PRs on github or MRs on
+gitlab for submission tarballs uploaded on slackbuilds.org.
 
 ## License
 

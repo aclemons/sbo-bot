@@ -10,16 +10,7 @@ repos:
       - id: check-shebang-scripts-are-executable
       - id: check-yaml
       - id: end-of-file-fixer
-      - id: pretty-format-json
-        exclude: package.json|package-lock.json|tsconfig.json
-        args: [--autofix]
       - id: trailing-whitespace
-
-  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-    rev: 0.2.3
-    hooks:
-      - id: yamlfmt
-        args: [--mapping, '2', --sequence, '4', --offset, '2', --width, '150']
 
   - repo: https://github.com/koalaman/shellcheck-precommit
     rev: v0.10.0
@@ -39,23 +30,25 @@ repos:
 
   - repo: local
     hooks:
-      # - id: eslint
-      #   name: eslint
-      #   entry: npm run lint
-      #   language: system
-      #   pass_filenames: false
-      #   files: ^.*\.([tj]s)$
-
       - id: prettier
         name: prettier
-        entry: bash -c 'cd github && npm run format'
-        language: system
-        pass_filenames: false
-        files: ^.*\.([tj]s)$
+        description: ''
+        entry: prettier --write --ignore-unknown
+        language: node
+        types: [text]
+        args: []
+        require_serial: false
+        additional_dependencies:
+          # renovate: datasource=npm
+          - prettier@3.3.2
+          # renovate: datasource=npm
+          - '@trivago/prettier-plugin-sort-imports@4.3.0'
 
       - id: ruff-lint
         name: ruff-lint
-        entry: bash -c 'cd gitlab && poetry run ruff check --fix --exit-non-zero-on-fix --force-exclude'
+        entry:
+          bash -c 'cd gitlab && poetry run ruff check --fix
+          --exit-non-zero-on-fix --force-exclude'
         language: python
         require_serial: true
         args: []

@@ -26,7 +26,10 @@ def build_uvicorn_app() -> FastAPI:
     app.include_router(healthcheck_router)
     app.include_router(webhook_router)
 
-    app.state.gitlab = gitlab.Gitlab(private_token=os.environ["GITLAB_AUTH_TOKEN"])
+    app.state.gitlab = gitlab.Gitlab(
+        private_token=os.environ["GITLAB_AUTH_TOKEN"],
+        url=os.environ.get("GITLAB_URL") or None,
+    )
     app.state.aiohttp_session = ClientSession(timeout=ClientTimeout(total=10))
 
     return app

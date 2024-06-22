@@ -1,5 +1,4 @@
 ---
-
 name: Build and deploy sbo-bot infrastructure
 
 on:
@@ -35,13 +34,16 @@ jobs:
         uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
 
       - name: Compute git sha
-        run: echo "DOCKER_IMAGE_VERSION=git$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
+        run:
+          echo "DOCKER_IMAGE_VERSION=git$(git rev-parse --short HEAD)" >>
+          "$GITHUB_ENV"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/sbobot-automation
+          role-to-assume:
+            arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/sbobot-automation
           role-duration-seconds: ${{ env.SESSION_DURATION }}
 
       - name: Login to Amazon ECR
@@ -100,7 +102,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/sbobot-automation
+          role-to-assume:
+            arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/sbobot-automation
           role-duration-seconds: ${{ env.SESSION_DURATION }}
 
       - name: Tofu init
@@ -108,7 +111,9 @@ jobs:
         working-directory: tf
 
       - name: Tofu apply
-        run: tofu apply -auto-approve -input=false -var docker_image_version=${{ env.DOCKER_IMAGE_VERSION }}
+        run:
+          tofu apply -auto-approve -input=false -var docker_image_version=${{
+          env.DOCKER_IMAGE_VERSION }}
         working-directory: tf
 
       - name: Clean up old lambda versions
