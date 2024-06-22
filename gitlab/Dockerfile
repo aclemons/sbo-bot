@@ -61,6 +61,7 @@ RUN groupadd --gid 1000 python && \
     useradd --uid 1000 --gid python --shell /bin/bash --create-home python && \
     mkdir -p /usr/src/app && chown python:python /usr/src/app
 
+
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.3@sha256:f312209a538c102bcc112b99edf9b989140658a5f8d0c98d9a0c7ce12512e76a AS aws-lambda-adapter
 
 
@@ -86,6 +87,7 @@ RUN echo "Running with python $(python3 --version)" && \
     source .venv/bin/activate && \
     pip3 install --disable-pip-version-check --no-color --no-python-version-warning --no-cache-dir --timeout 100 --no-input -r requirements.txt && \
     rm requirements.txt
+
 
 FROM python-base
 
