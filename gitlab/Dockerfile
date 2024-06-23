@@ -57,17 +57,10 @@ RUN export TERSE=0 && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
     touch /var/lib/slackpkg/current
 
-RUN groupadd --gid 1000 python && \
-    useradd --uid 1000 --gid python --shell /bin/bash --create-home python && \
-    mkdir -p /usr/src/app && chown python:python /usr/src/app
-
-
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.3@sha256:f312209a538c102bcc112b99edf9b989140658a5f8d0c98d9a0c7ce12512e76a AS aws-lambda-adapter
 
 
 FROM python-base AS poetry
-WORKDIR /usr/src/app
-USER python
 
 # renovate: datasource=git-refs depName=https://github.com/python-poetry/install.python-poetry.org
 ARG POETRY_INSTALLER_VERSION=d62875fc05fb20062175cd14d19a96dbefa48640
@@ -80,34 +73,32 @@ ARG POETRY_PLUGIN_EXPORT_VERSION=1.8.0
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/install.python-poetry.org/$POETRY_INSTALLER_VERSION/install-poetry.py | POETRY_VERSION=$POETRY_VERSION /usr/bin/python3 - && \
-    export PATH="/home/python/.local/bin:$PATH" && \
+    export PATH="/root/.local/bin:$PATH" && \
     poetry config warnings.export false && \
     poetry self add poetry-plugin-export==$POETRY_PLUGIN_EXPORT_VERSION
 
 
 FROM poetry AS requirements
-WORKDIR /usr/src/app
-USER python
+WORKDIR /tmp/work
 
-COPY --chown=python:python pyproject.toml poetry.lock ./
+COPY pyproject.toml poetry.lock ./
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN export PATH="/home/python/.local/bin:$PATH" && \
+RUN export PATH="/root/.local/bin:$PATH" && \
     mkdir -p /tmp/requirements/ && \
     poetry export --no-interaction --format=requirements.txt --output /tmp/requirements/requirements.txt
 
 
 FROM poetry AS wheels
-WORKDIR /usr/src/app
-USER python
+WORKDIR /tmp/work
 
-COPY --chown=python:python .python-version pyproject.toml poetry.lock ./
-COPY --chown=python:python sbobot ./sbobot
+COPY .python-version pyproject.toml poetry.lock ./
+COPY sbobot ./sbobot
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN echo "Running with python $(python3 --version)" && \
     [[ "$(cat .python-version)" == "$(python3 --version | cut -d' ' -f2)" ]] || { echo "Python version mismatch" ; exit 1 ; } && \
-    export PATH="/home/python/.local/bin:$PATH" && \
+    export PATH="/root/.local/bin:$PATH" && \
     poetry build --format=wheel --output=/tmp/dist --no-cache
 
 
@@ -115,9 +106,6 @@ FROM python-base
 
 # COPY --link --from=lambda-layers /opt /opt
 COPY --link --from=aws-lambda-adapter /lambda-adapter /opt/extensions/lambda-adapter
-
-WORKDIR /usr/src/app
-USER python
 
 COPY lambda-entrypoint.sh /lambda-entrypoint.sh
 COPY startup.sh /startup.sh
