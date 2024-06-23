@@ -18,7 +18,7 @@ uvicorn = {version = "0.30.1", extras = ["standard"]}
 yarl = "1.9.4"
 
 [tool.poetry.group.dev.dependencies]
-boto3-stubs = { version = "1.34.131", extras = ["ssm"] }
+boto3-stubs-lite = { version = "1.34.131", extras = ["ssm"] }
 pyright = "1.1.368"
 pytest = "8.2.2"
 pytest-dotenv = "0.5.2"
@@ -28,6 +28,9 @@ ruff-lsp = "0.0.53"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+typeCheckingMode = "strict"
 
 [tool.pytest.ini_options]
 env_override_existing_values = 1
@@ -41,11 +44,22 @@ lint.ignore = [
  "E501", # black handles long line wrapping
  "COM812", # conflicts with ruff format
  "ISC001", # conflicts with ruff format
+ "ANN101", # deprecated and will be removed in a future ruff release
+ "ANN102", # deprecated and will be removed in a future ruff release
 ]
 target-version = "py311"
 
+[tool.ruff.lint.flake8-annotations]
+allow-star-arg-any = true
+mypy-init-return = true
+suppress-dummy-args = true
+
 [tool.ruff.lint.flake8-bugbear]
-extend-immutable-calls = ["fastapi.Body", "fastapi.Depends", "fastapi.Security"]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Security"]
+
+[tool.ruff.lint.flake8-type-checking]
+quote-annotations = true
+runtime-evaluated-base-classes = ["pydantic.BaseModel"]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 12

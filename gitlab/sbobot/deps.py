@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from fastapi import Request
+from fastapi import Request  # noqa: TCH002 - runtime evaluated
 
 if TYPE_CHECKING:
     import gitlab

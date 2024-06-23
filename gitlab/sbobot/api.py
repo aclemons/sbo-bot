@@ -1,6 +1,6 @@
 import os
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import structlog
 from fastapi import APIRouter, Depends, status
@@ -35,7 +35,7 @@ log = structlog.get_logger()
     dependencies=[Depends(auth)],
 )
 async def webhook(
-    payload: dict,
+    payload: "dict[str, Any]",
     gitlab: "gitlab.Gitlab" = Depends(get_gitlab),
     http_client: "ClientSession" = Depends(get_http_client),
 ) -> None:
