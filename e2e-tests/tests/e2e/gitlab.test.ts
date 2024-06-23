@@ -1,5 +1,6 @@
 import { buildCommentWebhookPayload, mockCommentAck } from '../../src/gitlab';
 import { mockJenkinsSingleMrBuild } from '../../src/jenkins';
+import { beforeEach, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest';
 import { WireMock } from 'wiremock-captain';
 
@@ -10,10 +11,13 @@ describe('gitlab webhook', () => {
     await mock.resetMappings();
   });
 
-  describe('POST /webhook', () => {
+  describe('pOST /webhook', () => {
     describe('a single build is requested by an admin', () => {
       it('schedules the build', async () => {
+        expect.assertions(1);
+
         const build = 'system/fzf';
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { payload, mrId, commentId } = buildCommentWebhookPayload({
           username: 'testadmin1',
           build,
@@ -25,6 +29,7 @@ describe('gitlab webhook', () => {
         const res = await supertest('http://localhost:9012')
           .post('/webhook')
           .set('x-gitlab-token', '123456')
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           .send(payload);
 
         expect(res.statusCode).toBe(204);
@@ -33,8 +38,11 @@ describe('gitlab webhook', () => {
 
     describe('a single build is requested by normal user', () => {
       it('ignores the comment', async () => {
+        expect.assertions(1);
+
         const build = 'system/fzf';
-        const { payload, mrId, commentId } = buildCommentWebhookPayload({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const { payload } = buildCommentWebhookPayload({
           username: 'randomuser',
           build,
         });
@@ -42,6 +50,7 @@ describe('gitlab webhook', () => {
         const res = await supertest('http://localhost:9012')
           .post('/webhook')
           .set('x-gitlab-token', '123456')
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           .send(payload);
 
         expect(res.statusCode).toBe(204);

@@ -1,5 +1,6 @@
 import { buildCommentWebhookPayload, mockCommentAck } from '../../src/github';
 import { mockJenkinsSinglePrBuild } from '../../src/jenkins';
+import { beforeEach, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest';
 import { WireMock } from 'wiremock-captain';
 
@@ -10,9 +11,11 @@ describe('github webhook', () => {
     await mock.resetMappings();
   });
 
-  describe('POST /', () => {
+  describe('pOST /', () => {
     describe('a single build is requested by an admin', () => {
       it('schedules the build', async () => {
+        expect.assertions(1);
+
         const build = 'system/fzf';
         const { payload, prId, commentId, signature } =
           await buildCommentWebhookPayload({
@@ -21,7 +24,7 @@ describe('github webhook', () => {
           });
 
         await mockJenkinsSinglePrBuild({ prId, build });
-        await mockCommentAck({ prId, commentId });
+        await mockCommentAck({ commentId });
 
         const res = await supertest('http://localhost:9011')
           .post('/')
@@ -37,12 +40,13 @@ describe('github webhook', () => {
 
     describe('a single build is requested by normal user', () => {
       it('ignores the comment', async () => {
+        expect.assertions(1);
+
         const build = 'system/fzf';
-        const { payload, prId, commentId, signature } =
-          await buildCommentWebhookPayload({
-            username: 'randomuser',
-            build,
-          });
+        const { payload, signature } = await buildCommentWebhookPayload({
+          username: 'randomuser',
+          build,
+        });
 
         const res = await supertest('http://localhost:9011')
           .post('/')

@@ -54,6 +54,7 @@ repos:
         args: []
         types_or: [python, pyi]
         additional_dependencies: []
+        files: ^gitlab/
 
       - id: ruff-format
         name: ruff-format
@@ -63,6 +64,7 @@ repos:
         args: []
         types_or: [python, pyi]
         additional_dependencies: []
+        files: ^gitlab/
 
       - id: pyright
         name: pyright
@@ -71,3 +73,22 @@ repos:
         require_serial: true
         types_or: [python, pyi]
         additional_dependencies: []
+        files: ^gitlab/
+
+      # - id: e2e-tests-eslint
+      #   name: eslint
+      #   entry: e2e-tests/eslint-pre-commit.sh
+      #   language: system
+      #   args: []
+      #   require_serial: false
+      #   types: [file]
+      #   files: ^e2e-tests/.*/.*\.[jt]sx?$
+
+      - id: e2e-tests-eslint
+        name: eslint
+        entry: bash -c 'cd e2e-tests && npm run lint-fix'
+        language: system
+        pass_filenames: false
+        require_serial: false
+        types: [file]
+        files: ^e2e-tests/

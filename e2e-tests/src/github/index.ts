@@ -8,13 +8,13 @@ export const buildCommentWebhookPayload = async ({
   username,
   build,
 }: {
-  username: String;
-  build: String;
+  username: string;
+  build: string;
 }): Promise<{
-  prId: Number;
-  commentId: Number;
-  payload: String;
-  signature: String;
+  prId: number;
+  commentId: number;
+  payload: string;
+  signature: string;
 }> => {
   const min = 0;
   const max = 65535;
@@ -85,11 +85,9 @@ export const buildCommentWebhookPayload = async ({
 };
 
 export const mockCommentAck = async ({
-  prId,
   commentId,
 }: {
-  prId: Number;
-  commentId: Number;
+  commentId: number;
 }): Promise<null> => {
   const wiremockEndpoint = 'http://localhost:9100';
   const mock = new WireMock(wiremockEndpoint);
@@ -108,7 +106,7 @@ export const mockCommentAck = async ({
 
   const reactionRequest: IWireMockRequest = {
     method: 'POST',
-    endpoint: `/api/v3/repos/SlackBuildsOrg/slackbuilds/issues/comments/${commentId}/reactions`,
+    endpoint: `/api/v3/repos/SlackBuildsOrg/slackbuilds/issues/comments/${commentId.toString()}/reactions`,
     body: {
       content: '+1',
     },

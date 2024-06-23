@@ -8,8 +8,8 @@ export const mockJenkinsSingleMrBuild = async ({
   mrId,
   build,
 }: {
-  mrId: Number;
-  build: String;
+  mrId: number;
+  build: string;
 }): Promise<null> => {
   const wiremockEndpoint = 'http://localhost:9100';
   const mock = new WireMock(wiremockEndpoint);
@@ -39,10 +39,10 @@ export const mockJenkinsSingleMrBuild = async ({
             build_package: build,
             gh_issue: '-1',
             gh_pr: '-1',
-            gl_mr: `${mrId}`,
+            gl_mr: mrId.toString(),
             repo: 'SlackBuilds.org/slackbuilds',
           },
-          regexpFilterText: `build,x86_64,${mrId},-1,-1,${build},SlackBuilds.org/slackbuilds`,
+          regexpFilterText: `build,x86_64,${mrId.toString()},-1,-1,${build},SlackBuilds.org/slackbuilds`,
           id: 4053,
           url: 'queue/item/4053/',
         },
@@ -59,8 +59,8 @@ export const mockJenkinsSinglePrBuild = async ({
   prId,
   build,
 }: {
-  prId: Number;
-  build: String;
+  prId: number;
+  build: string;
 }): Promise<null> => {
   const wiremockEndpoint = 'http://localhost:9100';
   const mock = new WireMock(wiremockEndpoint);
@@ -90,11 +90,11 @@ export const mockJenkinsSinglePrBuild = async ({
             build_arch: 'x86_64',
             build_package: build,
             gh_issue: '-1',
-            gh_pr: `${prId}`,
+            gh_pr: prId.toString(),
             gl_mr: '-1',
             repo: 'SlackBuildsOrg/slackbuilds',
           },
-          regexpFilterText: `build,x86_64,-1,${prId},-1,${build},SlackBuilds.org/slackbuilds`,
+          regexpFilterText: `build,x86_64,-1,${prId.toString()},-1,${build},SlackBuilds.org/slackbuilds`,
           id: 4053,
           url: 'queue/item/4053/',
         },

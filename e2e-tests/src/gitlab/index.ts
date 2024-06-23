@@ -8,9 +8,10 @@ export const buildCommentWebhookPayload = ({
   username,
   build,
 }: {
-  username: String;
-  build: String;
-}): { mrId: Number; commentId: Number; payload: any } => {
+  username: string;
+  build: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+}): { mrId: number; commentId: number; payload: any } => {
   const min = 0;
   const max = 65535;
 
@@ -49,15 +50,15 @@ export const mockCommentAck = async ({
   mrId,
   commentId,
 }: {
-  mrId: Number;
-  commentId: Number;
+  mrId: number;
+  commentId: number;
 }): Promise<null> => {
   const wiremockEndpoint = 'http://localhost:9100';
   const mock = new WireMock(wiremockEndpoint);
 
   const gitlabRequest: IWireMockRequest = {
     method: 'POST',
-    endpoint: `/api/v4/projects/1309714/merge_requests/${mrId}/notes/${commentId}/award_emoji`,
+    endpoint: `/api/v4/projects/1309714/merge_requests/${mrId.toString()}/notes/${commentId.toString()}/award_emoji`,
     body: {
       name: 'thumbsup',
     },
