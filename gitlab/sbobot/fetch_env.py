@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from mypy_boto3_ssm.type_defs import GetParameterResultTypeDef, ParameterTypeDef
 
 
-def run(client: "SSMClient", target_file: str, parameter_name: str) -> None:  # noqa: UP037
+def write_config(client: "SSMClient", target_file: str, parameter_name: str) -> None:  # noqa: UP037
     log.info("Fetching env from ssm")
 
     parameter: ParameterTypeDef | None = None
@@ -45,7 +45,11 @@ def run(client: "SSMClient", target_file: str, parameter_name: str) -> None:  # 
 
 async def amain() -> None:
     with closing(cast("SSMClient", boto3.session.Session().client("ssm"))) as client:
-        run(client, "/tmp/.env", "/sbobot/gitlab-webhook/env")  # noqa: S108
+        write_config(
+            client=client,
+            parameter_name="/sbobot/gitlab-webhook/env",
+            target_file="/tmp/.env",  # noqa: S108
+        )
 
 
 if __name__ == "__main__":

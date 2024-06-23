@@ -4,7 +4,7 @@ services:
     image: localstack/localstack:3.5.0@sha256:c0d346a4b726f167e16451d01a217dfe17f07994ac30f7ab61b57aa321b3e4d6
     environment:
       - EAGER_SERVICE_LOADING=1
-      - SERVICES=ssm
+      - SERVICES=events,ssm
       - DOCKER_HOST=unix:///var/run/docker.sock
       - DEBUG=${DEBUG-}
     ports:
