@@ -5,6 +5,7 @@ npm-debug.log
 .env
 coverage
 lib
+__pycache__
 
 # Local .terraform directories
 **/.terraform/*

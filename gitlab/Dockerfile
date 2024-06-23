@@ -52,7 +52,7 @@ RUN export TERSE=0 && \
     slackpkg -default_answer=yes -batch=on update && \
     EXIT_CODE=0 && slackpkg -default_answer=yes -batch=on upgrade-all || EXIT_CODE=$? && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
-    EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on install python3 expat || EXIT_CODE=$? ; } && \
+    EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on install python3 python-pip expat || EXIT_CODE=$? ; } && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
     touch /var/lib/slackpkg/current
@@ -65,28 +65,50 @@ RUN groupadd --gid 1000 python && \
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.3@sha256:f312209a538c102bcc112b99edf9b989140658a5f8d0c98d9a0c7ce12512e76a AS aws-lambda-adapter
 
 
-FROM python-base AS builder
+FROM python-base AS poetry
+WORKDIR /usr/src/app
+USER python
+
+# renovate: datasource=git-refs depName=https://github.com/python-poetry/install.python-poetry.org
+ARG POETRY_INSTALLER_VERSION=d62875fc05fb20062175cd14d19a96dbefa48640
+
+# renovate: datasource=github-releases depName=python-poetry/poetry
+ARG POETRY_VERSION=1.8.3
+
+# renovate: datasource=github-releases depName=python-poetry/poetry-plugin-export
+ARG POETRY_PLUGIN_EXPORT_VERSION=1.8.0
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/install.python-poetry.org/$POETRY_INSTALLER_VERSION/install-poetry.py | POETRY_VERSION=$POETRY_VERSION /usr/bin/python3 - && \
+    export PATH="/home/python/.local/bin:$PATH" && \
+    poetry config warnings.export false && \
+    poetry self add poetry-plugin-export==$POETRY_PLUGIN_EXPORT_VERSION
+
+
+FROM poetry AS requirements
+WORKDIR /usr/src/app
+USER python
+
+COPY --chown=python:python pyproject.toml poetry.lock ./
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN export PATH="/home/python/.local/bin:$PATH" && \
+    mkdir -p /tmp/requirements/ && \
+    poetry export --no-interaction --format=requirements.txt --output /tmp/requirements/requirements.txt
+
+
+FROM poetry AS wheels
 WORKDIR /usr/src/app
 USER python
 
 COPY --chown=python:python .python-version pyproject.toml poetry.lock ./
+COPY --chown=python:python sbobot ./sbobot
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-# hadolint ignore=SC1091
 RUN echo "Running with python $(python3 --version)" && \
     [[ "$(cat .python-version)" == "$(python3 --version | cut -d' ' -f2)" ]] || { echo "Python version mismatch" ; exit 1 ; } && \
-    curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.3 python3 - && \
     export PATH="/home/python/.local/bin:$PATH" && \
-    poetry config warnings.export false && \
-    poetry self add poetry-plugin-export==1.8.0 && \
-    poetry export --no-interaction --format=requirements.txt --output requirements.txt && \
-    curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.3 python3 - --uninstall && \
-    rm -rf /home/python/.local && rm -rf /home/python/.config && rm -rf /home/python/.cache && \
-    rm -rf .python-version pyproject.toml poetry.lock && \
-    python3 -m venv .venv && \
-    source .venv/bin/activate && \
-    pip3 install --disable-pip-version-check --no-color --no-python-version-warning --no-cache-dir --timeout 100 --no-input -r requirements.txt && \
-    rm requirements.txt
+    poetry build --format=wheel --output=/tmp/dist --no-cache
 
 
 FROM python-base
@@ -105,7 +127,12 @@ ENV AWS_LWA_READINESS_CHECK_PORT="8000"
 ENV AWS_LWA_READINESS_CHECK_PATH="/healthz"
 ENV AWS_LWA_ASYNC_INIT="true"
 
-COPY --link --from=builder /usr/src/app/.venv .venv
-COPY --chown=python:python sbobot sbobot
+# hadolint ignore=DL3013
+RUN --mount=type=bind,from=requirements,source=/tmp/requirements,target=/requirements \
+    pip3 install --require-hashes --disable-pip-version-check --no-color --no-python-version-warning --no-cache-dir --timeout 100 --no-input -r /requirements/requirements.txt
+
+# hadolint ignore=DL3013
+RUN --mount=type=bind,from=wheels,source=/tmp/dist,target=/dist \
+    pip3 install --no-color --no-python-version-warning --no-cache-dir --timeout 100 --no-input --no-deps /dist/*.whl
 
 CMD ["/lambda-entrypoint.sh"]

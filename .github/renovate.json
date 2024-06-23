@@ -4,20 +4,6 @@
     {
       "customType": "regex",
       "datasourceTemplate": "github-releases",
-      "depNameTemplate": "python-poetry/poetry",
-      "fileMatch": ["gitlab/Dockerfile"],
-      "matchStrings": ["POETRY_VERSION=(?<currentValue>.*) python3"]
-    },
-    {
-      "customType": "regex",
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "python-poetry/poetry-plugin-export",
-      "fileMatch": ["gitlab/Dockerfile"],
-      "matchStrings": ["poetry-plugin-export==(?<currentValue>.*) &&"]
-    },
-    {
-      "customType": "regex",
-      "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
       "fileMatch": ["^tf/.opentofu-version$"],
       "matchStrings": ["(?<currentValue>.*)"]

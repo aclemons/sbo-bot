@@ -8,7 +8,8 @@ from fastapi.responses import ORJSONResponse
 def build_uvicorn_app() -> FastAPI:
     import gitlab
     from aiohttp import ClientSession, ClientTimeout
-    from api import healthcheck_router, webhook_router
+
+    from sbobot.api import healthcheck_router, webhook_router
 
     app = FastAPI(
         default_response_class=ORJSONResponse,
@@ -37,7 +38,7 @@ def build_uvicorn_app() -> FastAPI:
 
 if __name__ == "__main__":
     uvicorn.run(
-        "main:build_uvicorn_app",
+        "sbobot.main:build_uvicorn_app",
         host=os.getenv("UVICORN_HOST", "127.0.0.1"),
         port=8000,
         factory=True,

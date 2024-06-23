@@ -1,0 +1,16 @@
+# Ignore everything
+*
+
+# Unignore the things we want
+!/.python-version
+!/lambda-entrypoint.sh
+!/poetry.lock
+!/pyproject.toml
+!/sbobot
+!/startup.sh
+
+# Ignore again things we unignored
+**/*.pyc
+**/.gitkeep
+**/Dockerfile
+**/__pycache__

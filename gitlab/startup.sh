@@ -2,12 +2,7 @@
 
 set -e
 
-cd /usr/src/app/
-
-# shellcheck source=/dev/null
-. .venv/bin/activate
-
 printf 'Fetching env configuration from ssm\n'
-python3 sbobot/fetch_env.py
+python3 -m sbobot.fetch_env
 eval "$(sed 's/^/export /' /tmp/.env)"
-exec python3 sbobot/main.py
+exec python3 -m sbobot.main
