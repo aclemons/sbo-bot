@@ -129,3 +129,78 @@ jobs:
             printf 'Removing version %s of function %s\n' "$version" "$name"
             aws lambda delete-function --function-name "$name" --qualifier "$version"
           done
+
+  seed-cache:
+    name: Seed various caches from the master branch for ci checks
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    env:
+      # renovate: datasource=git-refs depName=https://github.com/python-poetry/install.python-poetry.org
+      POETRY_INSTALLER_VERSION: d62875fc05fb20062175cd14d19a96dbefa48640
+      # renovate: datasource=github-releases depName=python-poetry/poetry
+      POETRY_VERSION: 1.8.3
+      # renovate: datasource=pypi depName=pre-commit
+      PRE_COMMIT_VERSION: '3.7.1'
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          show-progress: false
+
+      - name: Install poetry
+        run: |
+          curl -sSL "https://raw.githubusercontent.com/python-poetry/install.python-poetry.org/$POETRY_INSTALLER_VERSION/install-poetry.py" | POETRY_VERSION="$POETRY_VERSION" /usr/bin/python3 -
+
+      - name: Configure pre-commit repo cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.cache/pre-commit
+          key:
+            ${{ runner.os }}-pre-commit-repo-${{ env.pythonLocation }}-${{
+            hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Configure pre-commit install cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        id: pre_commit_install_cache
+        with:
+          path: ~/.pre-commit-venv
+          key:
+            ${{ runner.os }}-pre-commit-venv-${{ env.PRE_COMMIT_VERSION }}-${{
+            env.pythonLocation }}
+
+      - name: Install pre-commit
+        if: steps.pre_commit_install_cache.outputs.cache-hit != 'true'
+        run: |
+          python -m venv ~/.pre-commit-venv
+          # shellcheck source=/dev/null
+          . ~/.pre-commit-venv/bin/activate
+          pip install pre-commit==${{ env.PRE_COMMIT_VERSION }}
+
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version-file: 'e2e-tests/.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: |
+            e2e-tests/package-lock.json
+
+      - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
+        with:
+          python-version-file: 'gitlab/.python-version'
+          cache: 'poetry'
+
+      - name: Install python dependencies
+        working-directory: gitlab
+        run: |
+          poetry env use "$(cat .python-version)"
+          poetry install --no-interaction
+
+      - name: Install e2e-tests dependencies
+        working-directory: e2e-tests
+        run: |
+          npm ci
+
+      - name: Run pre-commit
+        run: |
+          # shellcheck source=/dev/null
+          . ~/.pre-commit-venv/bin/activate
+          pre-commit run --all-files --color=always --show-diff-on-failure
