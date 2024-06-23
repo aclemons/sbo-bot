@@ -5,13 +5,14 @@ FROM aclemons/slackware:current@sha256:19d70f9f6bed82352d2c15a62a06344e03fd418b9
 RUN export TERSE=0 && \
     sed -i '/^WGETFLAGS/s/"$/ -q"/' /etc/slackpkg/slackpkg.conf && \
     slackpkg -default_answer=yes -batch=on update && \
-    EXIT_CODE=0 && slackpkg -default_answer=yes -batch=on upgrade-all || EXIT_CODE=$? && \
+    EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on upgrade-all || EXIT_CODE=$? ; } && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on install brotli ca-certificates cyrus-sasl curl dcron nghttp2 perl || EXIT_CODE=$? ; } && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     c_rehash && update-ca-certificates && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
-    touch /var/lib/slackpkg/current
+    touch /var/lib/slackpkg/current && \
+    rm /root/.gnupg/public-keys.d/pubring.db.lock
 
 # renovate: datasource=github-releases depName=aws/aws-lambda-runtime-interface-emulator
 ARG AWS_LAMBDA_RIE_VERSION=v1.20
@@ -30,17 +31,18 @@ WORKDIR /
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN export TERSE=0 && \
     slackpkg -default_answer=yes -batch=on update && \
-    EXIT_CODE=0 && slackpkg -default_answer=yes -batch=on upgrade-all || EXIT_CODE=$? && \
+    EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on upgrade-all || EXIT_CODE=$? ; } && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on install cpio icu4c libgcrypt libgpg-error lua patchelf rpm sqlite || EXIT_CODE=$? ; } && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
     touch /var/lib/slackpkg/current && \
-    if [ "$(uname -m)" = "x86_64" ] ; then curl -o "/tmp/lambda-insights-extension.rpm" -L "https://lambda-insights-extension.s3-ap-northeast-1.amazonaws.com/amazon_linux/lambda-insights-extension.$EXTENSION_VERSION.rpm" ; fi && \
+    rm /root/.gnupg/public-keys.d/pubring.db.lock && \
+    if [ "$(uname -m)" = "x86_64" ] ; then curl -o /tmp/lambda-insights-extension.rpm -L "https://lambda-insights-extension.s3-ap-northeast-1.amazonaws.com/amazon_linux/lambda-insights-extension.$EXTENSION_VERSION.rpm" ; fi && \
     if [ "$(uname -m)" = "x86_64" ] ; then echo "$EXTENSION_CHECKSUM_AMD64 /tmp/lambda-insights-extension.rpm" | sha512sum --strict --check ; fi && \
-    if [ "$(uname -m)" = "aarch64" ] ; then curl -o "/tmp/lambda-insights-extension.rpm" -L "https://lambda-insights-extension-arm64.s3-ap-northeast-1.amazonaws.com/amazon_linux/lambda-insights-extension-arm64.$EXTENSION_VERSION.rpm" ; fi && \
+    if [ "$(uname -m)" = "aarch64" ] ; then curl -o /tmp/lambda-insights-extension.rpm -L "https://lambda-insights-extension-arm64.s3-ap-northeast-1.amazonaws.com/amazon_linux/lambda-insights-extension-arm64.$EXTENSION_VERSION.rpm" ; fi && \
     if [ "$(uname -m)" = "aarch64" ] ; then echo "$EXTENSION_CHECKSUM_ARM64 /tmp/lambda-insights-extension.rpm" | sha512sum --strict --check ; fi && \
-    rpm2cpio < "/tmp/lambda-insights-extension.rpm" | cpio -imdv && \
+    rpm2cpio < /tmp/lambda-insights-extension.rpm | cpio -imdv && \
     rm -f /tmp/lambda-insights-extension.rpm && \
     if [ "$(uname -m)" = "aarch64" ] ; then patchelf --set-interpreter /lib64/ld-linux-aarch64.so.1 /opt/extensions/cloudwatch_lambda_agent ; fi && \
     removepkg cpio icu4c libgcrypt libgpg-error lua patchelf rpm sqlite
@@ -50,12 +52,13 @@ FROM base AS python-base
 
 RUN export TERSE=0 && \
     slackpkg -default_answer=yes -batch=on update && \
-    EXIT_CODE=0 && slackpkg -default_answer=yes -batch=on upgrade-all || EXIT_CODE=$? && \
+    EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on upgrade-all || EXIT_CODE=$? ; } && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on install python3 python-pip expat || EXIT_CODE=$? ; } && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
-    touch /var/lib/slackpkg/current
+    touch /var/lib/slackpkg/current && \
+    rm /root/.gnupg/public-keys.d/pubring.db.lock
 
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.3@sha256:f312209a538c102bcc112b99edf9b989140658a5f8d0c98d9a0c7ce12512e76a AS aws-lambda-adapter
 
@@ -75,7 +78,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/install.python-poetry.org/$POETRY_INSTALLER_VERSION/install-poetry.py | POETRY_VERSION=$POETRY_VERSION /usr/bin/python3 - && \
     export PATH="/root/.local/bin:$PATH" && \
     poetry config warnings.export false && \
-    poetry self add poetry-plugin-export==$POETRY_PLUGIN_EXPORT_VERSION
+    poetry self add poetry-plugin-export==$POETRY_PLUGIN_EXPORT_VERSION && \
+    rm -rf /root/.cache
 
 
 FROM poetry AS requirements
@@ -86,20 +90,20 @@ COPY pyproject.toml poetry.lock ./
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN export PATH="/root/.local/bin:$PATH" && \
     mkdir -p /tmp/requirements/ && \
-    poetry export --no-interaction --format=requirements.txt --output /tmp/requirements/requirements.txt
+    poetry export --no-interaction --format=requirements.txt --output /tmp/requirements/requirements.txt && \
+    rm -rf /root/.cache
 
 
 FROM poetry AS wheels
-WORKDIR /tmp/work
-
-COPY .python-version pyproject.toml poetry.lock ./
-COPY sbobot ./sbobot
+WORKDIR /src
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN echo "Running with python $(python3 --version)" && \
+RUN --mount=target=/src,source=. \
+    echo "Running with python $(python3 --version)" && \
     [[ "$(cat .python-version)" == "$(python3 --version | cut -d' ' -f2)" ]] || { echo "Python version mismatch" ; exit 1 ; } && \
     export PATH="/root/.local/bin:$PATH" && \
-    poetry build --format=wheel --output=/tmp/dist --no-cache
+    poetry build --format=wheel --output=/tmp/dist --no-cache && \
+    rm -rf /root/.cache
 
 
 FROM python-base
