@@ -13,11 +13,31 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
+    env:
+      # renovate: datasource=git-refs depName=https://github.com/python-poetry/install.python-poetry.org
+      POETRY_INSTALLER_VERSION: d62875fc05fb20062175cd14d19a96dbefa48640
+      # renovate: datasource=github-releases depName=python-poetry/poetry
+      POETRY_VERSION: 1.8.3
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           show-progress: false
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
+
+      - name: Start docker compose base services
+        run: |
+          nohup docker compose up -d --wait --quiet-pull github-local-api-gateway gitlab-local-api-gateway localstack wiremock &
+          echo "COMPOSE_PID=$!" >> "$GITHUB_ENV"
+
+      - name: Install poetry
+        run: |
+          curl -sSL "https://raw.githubusercontent.com/python-poetry/install.python-poetry.org/$POETRY_INSTALLER_VERSION/install-poetry.py" | POETRY_VERSION="$POETRY_VERSION" /usr/bin/python3 -
 
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
@@ -26,11 +46,21 @@ jobs:
           cache-dependency-path: |
             e2e-tests/package-lock.json
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
+      - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
+        with:
+          python-version-file: 'gitlab/.python-version'
+          cache: 'poetry'
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
+      - name: Install python dependencies
+        working-directory: gitlab
+        run: |
+          poetry env use "$(cat .python-version)"
+          poetry install --no-interaction
+
+      - name: Install e2e-tests dependencies
+        working-directory: e2e-tests
+        run: |
+          npm ci
 
       - name: Build github-app
         uses: docker/build-push-action@31159d49c0d4756269a0940a750801a1ea5d7003 # v6.1.0
@@ -58,12 +88,17 @@ jobs:
           tags: |
             sbobot/bot:gitlab-webhook-latest
 
-      - name: Start docker compose
+      - name: Start remaining docker compose services
         run: |
+          timeout 20 bash -c "while kill -0 $COMPOSE_PID 2> /dev/null; do sleep 1; done"
           docker compose up -d --wait --quiet-pull
 
-      - name: Run tests
+      - name: Run pytests
+        working-directory: gitlab
+        run: |
+          poetry run pytest
+
+      - name: Run e2e-tests
         working-directory: e2e-tests
         run: |
-          npm ci
           npm run test
