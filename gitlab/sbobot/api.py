@@ -12,6 +12,7 @@ from sbobot.deps import (
     get_jenkins_configuration,
     get_payload_parser,
 )
+from sbobot.fastapi import ORJSONRoute
 
 if TYPE_CHECKING:
     import gitlab
@@ -20,7 +21,7 @@ if TYPE_CHECKING:
     from sbobot.config import JenkinsConfiguration
     from sbobot.parser import PayloadParserProtocol
 
-webhook_router = APIRouter(tags=["webhook"])
+webhook_router = APIRouter(tags=["webhook"], route_class=ORJSONRoute)
 
 ALLOWED_COMMENTORS = (os.environ.get("GITLAB_ADMINS") or "").split(",")
 
