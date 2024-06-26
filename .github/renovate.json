@@ -40,6 +40,11 @@
       "enabled": false,
       "matchDepNames": ["hashicorp/terraform"],
       "matchDepTypes": ["required_version"]
+    },
+    {
+      "description": "Group boto3 updates with stub updates",
+      "matchDepNames": ["boto3", "boto3-stubs-lite"],
+      "groupName": "boto"
     }
   ],
   "pre-commit": {
