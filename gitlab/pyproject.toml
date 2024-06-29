@@ -30,6 +30,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pyright]
+reportUnnecessaryTypeIgnoreComment = "error"
 typeCheckingMode = "strict"
 
 [tool.pytest.ini_options]
