@@ -11,7 +11,7 @@ python = "3.11.9"
 aiohttp = "3.9.5"
 boto3 = "1.34.139"
 fastapi-slim = "0.111.0"
-orjson = "3.10.5"
+orjson = "3.10.6"
 python-gitlab = "4.7.0"
 structlog = "24.2.0"
 uvicorn = {version = "0.30.1", extras = ["standard"]}
