@@ -24,6 +24,7 @@ if TYPE_CHECKING:
 webhook_router = APIRouter(tags=["webhook"], route_class=ORJSONRoute)
 
 ALLOWED_COMMENTORS = (os.environ.get("GITLAB_ADMINS") or "").split(",")
+ALLOWED_CONTRIBUTORS = (os.environ.get("GITLAB_CONTRIBUTORS") or "").split(",")
 
 log = structlog.get_logger()
 
@@ -48,14 +49,45 @@ async def webhook(
         log.info("Payload was not a command.")
         return
 
-    if command.commentator not in ALLOWED_COMMENTORS:
-        log.info("Comment was not made by an admin.")
-        return
+    if command.mr_id is not None:
+        if command.commentator not in ALLOWED_COMMENTORS:
+            log.info(
+                "Comment was not made by an admin.", commentator=command.commentator
+            )
 
-    mr = gitlab.projects.get(command.project_id, lazy=True).mergerequests.get(
-        command.mr_id, lazy=True
-    )
-    note = mr.notes.get(command.comment_id, lazy=True)
+            if command.commentator not in ALLOWED_CONTRIBUTORS:
+                log.info(
+                    "Comment was not made by a contributor.",
+                    commentator=command.commentator,
+                )
+                return
+
+            if not command.commentator_is_owner:
+                log.info(
+                    "Comment was not on the contributor's own PR.",
+                    commentator=command.commentator,
+                )
+                return
+
+        mr = gitlab.projects.get(command.project_id, lazy=True).mergerequests.get(
+            command.mr_id, lazy=True
+        )
+        note = mr.notes.get(command.comment_id, lazy=True)
+
+    elif command.issue_id is not None:
+        if command.commentator not in ALLOWED_COMMENTORS:
+            log.info(
+                "Comment was not made by an admin.", commentator=command.commentator
+            )
+            return
+
+        issue = gitlab.projects.get(command.project_id, lazy=True).issues.get(
+            command.issue_id, lazy=True
+        )
+        note = issue.notes.get(command.comment_id, lazy=True)
+    else:
+        msg = "Invalid state"
+        raise ValueError(msg)
 
     async def schedule_job(build_arch: str) -> bool:
         log.info(
@@ -67,7 +99,8 @@ async def webhook(
 
         request_data = {
             "build_arch": build_arch,
-            "gl_mr": command.mr_id,
+            "gl_mr": None if command.mr_id is None else command.mr_id,
+            "gl_issue": None if command.issue_id is None else command.issue_id,
             "build_package": command.target,
             "action": command.command,
             "repo": command.repo,

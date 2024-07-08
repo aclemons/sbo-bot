@@ -2,8 +2,12 @@ import re
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Literal, Protocol
 
-COMMENT_RE = re.compile(
+MR_COMMENT_RE = re.compile(
     "^(?:@|/)sbo-bot:? (rebuild|build|lint) ((x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$"
+)
+
+ISSUE_COMMENT_RE = re.compile(
+    "^(?:@|/)sbo-bot:? (rebuild|build|lint) ((x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+|all)$"
 )
 
 ArchValue = Literal["arm", "i586", "x86_64"]
@@ -11,10 +15,12 @@ ArchValue = Literal["arm", "i586", "x86_64"]
 
 @dataclass
 class BuildCommand:
+    commentator_is_owner: bool
     commentator: str
     comment_id: int
     project_id: int
-    mr_id: int
+    mr_id: int | None
+    issue_id: int | None
     arches: list[ArchValue]
     target: str
     command: Literal["lint", "build", "rebuild"]
@@ -32,16 +38,37 @@ class PayloadParser:
         if payload["object_kind"] != "note":
             return None
 
-        if payload["object_attributes"]["noteable_type"] != "MergeRequest":
+        if (
+            payload["object_attributes"]["noteable_type"] != "MergeRequest"
+            and payload["object_attributes"]["noteable_type"] != "Issue"
+        ):
             return None
 
         commentator = payload["user"]["username"]
         comment_id = payload["object_attributes"]["id"]
         comment: str = payload["object_attributes"]["note"]
-        mr_id = payload["merge_request"]["iid"]
-        project_id = payload["project_id"]
 
-        match = COMMENT_RE.match(comment)
+        mr_id = None
+        issue_id = None
+        if payload["object_attributes"]["noteable_type"] == "MergeRequest":
+            mr_id = payload["merge_request"]["iid"]
+            commentator_is_owner = (
+                payload["merge_request"]["author_id"] == payload["user"]["id"]
+            )
+
+            match = MR_COMMENT_RE.match(comment)
+        elif payload["object_attributes"]["noteable_type"] == "Issue":
+            issue_id = payload["issue"]["iid"]
+            commentator_is_owner = (
+                payload["issue"]["author_id"] == payload["user"]["id"]
+            )
+
+            match = ISSUE_COMMENT_RE.match(comment)
+        else:
+            msg = "Invalid state"
+            raise ValueError(msg)
+
+        project_id = payload["project_id"]
 
         if not match:
             return None
@@ -72,9 +99,11 @@ class PayloadParser:
         build_package = match[4]
 
         return BuildCommand(
+            commentator_is_owner=commentator_is_owner,
             commentator=commentator,
             comment_id=comment_id,
             mr_id=mr_id,
+            issue_id=issue_id,
             project_id=project_id,
             arches=[build_arch] if build_arch else ["i586", "x86_64"],
             target=build_package,

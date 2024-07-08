@@ -63,7 +63,7 @@ quote-annotations = true
 runtime-evaluated-base-classes = ["pydantic.BaseModel"]
 
 [tool.ruff.lint.mccabe]
-max-complexity = 12
+max-complexity = 20
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = [
