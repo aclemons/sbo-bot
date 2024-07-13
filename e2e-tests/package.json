@@ -28,5 +28,8 @@
     "typescript": "5.5.3",
     "typescript-eslint": "8.0.0-alpha.41",
     "wiremock-captain": "3.3.1"
+  },
+  "engines": {
+    "node": "20.15.1"
   }
 }
