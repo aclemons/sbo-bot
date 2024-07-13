@@ -14,8 +14,8 @@ process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 
 export = (app: Probot) => {
-  const allowedCommentors = (process.env.GITHUB_ADMINS || '').split(',');
-  const allowedContributors = (process.env.GITHUB_CONTRIBUTORS || '').split(',');
+  const allowedCommentors = (process.env.GITHUB_ADMINS ?? '').split(',');
+  const allowedContributors = (process.env.GITHUB_CONTRIBUTORS ?? '').split(',');
 
   app.on('issue_comment.created', async (context) => {
     context.log.info('Processing comment');
@@ -47,18 +47,20 @@ export = (app: Probot) => {
         }
       }
 
-      matches = comment.match(
-        '^@sbo-bot: (single-build|rebuild|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$',
-      );
+      matches =
+        /^@sbo-bot: (single-build|rebuild|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\/[a-zA-Z0-9+\-._]+)$/.exec(
+          comment,
+        );
     } else {
       if (!allowedCommentors.includes(commentator)) {
         context.log.info(`Comment was not made by an admin. (${commentator})`);
         return;
       }
 
-      matches = comment.match(
-        '^@sbo-bot: (single-build|rebuild|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+|all)$',
-      );
+      matches =
+        /^@sbo-bot: (single-build|rebuild|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\/[a-zA-Z0-9+\-._]+|all)$/.exec(
+          comment,
+        );
     }
 
     if (!matches) {
@@ -94,7 +96,7 @@ export = (app: Probot) => {
 
       context.log.info(`Received jenkins response: ${JSON.stringify(data)}`);
 
-      if (status === 200 && data['jobs']['slackbuilds.org-pr-check-build-package']['triggered']) {
+      if (status === 200 && data.jobs['slackbuilds.org-pr-check-build-package'].triggered) {
         context.log.info('Build was successfully scheduled.');
         await context.octokit.reactions.createForIssueComment({
           owner: context.repo().owner,
@@ -131,7 +133,7 @@ export = (app: Probot) => {
 
       context.log.info(`Received jenkins response for i586 trigger: ${JSON.stringify(data)}`);
 
-      if (status === 200 && data['jobs']['slackbuilds.org-pr-check-build-package']['triggered']) {
+      if (status === 200 && data.jobs['slackbuilds.org-pr-check-build-package'].triggered) {
         context.log.info('Build (i586) was successfully scheduled.');
 
         const { data, status } = await axios.post(
@@ -154,7 +156,7 @@ export = (app: Probot) => {
 
         context.log.info(`Received jenkins response for x86_64 trigger: ${JSON.stringify(data)}`);
 
-        if (status === 200 && data['jobs']['slackbuilds.org-pr-check-build-package']['triggered']) {
+        if (status === 200 && data.jobs['slackbuilds.org-pr-check-build-package'].triggered) {
           context.log.info('Build (x86_64) was successfully scheduled.');
           await context.octokit.reactions.createForIssueComment({
             owner: context.repo().owner,

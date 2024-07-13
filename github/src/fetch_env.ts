@@ -31,7 +31,7 @@ const run = async () => {
     if (parameter === null) {
       console.log('Writing empty .env file to /tmp');
       fs.writeFileSync('/tmp/.env', '', { encoding: 'utf8' });
-    } else if (parameter?.Parameter?.Value) {
+    } else if (parameter.Parameter?.Value) {
       console.log('Parameter found, writing .env file to /tmp');
       fs.writeFileSync('/tmp/.env', parameter.Parameter.Value, { encoding: 'utf8' });
     } else {

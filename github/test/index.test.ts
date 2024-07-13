@@ -13,7 +13,8 @@ const path = require('path');
 
 const privateKey = fs.readFileSync(path.join(__dirname, 'fixtures/mock-cert.pem'), 'utf-8');
 
-describe('My Probot app', () => {
+const { afterEach, beforeEach, describe, expect, it, test } = require('@jest/globals');
+describe('my Probot app', () => {
   let probot: any;
 
   beforeEach(() => {
@@ -31,7 +32,7 @@ describe('My Probot app', () => {
     probot.load(myProbotApp);
   });
 
-  test('creates a comment when an issue is opened', async () => {
+  it('creates a comment when an issue is opened', async () => {
     const mock = nock('https://api.github.com')
       // Test that we correctly return a test token
       .post('/app/installations/2/access_tokens')
