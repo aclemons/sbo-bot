@@ -1,14 +1,8 @@
-import * as Sentry from '@sentry/node';
 import { Probot } from 'probot';
 import axios from 'axios';
 
-Sentry.init({
-  enableTracing: false,
-});
-
 const shutdown = () => {
   console.log('Shutting down server...');
-  Sentry.flush();
 };
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
