@@ -5,8 +5,15 @@
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
-      "fileMatch": ["^tf/.opentofu-version$"],
+      "fileMatch": ["^tf/\\.opentofu-version$"],
       "matchStrings": ["(?<currentValue>.*)"]
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "opentofu/opentofu",
+      "fileMatch": ["^tf/.*\\.tf$"],
+      "matchStrings": ["required_version\\s=\\s\"(?<currentValue>.*?)\""]
     },
     {
       "customType": "regex",
