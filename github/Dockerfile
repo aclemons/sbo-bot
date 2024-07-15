@@ -71,11 +71,11 @@ USER node
 
 RUN npm config set update-notifier false
 
-COPY --chown=node:node .nvmrc package.json package-lock.json ./
+COPY --chown=node:node package.json package-lock.json ./
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN echo "Running with node $(node --version)" && \
-    [[ "$(cat .nvmrc)" == "$(node --version | sed 's/v//')" ]] || { echo "Node version mismatch" ; exit 1 ; } && \
+    [[ "$(sed -n '/"engines"/,+1p' package.json | sed -n '$p' | cut -d: -f2 | sed 's/"//g;s/[[:space:]]*//g')" == "$(node --version | sed 's/v//')" ]] || { echo "Node version mismatch" ; exit 1 ; } && \
     npm ci && npm cache clean --force
 
 COPY --chown=node:node . ./

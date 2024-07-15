@@ -178,7 +178,7 @@ jobs:
 
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version-file: 'e2e-tests/.nvmrc'
+          node-version-file: '.nvmrc'
           cache: 'npm'
           cache-dependency-path: |
             e2e-tests/package-lock.json
