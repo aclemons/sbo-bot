@@ -60,9 +60,11 @@ export const mockJenkinsSingleMrBuild = async ({
 
 export const mockJenkinsSinglePrBuild = async ({
   prId,
+  issueId,
   build,
 }: {
-  prId: number;
+  prId?: number | null;
+  issueId?: number | null;
   build: string;
 }): Promise<null> => {
   const wiremockEndpoint = 'http://localhost:9100';
@@ -73,8 +75,8 @@ export const mockJenkinsSinglePrBuild = async ({
     endpoint: '/generic-webhook-trigger/invoke',
     body: {
       build_arch: 'x86_64',
-      gh_pr: prId,
-      gh_issue: null,
+      gh_pr: prId ?? null,
+      gh_issue: issueId ?? null,
       build_package: build,
       repo: 'SlackBuildsOrg/slackbuilds',
       action: 'build',
@@ -92,12 +94,12 @@ export const mockJenkinsSinglePrBuild = async ({
             action: 'build',
             build_arch: 'x86_64',
             build_package: build,
-            gh_issue: '-1',
-            gh_pr: prId.toString(),
+            gh_issue: issueId?.toString() ?? '-1',
+            gh_pr: prId?.toString() ?? '-1',
             gl_mr: '-1',
             repo: 'SlackBuildsOrg/slackbuilds',
           },
-          regexpFilterText: `build,x86_64,-1,-1,${prId.toString()},-1,${build},SlackBuilds.org/slackbuilds`,
+          regexpFilterText: `build,x86_64,-1,-1,${prId?.toString() ?? '-1'},${issueId?.toString() ?? '-1'},${build},SlackBuilds.org/slackbuilds`,
           id: 4053,
           url: 'queue/item/4053/',
         },

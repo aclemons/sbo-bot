@@ -7,11 +7,14 @@ import {
 export const buildCommentWebhookPayload = async ({
   username,
   build,
+  issue,
 }: {
   username: string;
   build: string;
+  issue?: boolean;
 }): Promise<{
-  prId: number;
+  prId: number | null;
+  issueId: number | null;
   commentId: number;
   payload: string;
   signature: string;
@@ -19,44 +22,87 @@ export const buildCommentWebhookPayload = async ({
   const min = 0;
   const max = 65535;
 
-  const prId = Math.floor(Math.random() * (max - min + 1)) + min;
   const commentId = Math.floor(Math.random() * (max - min + 1)) + min;
+  let payloadObject;
+  let issueId = null;
+  let prId = null;
 
-  const payloadObject = {
-    action: 'created',
-    issue: {
-      number: prId,
-      title: build,
-      user: {
-        login: username,
+  if (issue) {
+    issueId = Math.floor(Math.random() * (max - min + 1)) + min;
+    payloadObject = {
+      action: 'created',
+      issue: {
+        number: issueId,
+        title: build,
+        user: {
+          login: username,
+        },
+        pull_request: {},
       },
-      pull_request: {},
-    },
-    comment: {
-      id: commentId,
-      user: {
-        login: username,
+      comment: {
+        id: commentId,
+        user: {
+          login: username,
+        },
+        body: `@sbo-bot: build x86_64 ${build}`,
       },
-      body: `@sbo-bot: build x86_64 ${build}`,
-    },
-    repository: {
-      id: 49907051,
-      name: 'slackbuilds',
-      full_name: 'SlackBuildsOrg/slackbuilds',
-      owner: {
+      repository: {
+        id: 49907051,
+        name: 'slackbuilds',
+        full_name: 'SlackBuildsOrg/slackbuilds',
+        owner: {
+          login: 'SlackBuildsOrg',
+        },
+      },
+      organization: {
         login: 'SlackBuildsOrg',
       },
-    },
-    organization: {
-      login: 'SlackBuildsOrg',
-    },
-    sender: {
-      login: username,
-    },
-    installation: {
-      id: 123,
-    },
-  };
+      sender: {
+        login: username,
+      },
+      installation: {
+        id: 123,
+      },
+    };
+  } else {
+    prId = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    payloadObject = {
+      action: 'created',
+      issue: {
+        number: prId,
+        title: build,
+        user: {
+          login: username,
+        },
+        pull_request: {},
+      },
+      comment: {
+        id: commentId,
+        user: {
+          login: username,
+        },
+        body: `@sbo-bot: build x86_64 ${build}`,
+      },
+      repository: {
+        id: 49907051,
+        name: 'slackbuilds',
+        full_name: 'SlackBuildsOrg/slackbuilds',
+        owner: {
+          login: 'SlackBuildsOrg',
+        },
+      },
+      organization: {
+        login: 'SlackBuildsOrg',
+      },
+      sender: {
+        login: username,
+      },
+      installation: {
+        id: 123,
+      },
+    };
+  }
 
   const payload = JSON.stringify(payloadObject);
 
@@ -79,6 +125,7 @@ export const buildCommentWebhookPayload = async ({
   return {
     payload,
     prId,
+    issueId,
     commentId,
     signature,
   };
