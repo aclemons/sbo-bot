@@ -118,6 +118,7 @@ jobs:
       - name: Start remaining docker compose services
         run: |
           timeout 20 bash -c "while kill -0 $COMPOSE_PID 2> /dev/null; do sleep 1; done"
+          ./seed.sh
           docker compose up -d --wait --quiet-pull
 
       - name: Run pre-commit

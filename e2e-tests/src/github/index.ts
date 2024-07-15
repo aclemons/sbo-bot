@@ -37,7 +37,6 @@ export const buildCommentWebhookPayload = async ({
         user: {
           login: username,
         },
-        pull_request: {},
       },
       comment: {
         id: commentId,

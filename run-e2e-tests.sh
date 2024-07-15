@@ -8,7 +8,11 @@ CWD="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
   cd "$CWD"
 
   docker compose down --remove-orphans
-  docker compose up -d --wait --quiet-pull --remove-orphans
+  docker compose up -d --wait --quiet-pull --remove-orphans localstack
+
+  "$CWD/seed.sh"
+
+  docker compose up -d --wait --quiet-pull --remove-orphans --build
 )
 
 cleanup() {

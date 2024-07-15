@@ -1,0 +1,10 @@
+# Ignore everything
+*
+
+# Unignore the things we want
+!/lambda-entrypoint.sh
+!/package-lock.json
+!/package.json
+!/src/**/*.ts
+!/startup.sh
+!/tsconfig.json
