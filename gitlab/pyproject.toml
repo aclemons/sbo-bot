@@ -13,7 +13,7 @@ boto3 = "1.34.145"
 fastapi-slim = "0.111.1"
 orjson = "3.10.6"
 python-gitlab = "4.8.0"
-structlog = "24.2.0"
+structlog = "24.4.0"
 uvicorn = {version = "0.30.1", extras = ["standard"]}
 yarl = "1.9.4"
 
