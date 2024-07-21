@@ -26,7 +26,7 @@
     "ts-jest": "29.2.3",
     "ts-node": "10.9.2",
     "typescript": "5.5.3",
-    "typescript-eslint": "8.0.0-alpha.47",
+    "typescript-eslint": "8.0.0-alpha.48",
     "wiremock-captain": "3.3.1"
   },
   "engines": {
