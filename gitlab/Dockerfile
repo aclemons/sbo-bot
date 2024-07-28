@@ -60,7 +60,7 @@ RUN export TERSE=0 && \
     touch /var/lib/slackpkg/current && \
     rm /root/.gnupg/public-keys.d/pubring.db.lock
 
-FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.3@sha256:f312209a538c102bcc112b99edf9b989140658a5f8d0c98d9a0c7ce12512e76a AS aws-lambda-adapter
+FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.4@sha256:e2653f741cd15851ba4f13f3cc47d29f2d14377c7d11737bfa272baa1b569007 AS aws-lambda-adapter
 
 
 FROM python-base AS poetry
