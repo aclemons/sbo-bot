@@ -9,7 +9,7 @@ license = "MIT"
 python = "3.11.9"
 
 aiohttp = "3.9.5"
-boto3 = "1.34.145"
+boto3 = "1.34.149"
 fastapi-slim = "0.111.1"
 orjson = "3.10.6"
 python-gitlab = "4.8.0"
@@ -18,7 +18,7 @@ uvicorn = {version = "0.30.3", extras = ["standard"]}
 yarl = "1.9.4"
 
 [tool.poetry.group.dev.dependencies]
-boto3-stubs-lite = { version = "1.34.145", extras = ["ssm"] }
+boto3-stubs-lite = { version = "1.34.149", extras = ["ssm"] }
 pyright = "1.1.373"
 pytest = "8.3.2"
 pytest-dotenv = "0.5.2"
