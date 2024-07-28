@@ -11,8 +11,7 @@ RUN export TERSE=0 && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     c_rehash && update-ca-certificates && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
-    touch /var/lib/slackpkg/current && \
-    rm /root/.gnupg/public-keys.d/pubring.db.lock
+    touch /var/lib/slackpkg/current
 
 # renovate: datasource=github-releases depName=aws/aws-lambda-runtime-interface-emulator
 ARG AWS_LAMBDA_RIE_VERSION=v1.21
@@ -57,8 +56,7 @@ RUN export TERSE=0 && \
     EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on install python3 python-pip expat || EXIT_CODE=$? ; } && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
-    touch /var/lib/slackpkg/current && \
-    rm /root/.gnupg/public-keys.d/pubring.db.lock
+    touch /var/lib/slackpkg/current
 
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.4@sha256:e2653f741cd15851ba4f13f3cc47d29f2d14377c7d11737bfa272baa1b569007 AS aws-lambda-adapter
 
