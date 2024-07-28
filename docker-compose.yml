@@ -69,7 +69,7 @@ services:
     extra_hosts:
       - gw:host-gateway
   wiremock:
-    image: wiremock/wiremock:3.9.0@sha256:d5936448c36bd4ed54489707b76ae19117a807d809f03b58b28a4d338137bb28
+    image: wiremock/wiremock:3.9.1@sha256:8fe02bc3f9b63deb1454d41750dbaf081adf4b3e8c74fd8e31f790bee5647b88
     command: --verbose --global-response-templating
     ports:
       - 9100:8080
