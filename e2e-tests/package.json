@@ -30,6 +30,6 @@
     "wiremock-captain": "3.3.1"
   },
   "engines": {
-    "node": "20.15.1"
+    "node": "20.16.0"
   }
 }
