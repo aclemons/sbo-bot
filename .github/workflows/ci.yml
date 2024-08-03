@@ -19,7 +19,7 @@ jobs:
       # renovate: datasource=github-releases depName=python-poetry/poetry
       POETRY_VERSION: 1.8.3
       # renovate: datasource=pypi depName=pre-commit
-      PRE_COMMIT_VERSION: '3.7.1'
+      PRE_COMMIT_VERSION: '3.8.0'
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
