@@ -10,7 +10,7 @@ python = "3.11.9"
 
 aiohttp = "3.9.5"
 boto3 = "1.34.149"
-fastapi-slim = "0.111.1"
+fastapi-slim = "0.112.0"
 orjson = "3.10.6"
 python-gitlab = "4.8.0"
 structlog = "24.4.0"
