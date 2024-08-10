@@ -22,7 +22,7 @@ boto3-stubs-lite = { version = "1.34.153", extras = ["ssm"] }
 pyright = "1.1.374"
 pytest = "8.3.2"
 pytest-dotenv = "0.5.2"
-ruff = "0.5.6"
+ruff = "0.5.7"
 ruff-lsp = "0.0.54"
 
 [build-system]
