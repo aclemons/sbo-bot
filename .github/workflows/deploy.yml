@@ -52,7 +52,7 @@ jobs:
           mask-password: 'true'
 
       - name: Build and push github-app
-        uses: docker/build-push-action@5176d81f87c23d6fc96624dfdbcd9f3830bbe445 # v6.5.0
+        uses: docker/build-push-action@16ebe778df0e7752d2cfcbd924afdbbd89c1a755 # v6.6.1
         with:
           push: true
           platforms: linux/arm64/v8
@@ -66,7 +66,7 @@ jobs:
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/sbobot/bot:github-app-${{ env.DOCKER_IMAGE_VERSION }}
 
       - name: Build and push gitlab-webhook
-        uses: docker/build-push-action@5176d81f87c23d6fc96624dfdbcd9f3830bbe445 # v6.5.0
+        uses: docker/build-push-action@16ebe778df0e7752d2cfcbd924afdbbd89c1a755 # v6.6.1
         with:
           push: true
           platforms: linux/arm64/v8
