@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-ssm": "3.628.0",
-    "axios": "1.7.3",
+    "axios": "1.7.4",
     "probot": "13.3.7"
   },
   "devDependencies": {
