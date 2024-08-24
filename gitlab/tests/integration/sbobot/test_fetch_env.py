@@ -19,7 +19,7 @@ def ssm_client() -> "Generator[SSMClient, None, None]":
         yield client
 
 
-@pytest.fixture()
+@pytest.fixture
 def target_file(tmp_path_factory: "pytest.TempPathFactory") -> "Path":
     return tmp_path_factory.mktemp("fetch_env") / ".env"
 
