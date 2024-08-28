@@ -1456,13 +1456,13 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "python-gitlab"
-version = "4.9.0"
+version = "4.10.0"
 description = "A python wrapper for the GitLab API"
 optional = false
 python-versions = ">=3.8.0"
 files = [
-    {file = "python_gitlab-4.9.0-py3-none-any.whl", hash = "sha256:0c8b7220055072bc44a344ea944237f1251f8dcdd9eae88c4b2fb5c1af2085fa"},
-    {file = "python_gitlab-4.9.0.tar.gz", hash = "sha256:df44dbb6e9c941e7ebfb9244e7ed4aa4db90f5c16498cb2d135b8e6e7f089a1a"},
+    {file = "python_gitlab-4.10.0-py3-none-any.whl", hash = "sha256:53ea6d977fb26d256390636616ca91d127cd04bdefc6c5ce2d7711b8e5100b2a"},
+    {file = "python_gitlab-4.10.0.tar.gz", hash = "sha256:86f99c1915088e2d2573817aca8bf6bab5e4f12d42b04ef6b2df2abb528d57fd"},
 ]
 
 [package.dependencies]
@@ -2110,4 +2110,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.9"
-content-hash = "d68bc83d52fd1b8f2d3fb86f046d7c89f77b6a6df044af6253cfcfaf6ded55a5"
+content-hash = "fa5cfaf5564b6b5b5184af71afb38e8802c60d4ca97b4dad8a158f44a6ffcf08"
