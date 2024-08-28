@@ -12,7 +12,7 @@ aiohttp = "3.10.5"
 boto3 = "1.35.6"
 fastapi-slim = "0.112.2"
 orjson = "3.10.7"
-python-gitlab = "4.9.0"
+python-gitlab = "4.10.0"
 structlog = "24.4.0"
 uvicorn = {version = "0.30.6", extras = ["standard"]}
 yarl = "1.9.4"
