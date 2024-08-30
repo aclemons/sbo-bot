@@ -1,7 +1,7 @@
 ---
 services:
   localstack:
-    image: localstack/localstack:3.6.0@sha256:231148e6d60d040441ee0b418ab181eaedf30d18bca23ce5b44dfb863c40fb7c
+    image: localstack/localstack:3.7.0@sha256:df63c67e3c8aeff4aec7421bd52a10c4a7a5e414d959c2eba2ec744badcc9e9b
     environment:
       - EAGER_SERVICE_LOADING=1
       - SERVICES=events,ssm
