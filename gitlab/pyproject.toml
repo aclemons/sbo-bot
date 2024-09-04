@@ -15,7 +15,7 @@ orjson = "3.10.7"
 python-gitlab = "4.10.0"
 structlog = "24.4.0"
 uvicorn = {version = "0.30.6", extras = ["standard"]}
-yarl = "1.9.4"
+yarl = "1.9.9"
 
 [tool.poetry.group.dev.dependencies]
 boto3-stubs-lite = { version = "1.35.12", extras = ["ssm"] }
