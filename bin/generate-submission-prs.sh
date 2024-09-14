@@ -122,5 +122,7 @@ printf 'Syncing data...\n'
       git push --set-upstream "https://$BOT_NAME:$GITHUB_TOKEN@github.com/$GIT_REPO.git" HEAD
       gh pr create --repo="$GIT_REPO" --head "$package-$checksum" --label submission-form --fill-first
     )
+
+    ssh -n slackbuilds.org "mv www/pending/$package.tar* ~/ARCHIVE/"
   done
 } 3<&0
