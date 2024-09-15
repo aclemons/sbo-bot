@@ -20,7 +20,7 @@ yarl = "1.10.0"
 [tool.poetry.group.dev.dependencies]
 boto3-stubs-lite = { version = "1.35.19", extras = ["ssm"] }
 pyright = "1.1.379"
-pytest = "8.3.2"
+pytest = "8.3.3"
 pytest-dotenv = "0.5.2"
 ruff = "0.6.4"
 ruff-lsp = "0.0.56"
