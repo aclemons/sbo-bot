@@ -6,7 +6,7 @@ authors = ["Andrew Clemons <andrew.clemons@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "3.11.9"
+python = "3.11.10"
 
 aiohttp = "3.10.5"
 boto3 = "1.35.19"
