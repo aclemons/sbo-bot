@@ -1458,13 +1458,13 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "python-gitlab"
-version = "4.10.0"
+version = "4.11.1"
 description = "A python wrapper for the GitLab API"
 optional = false
 python-versions = ">=3.8.0"
 files = [
-    {file = "python_gitlab-4.10.0-py3-none-any.whl", hash = "sha256:53ea6d977fb26d256390636616ca91d127cd04bdefc6c5ce2d7711b8e5100b2a"},
-    {file = "python_gitlab-4.10.0.tar.gz", hash = "sha256:86f99c1915088e2d2573817aca8bf6bab5e4f12d42b04ef6b2df2abb528d57fd"},
+    {file = "python_gitlab-4.11.1-py3-none-any.whl", hash = "sha256:f15fe4f4cbaa58c04e422ad30a2d4fc7976294dfdf1f90f81ab927e5b2238f33"},
+    {file = "python_gitlab-4.11.1.tar.gz", hash = "sha256:7afa2f9c30618bc3daee95d2186a06e1cf18ca2fa97890eb55fd8ddc4e339812"},
 ]
 
 [package.dependencies]
@@ -1473,6 +1473,7 @@ requests-toolbelt = ">=1.0.0"
 
 [package.extras]
 autocompletion = ["argcomplete (>=1.10.0,<3)"]
+graphql = ["gql[httpx] (>=3.5.0,<4)"]
 yaml = ["PyYaml (>=6.0.1)"]
 
 [[package]]
@@ -2110,4 +2111,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.9"
-content-hash = "0fbd002892b52a23b0c3f732cab436e81aa4c4b16c886ab7cad878d27d35e7cb"
+content-hash = "3f39093bf592717e6280345f9698928746025e8d19f6025dc41e853e5cf0755c"
