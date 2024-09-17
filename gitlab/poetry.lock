@@ -810,13 +810,13 @@ files = [
 
 [[package]]
 name = "fastapi-slim"
-version = "0.114.2"
+version = "0.115.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "fastapi_slim-0.114.2-py3-none-any.whl", hash = "sha256:52ae76c53a30ad0fa96beb84c1bf4bef9c72e88c2f7c0473e836f01d7ac3ca6b"},
-    {file = "fastapi_slim-0.114.2.tar.gz", hash = "sha256:76d0a450826fb0fa740268be55ef04c44807da87a94fbbf5f16338b5a4a2d321"},
+    {file = "fastapi_slim-0.115.0-py3-none-any.whl", hash = "sha256:27ab44da95b622e68be7a19f06df1960a320b9d94e689b0adfc055bb26ee9be7"},
+    {file = "fastapi_slim-0.115.0.tar.gz", hash = "sha256:b4b962ca2aa0a31010dafdad3d4da99d368a5591223304c6fb385712fad7feb6"},
 ]
 
 [package.dependencies]
@@ -2117,4 +2117,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.10"
-content-hash = "c79b5d0445db4670d6777ebe67937f54413676812460b8f25e0099a6e81f22c2"
+content-hash = "c6135b45d571d143ff20259eb3ae53dac0a4a707a88aeaa23bc780d999425a8a"
