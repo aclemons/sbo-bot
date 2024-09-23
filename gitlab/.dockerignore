@@ -4,13 +4,14 @@
 # Unignore the things we want
 !/.python-version
 !/lambda-entrypoint.sh
-!/poetry.lock
 !/pyproject.toml
 !/sbobot
 !/startup.sh
+!/uv.lock
 
 # Ignore again things we unignored
 **/*.pyc
 **/.gitkeep
+**/.venv
 **/Dockerfile
 **/__pycache__

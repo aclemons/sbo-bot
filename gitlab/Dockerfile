@@ -61,48 +61,30 @@ RUN export TERSE=0 && \
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.4@sha256:e2653f741cd15851ba4f13f3cc47d29f2d14377c7d11737bfa272baa1b569007 AS aws-lambda-adapter
 
 
-FROM python-base AS poetry
+FROM python-base AS requirements
 
-# renovate: datasource=git-refs depName=https://github.com/python-poetry/install.python-poetry.org
-ARG POETRY_INSTALLER_VERSION=d62875fc05fb20062175cd14d19a96dbefa48640
-
-# renovate: datasource=github-releases depName=python-poetry/poetry
-ARG POETRY_VERSION=1.8.3
-
-# renovate: datasource=github-releases depName=python-poetry/poetry-plugin-export
-ARG POETRY_PLUGIN_EXPORT_VERSION=1.8.0
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/install.python-poetry.org/$POETRY_INSTALLER_VERSION/install-poetry.py | POETRY_VERSION=$POETRY_VERSION /usr/bin/python3 - && \
-    export PATH="/root/.local/bin:$PATH" && \
-    poetry config warnings.export false && \
-    poetry self add poetry-plugin-export==$POETRY_PLUGIN_EXPORT_VERSION && \
-    rm -rf /root/.cache
-
-
-FROM poetry AS requirements
 WORKDIR /tmp/work
 
-COPY pyproject.toml poetry.lock ./
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_SYSTEM_PYTHON=1
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN export PATH="/root/.local/bin:$PATH" && \
+RUN --mount=from=ghcr.io/astral-sh/uv:0.4.15,source=/uv,target=/bin/uv \
+    --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     mkdir -p /tmp/requirements/ && \
-    poetry export --no-interaction --format=requirements.txt --output /tmp/requirements/requirements.txt && \
-    rm -rf /root/.cache
+    uv export --no-editable --no-dev --no-emit-project --output-file /tmp/requirements/requirements.txt
 
 
-FROM poetry AS wheels
+FROM python-base AS wheels
 WORKDIR /src
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN --mount=target=/src,source=. \
+RUN --mount=from=ghcr.io/astral-sh/uv:0.4.15,source=/uv,target=/bin/uv \
+    --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=.,target=/src \
     echo "Running with python $(python3 --version)" && \
     [[ "$(cat .python-version)" == "$(python3 --version | cut -d' ' -f2)" ]] || { echo "Python version mismatch" ; exit 1 ; } && \
-    export PATH="/root/.local/bin:$PATH" && \
-    poetry build --format=wheel --output=/tmp/dist --no-cache && \
-    rm -rf /root/.cache
-
+    uv build --wheel --out-dir /tmp/dist
 
 FROM python-base
 
