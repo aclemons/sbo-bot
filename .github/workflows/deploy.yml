@@ -136,10 +136,6 @@ jobs:
     permissions:
       contents: read
     env:
-      # renovate: datasource=git-refs depName=https://github.com/python-poetry/install.python-poetry.org
-      POETRY_INSTALLER_VERSION: d62875fc05fb20062175cd14d19a96dbefa48640
-      # renovate: datasource=github-releases depName=python-poetry/poetry
-      POETRY_VERSION: 1.8.3
       # renovate: datasource=pypi depName=pre-commit
       PRE_COMMIT_VERSION: '3.8.0'
     steps:
@@ -147,9 +143,13 @@ jobs:
         with:
           show-progress: false
 
-      - name: Install poetry
-        run: |
-          curl -sSL "https://raw.githubusercontent.com/python-poetry/install.python-poetry.org/$POETRY_INSTALLER_VERSION/install-poetry.py" | POETRY_VERSION="$POETRY_VERSION" /usr/bin/python3 -
+      - name: Install uv
+        uses: astral-sh/setup-uv@abac0ce7b0768476333db78faaf98b1130f5face # v3.1.1
+        with:
+          # renovate: datasource=pypi depName=uv
+          version: '0.4.15'
+          enable-cache: true
+          cache-dependency-glob: 'gitlab/uv.lock'
 
       - name: Configure pre-commit repo cache
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
@@ -186,13 +186,11 @@ jobs:
       - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
         with:
           python-version-file: 'gitlab/.python-version'
-          cache: 'poetry'
 
       - name: Install python dependencies
         working-directory: gitlab
         run: |
-          poetry env use "$(cat .python-version)"
-          poetry install --no-interaction
+          uv sync --all-extras --dev
 
       - name: Install e2e-tests dependencies
         working-directory: e2e-tests
