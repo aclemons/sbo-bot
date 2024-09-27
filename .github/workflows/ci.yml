@@ -16,6 +16,8 @@ jobs:
     env:
       # renovate: datasource=pypi depName=pre-commit
       PRE_COMMIT_VERSION: '3.8.0'
+      # renovate: datasource=pypi depName=uv
+      UV_VERSION: '0.4.15'
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -36,8 +38,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@abac0ce7b0768476333db78faaf98b1130f5face # v3.1.1
         with:
-          # renovate: datasource=pypi depName=uv
-          version: '0.4.15'
+          version: ${{ env.UV_VERSION }}
           enable-cache: true
           cache-dependency-glob: 'gitlab/uv.lock'
 
