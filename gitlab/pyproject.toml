@@ -9,7 +9,7 @@ dependencies = [
   "boto3==1.35.31",
   "fastapi-slim==0.115.0",
   "orjson==3.10.7",
-  "python-gitlab==4.12.0",
+  "python-gitlab==4.12.2",
   "structlog==24.4.0",
   "uvicorn[standard]==0.31.0",
   "yarl==1.13.1",
