@@ -22,5 +22,13 @@ JENKINS_WEBHOOK_SECRET=jenkinssecret
 EOF
 }
 
-AWS_ACCESS_KEY_ID=local AWS_DEFAULT_REGION=eu-central-1 AWS_REGION=eu-central-1 AWS_SECRET_ACCESS_KEY=secret AWS_SESSION_TOKEN=session aws --no-cli-pager --endpoint-url=http://localhost:4566 ssm put-parameter --name /sbobot/github-app/env --type SecureString --value "$(build_github_env)"
-AWS_ACCESS_KEY_ID=local AWS_DEFAULT_REGION=eu-central-1 AWS_REGION=eu-central-1 AWS_SECRET_ACCESS_KEY=secret AWS_SESSION_TOKEN=session aws --no-cli-pager --endpoint-url=http://localhost:4566 ssm put-parameter --name /sbobot/gitlab-webhook/env --type SecureString --value "$(build_gitlab_env)"
+(
+  export AWS_ACCESS_KEY_ID=local
+  export AWS_DEFAULT_REGION=eu-central-1
+  export AWS_REGION=eu-central-1
+  export AWS_SECRET_ACCESS_KEY=secret
+  export AWS_SESSION_TOKEN=session
+
+  aws --no-cli-pager --endpoint-url=http://localhost:4566 ssm put-parameter --name /sbobot/github-app/env --type SecureString --value "$(build_github_env)"
+  aws --no-cli-pager --endpoint-url=http://localhost:4566 ssm put-parameter --name /sbobot/gitlab-webhook/env --type SecureString --value "$(build_gitlab_env)"
+)
