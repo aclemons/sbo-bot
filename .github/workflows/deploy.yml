@@ -85,7 +85,7 @@ jobs:
           mkdir -p ~/.tofu.d/plugin-cache
 
       - name: Cache Tofu plugins
-        uses: actions/cache@2cdf405574d6ef1f33a1d12acccd3ae82f47b3f2 # v4.1.0
+        uses: actions/cache@3624ceb22c1c5a301c8db4169662070a689d9ea8 # v4.1.1
         with:
           path: ~/.tofu.d/plugin-cache
           key: ${{ runner.os }}-tofu-${{ hashFiles('**/.terraform.lock.hcl') }}
@@ -153,7 +153,7 @@ jobs:
           cache-dependency-glob: 'gitlab/uv.lock'
 
       - name: Configure pre-commit repo cache
-        uses: actions/cache@2cdf405574d6ef1f33a1d12acccd3ae82f47b3f2 # v4.1.0
+        uses: actions/cache@3624ceb22c1c5a301c8db4169662070a689d9ea8 # v4.1.1
         with:
           path: ~/.cache/pre-commit
           key:
@@ -161,7 +161,7 @@ jobs:
             hashFiles('.pre-commit-config.yaml') }}
 
       - name: Configure pre-commit install cache
-        uses: actions/cache@2cdf405574d6ef1f33a1d12acccd3ae82f47b3f2 # v4.1.0
+        uses: actions/cache@3624ceb22c1c5a301c8db4169662070a689d9ea8 # v4.1.1
         id: pre_commit_install_cache
         with:
           path: ~/.pre-commit-venv
