@@ -23,8 +23,8 @@ RUN if [ "$(uname -m)" = "aarch64" ] ; then curl -o /usr/local/bin/aws-lambda-ri
 FROM base AS lambda-layers
 
 ENV EXTENSION_VERSION=1.0.333.0
-ENV EXTENSION_CHECKSUM_AMD64=0222f4af221496e77cd73b133a38905cf19f624b6ad879cbd566825457957f2c2dc7f0f4b38309b7bbec0064b345c0762744d77ae1ab593d2557e88fc5348542
-ENV EXTENSION_CHECKSUM_ARM64=c95a0b979b2924606420654742eb1e30858ac37c286127f8fe9c2cd6b57cf80294d3954b8a0d762903e4ba83d643efa3fa1365147ceb69a452aa4902719116ae
+ENV EXTENSION_CHECKSUM_AMD64=c2b83c9eb00e3c4688170b07ea72a2edf512b060492e4c849d94be4fd4255cfec0d326a47a4fa67719005bfcae44ff3e82d35754cd2747f8c8f537a98c543779
+ENV EXTENSION_CHECKSUM_ARM64=8059831281fffa3674fdc30d72042ea913ab06dcd9e6d5e9187e75844dfe410b0cfc36e75a9ad5958fbafad7db88f32212117d8c5329060b4dab23bc0e34ba35
 
 WORKDIR /
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -32,7 +32,7 @@ RUN export TERSE=0 && \
     slackpkg -default_answer=yes -batch=on update && \
     EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on upgrade-all || EXIT_CODE=$? ; } && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
-    EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on install cpio icu4c libgcrypt libgpg-error lua patchelf rpm sqlite || EXIT_CODE=$? ; } && \
+    EXIT_CODE=0 && { slackpkg -default_answer=yes -batch=on install cpio icu4c libarchive libgcrypt libgpg-error libxml2 lua lz4 patchelf rpm sqlite || EXIT_CODE=$? ; } && \
     if [ "$EXIT_CODE" -ne 0 ] && [ "$EXIT_CODE" -ne 20 ] ; then exit "$EXIT_CODE" ; fi && \
     rm -rf /var/cache/packages/* && rm -rf /var/lib/slackpkg/* && \
     touch /var/lib/slackpkg/current && \
@@ -44,7 +44,7 @@ RUN export TERSE=0 && \
     rpm2cpio < /tmp/lambda-insights-extension.rpm | cpio -imdv && \
     rm -f /tmp/lambda-insights-extension.rpm && \
     if [ "$(uname -m)" = "aarch64" ] ; then patchelf --set-interpreter /lib64/ld-linux-aarch64.so.1 /opt/extensions/cloudwatch_lambda_agent ; fi && \
-    removepkg cpio icu4c libgcrypt libgpg-error lua patchelf rpm sqlite
+    removepkg cpio icu4c libgcrypt libarchive libgpg-error libxml2 lua lz4 patchelf rpm sqlite
 
 
 FROM base AS python-base
