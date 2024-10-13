@@ -16,7 +16,7 @@ concurrency:
 jobs:
   infra:
     name: Apply tofu
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       id-token: write
       contents: read
@@ -132,7 +132,7 @@ jobs:
 
   seed-cache:
     name: Seed various caches from the master branch for ci checks
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
     env:
