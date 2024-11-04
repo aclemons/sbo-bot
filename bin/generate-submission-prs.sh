@@ -124,5 +124,30 @@ printf 'Syncing data...\n'
     )
 
     ssh -n slackbuilds.org "mv www/pending/$package.tar* ~/ARCHIVE/"
+
+    (
+      cd "$TMP_FOLDER/slackbuilds"
+      pr_number="$(gh pr list --repo="$GIT_REPO" --head "$package-$checksum" --json number --jq '.[].number')"
+
+      printf 'Successfully created a PR for %s with number %s\n' "$category/$dir" "$number"
+
+      printf "Would you like to schedule a build for %s: " "$category/$dir"
+
+      read -u 3 -r answer
+
+      if [ "$answer" = "y" ] || [ "$answer" = "yes" ] ; then
+        printf "I'll output the PR diff now. Please inspect it *carefully*:\n"
+
+        gh pr diff --repo="$GIT_REPO" "$pr_number"
+
+        printf "Really queue builds %s? "
+
+        read -u 3 -r answer
+
+        if [ "$answer" = "y" ] || [ "$answer" = "yes" ] ; then
+          gh pr comment --repo="$GIT_REPO" "$pr_number" --body "@sbo-bot: build $category/$dir"
+        fi
+      fi
+    )
   done
 } 3<&0
