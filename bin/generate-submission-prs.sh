@@ -129,7 +129,7 @@ printf 'Syncing data...\n'
       cd "$TMP_FOLDER/slackbuilds"
       pr_number="$(gh pr list --repo="$GIT_REPO" --head "$package-$checksum" --json number --jq '.[].number')"
 
-      printf 'Successfully created a PR for %s with number %s\n' "$category/$dir" "$p_number"
+      printf 'Successfully created a PR for %s with number %s\n' "$category/$dir" "$pr_number"
 
       printf "Would you like to schedule a build for %s: " "$category/$dir"
 
