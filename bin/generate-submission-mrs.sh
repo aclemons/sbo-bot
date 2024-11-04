@@ -55,7 +55,7 @@ printf 'Syncing data...\n'
       git checkout -b "$package-$checksum"
     )
 
-    found="$(find "$TMP_FOLDER/slackbuilds" -type d -name "$package" \! -path '*/.git/*')"
+    found="$(find "$TMP_FOLDER/slackbuilds" -type d -name "$package" -maxdepth 2 -mindepth 2 \! -path '*/.git/*')"
 
     if [ "" = "$found" ] ; then
       printf 'New submission found %s\n' "$package"
