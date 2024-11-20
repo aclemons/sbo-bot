@@ -123,7 +123,7 @@ printf 'Syncing data...\n'
       gh pr create --repo="$GIT_REPO" --head "$package-$checksum" --label submission-form --fill-first
     )
 
-    ssh -n slackbuilds.org "mv www/pending/$package.tar* ~/ARCHIVE/"
+    ssh -n slackbuilds@slackbuilds.org "mv ~/www/pending/$package.tar* ~/ARCHIVE/"
 
     (
       cd "$TMP_FOLDER/slackbuilds"
