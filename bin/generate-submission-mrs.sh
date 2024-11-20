@@ -118,5 +118,7 @@ printf 'Syncing data...\n'
       git push --set-upstream "https://gitlab-ci-token:$GITLAB_TOKEN@gitlab.com/$GIT_REPO.git" HEAD
       GITLAB_TOKEN="$GITLAB_TOKEN" glab mr create --source-branch "$package-$checksum" --repo="$GIT_REPO" --label submission-form --fill --yes
     )
+
+    ssh -n slackbuilds@slackbuilds.org "mv ~/www/pending/$package.tar* ~/ARCHIVE/"
   done
 } 3<&0
