@@ -1,6 +1,6 @@
 import asyncio
 import os
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Annotated, Any
 
 import structlog
 from fastapi import APIRouter, Depends, status
@@ -36,10 +36,10 @@ log = structlog.get_logger()
 )
 async def webhook(
     payload: dict[str, Any],
-    gitlab: "gitlab.Gitlab" = Depends(get_gitlab),
-    http_client: "ClientSession" = Depends(get_aiohttp_session),
-    jenkins_configuration: "JenkinsConfiguration" = Depends(get_jenkins_configuration),
-    payload_parser: "PayloadParserProtocol" = Depends(get_payload_parser),
+    gitlab: Annotated["gitlab.Gitlab", Depends(get_gitlab)],
+    http_client: Annotated["ClientSession", Depends(get_aiohttp_session)],
+    jenkins_configuration: Annotated["JenkinsConfiguration", Depends(get_jenkins_configuration)],
+    payload_parser: Annotated["PayloadParserProtocol", Depends(get_payload_parser)],
 ) -> None:
     log.info("Processing incoming webhook payload", payload=payload)
 
