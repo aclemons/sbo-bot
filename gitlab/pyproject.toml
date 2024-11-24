@@ -46,8 +46,6 @@ lint.ignore = [
  "E501", # black handles long line wrapping
  "COM812", # conflicts with ruff format
  "ISC001", # conflicts with ruff format
- "ANN101", # deprecated and will be removed in a future ruff release
- "ANN102", # deprecated and will be removed in a future ruff release
 ]
 target-version = "py311"
 
