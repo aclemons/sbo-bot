@@ -38,7 +38,9 @@ async def webhook(
     payload: dict[str, Any],
     gitlab: Annotated["gitlab.Gitlab", Depends(get_gitlab)],
     http_client: Annotated["ClientSession", Depends(get_aiohttp_session)],
-    jenkins_configuration: Annotated["JenkinsConfiguration", Depends(get_jenkins_configuration)],
+    jenkins_configuration: Annotated[
+        "JenkinsConfiguration", Depends(get_jenkins_configuration)
+    ],
     payload_parser: Annotated["PayloadParserProtocol", Depends(get_payload_parser)],
 ) -> None:
     log.info("Processing incoming webhook payload", payload=payload)
