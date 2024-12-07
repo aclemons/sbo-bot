@@ -37,7 +37,12 @@ typeCheckingMode = "strict"
 [tool.pytest.ini_options]
 env_override_existing_values = 1
 env_files = [".test.env"]
-filterwarnings = ["error"]
+filterwarnings = [
+  "error",
+  "ignore:datetime.datetime.utcnow",               # TODO boto3 currently emits a Warning on python 3.12.
+  "ignore:datetime.datetime.utcfromtimestamp",     # TODO boto3 currently emits a Warning on python 3.12.
+]
+
 
 [tool.ruff]
 lint.select = ["ALL"]
