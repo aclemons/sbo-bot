@@ -21,7 +21,7 @@ dev-dependencies = [
   "pyright==1.1.390",
   "pytest==8.3.4",
   "pytest-dotenv==0.5.2",
-  "ruff==0.8.3",
+  "ruff==0.8.4",
   "ruff-lsp==0.0.59",
 ]
 
