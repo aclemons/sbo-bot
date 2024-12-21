@@ -534,15 +534,15 @@ wheels = [
 
 [[package]]
 name = "python-gitlab"
-version = "5.1.0"
+version = "5.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "requests" },
     { name = "requests-toolbelt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f6/44/a687ca1d79d3c4c52cc0529859eb2803f5a80612d0598c82798f1056e24b/python_gitlab-5.1.0.tar.gz", hash = "sha256:d5a10dae8328f32fb9214bd3f9dc199b4930cd496f81c9be42a0f8ff338aeb35", size = 384162 }
+sdist = { url = "https://files.pythonhosted.org/packages/8f/20/30e70cb0ebb6d86f6f8bf21e75896e2c4fc8f8523eb82212d3827d05f8f3/python_gitlab-5.2.0.tar.gz", hash = "sha256:1fb99d9de78aa93fdc97a106db44f0870cba225ea2064426302db02d14027967", size = 387472 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/87/c7/3298380881aa5ed98b4129d5bf1e1ea748d7bdb3dc9d45954f8099e9c455/python_gitlab-5.1.0-py3-none-any.whl", hash = "sha256:c30cf547392ce66daaaf020839cfb6c15a91b26e2e7054d1b3f1b92e8dd65e7d", size = 145395 },
+    { url = "https://files.pythonhosted.org/packages/81/40/9eaeb1575b1654282030ff8d147ae5cb440a2fcc65fc799107e97fd59c1a/python_gitlab-5.2.0-py3-none-any.whl", hash = "sha256:aa0136f3377210682970688789c1b510f948b68c4c14d1b873b590335501bd04", size = 146107 },
 ]
 
 [[package]]
@@ -673,7 +673,7 @@ requires-dist = [
     { name = "boto3", specifier = "==1.35.86" },
     { name = "fastapi-slim", specifier = "==0.115.6" },
     { name = "orjson", specifier = "==3.10.12" },
-    { name = "python-gitlab", specifier = "==5.1.0" },
+    { name = "python-gitlab", specifier = "==5.2.0" },
     { name = "structlog", specifier = "==24.4.0" },
     { name = "uvicorn", extras = ["standard"], specifier = "==0.34.0" },
     { name = "yarl", specifier = "==1.18.3" },
