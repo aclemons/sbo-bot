@@ -18,7 +18,7 @@ dependencies = [
 [tool.uv]
 dev-dependencies = [
   "boto3-stubs-lite[ssm]==1.35.70",
-  "pyright==1.1.390",
+  "pyright==1.1.391",
   "pytest==8.3.4",
   "pytest-dotenv==0.5.2",
   "ruff==0.8.4",
