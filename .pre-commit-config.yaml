@@ -42,7 +42,7 @@ repos:
           # renovate: datasource=npm
           - prettier@3.4.2
           # renovate: datasource=npm
-          - '@trivago/prettier-plugin-sort-imports@5.2.0'
+          - '@trivago/prettier-plugin-sort-imports@5.2.1'
           # renovate: datasource=npm
           - prettier-plugin-toml@2.0.1
 
