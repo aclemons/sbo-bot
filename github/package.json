@@ -41,6 +41,6 @@
     "typescript-eslint": "8.20.0"
   },
   "engines": {
-    "node": "22.13.0"
+    "node": "22.13.1"
   }
 }
