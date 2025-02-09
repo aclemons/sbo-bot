@@ -2,7 +2,7 @@
 name = "sbobot"
 version = "0.0.1"
 description = ""
-requires-python = "==3.12.8"
+requires-python = "==3.12.9"
 
 dependencies = [
   "aiohttp==3.11.11",
