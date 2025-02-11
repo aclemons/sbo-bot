@@ -615,7 +615,7 @@ wheels = [
 
 [[package]]
 name = "ruff-lsp"
-version = "0.0.61"
+version = "0.0.62"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "lsprotocol" },
@@ -624,9 +624,9 @@ dependencies = [
     { name = "ruff" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8c/36/d1dae5ae5cc7b9da0d4aebb0f579dc9154f588e76280dbbe51141f1ffdfc/ruff_lsp-0.0.61.tar.gz", hash = "sha256:4a1704dc96dc1353557b5edd0733768f3948cfc92042fd332927648e080754bc", size = 41225 }
+sdist = { url = "https://files.pythonhosted.org/packages/18/11/8e445dc55753efd45e09882ad0468f4a5650f33aecdbd15c7a52e8e0c3c4/ruff_lsp-0.0.62.tar.gz", hash = "sha256:6db2a39375973ecb16c64d3c8dc37e23e1e191dcb7aebcf525b1f85ebd338c0d", size = 41182 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f8/89/ef30cbf45090b8524a1f8a2d37349a26c412df7061946d9ce9147dd6e72d/ruff_lsp-0.0.61-py3-none-any.whl", hash = "sha256:c84988a2016066e5f808ba43b7b84e961cfd0339321fd986f35caf6f2c95334a", size = 21009 },
+    { url = "https://files.pythonhosted.org/packages/31/5e/d3a6fdf61f6373e53bfb45d6819a72dfef741bc8a9ff31c64496688e7c39/ruff_lsp-0.0.62-py3-none-any.whl", hash = "sha256:fb6c04a0cb09bb3ae316121b084ff09497edd01df58b36fa431f14515c63029e", size = 20980 },
 ]
 
 [[package]]
@@ -685,7 +685,7 @@ dev = [
     { name = "pytest", specifier = "==8.3.4" },
     { name = "pytest-dotenv", specifier = "==0.5.2" },
     { name = "ruff", specifier = "==0.9.5" },
-    { name = "ruff-lsp", specifier = "==0.0.61" },
+    { name = "ruff-lsp", specifier = "==0.0.62" },
 ]
 
 [[package]]

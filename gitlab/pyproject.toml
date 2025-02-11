@@ -22,7 +22,7 @@ dev-dependencies = [
   "pytest==8.3.4",
   "pytest-dotenv==0.5.2",
   "ruff==0.9.5",
-  "ruff-lsp==0.0.61",
+  "ruff-lsp==0.0.62",
 ]
 
 [build-system]
