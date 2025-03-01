@@ -52,6 +52,10 @@
       "description": "Group boto3 updates with stub updates",
       "matchDepNames": ["boto3", "boto3-stubs-lite"],
       "groupName": "boto"
+    },
+    {
+      "groupName": "uv monorepo",
+      "matchDepNames": ["astral-sh/uv", "ghcr.io/astral-sh/uv"]
     }
   ],
   "pre-commit": {
