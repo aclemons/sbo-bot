@@ -55,7 +55,7 @@
     },
     {
       "groupName": "uv monorepo",
-      "matchDepNames": ["astral-sh/uv", "ghcr.io/astral-sh/uv"]
+      "matchDepNames": ["astral-sh/uv", "ghcr.io/astral-sh/uv", "uv"]
     }
   ],
   "pre-commit": {
