@@ -14,7 +14,7 @@ RUN export TERSE=0 && \
     touch /var/lib/slackpkg/current
 
 # renovate: datasource=github-releases depName=aws/aws-lambda-runtime-interface-emulator
-ARG AWS_LAMBDA_RIE_VERSION=v1.23
+ARG AWS_LAMBDA_RIE_VERSION=v1.24
 
 RUN if [ "$(uname -m)" = "aarch64" ] ; then curl -o /usr/local/bin/aws-lambda-rie -L "https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/$AWS_LAMBDA_RIE_VERSION/aws-lambda-rie-arm64" ; else curl -o /usr/local/bin/aws-lambda-rie -L "https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/$AWS_LAMBDA_RIE_VERSION/aws-lambda-rie-x86_64" ; fi && \
     chown root:root /usr/local/bin/aws-lambda-rie && chmod 0755 /usr/local/bin/aws-lambda-rie
