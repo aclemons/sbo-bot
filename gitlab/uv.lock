@@ -478,15 +478,15 @@ wheels = [
 
 [[package]]
 name = "pyright"
-version = "1.1.397"
+version = "1.1.400"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "nodeenv" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/92/23/cefa10c9cb198e0858ed0b9233371d62bca880337f628e58f50dfdfb12f0/pyright-1.1.397.tar.gz", hash = "sha256:07530fd65a449e4b0b28dceef14be0d8e0995a7a5b1bb2f3f897c3e548451ce3", size = 3818998, upload_time = "2025-03-19T11:32:59.146Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6c/cb/c306618a02d0ee8aed5fb8d0fe0ecfed0dbf075f71468f03a30b5f4e1fe0/pyright-1.1.400.tar.gz", hash = "sha256:b8a3ba40481aa47ba08ffb3228e821d22f7d391f83609211335858bf05686bdb", size = 3846546, upload_time = "2025-04-24T12:55:18.907Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/01/b5/98ec41e1e0ad5576ecd42c90ec363560f7b389a441722ea3c7207682dec7/pyright-1.1.397-py3-none-any.whl", hash = "sha256:2e93fba776e714a82b085d68f8345b01f91ba43e1ab9d513e79b70fc85906257", size = 5693631, upload_time = "2025-03-19T11:32:56.776Z" },
+    { url = "https://files.pythonhosted.org/packages/c8/a5/5d285e4932cf149c90e3c425610c5efaea005475d5f96f1bfdb452956c62/pyright-1.1.400-py3-none-any.whl", hash = "sha256:c80d04f98b5a4358ad3a35e241dbf2a408eee33a40779df365644f8054d2517e", size = 5563460, upload_time = "2025-04-24T12:55:17.002Z" },
 ]
 
 [[package]]
@@ -688,7 +688,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "boto3-stubs-lite", extras = ["ssm"], specifier = "==1.37.38" },
-    { name = "pyright", specifier = "==1.1.397" },
+    { name = "pyright", specifier = "==1.1.400" },
     { name = "pytest", specifier = "==8.3.5" },
     { name = "pytest-dotenv", specifier = "==0.5.2" },
     { name = "ruff", specifier = "==0.11.4" },
