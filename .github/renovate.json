@@ -5,19 +5,19 @@
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
-      "fileMatch": ["^tf/\\.opentofu-version$"],
+      "managerFilePatterns": ["/^tf/\\.opentofu-version$/"],
       "matchStrings": ["(?<currentValue>.*)"]
     },
     {
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
-      "fileMatch": ["^tf/.*\\.tf$"],
+      "managerFilePatterns": ["/^tf/.*\\.tf$/"],
       "matchStrings": ["required_version\\s=\\s\"(?<currentValue>.*?)\""]
     },
     {
       "customType": "regex",
-      "fileMatch": ["^.pre-commit-config.yaml$"],
+      "managerFilePatterns": ["/^.pre-commit-config.yaml$/"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>.*?)( versioning=(?<versioning>.*?))?\\s+-\\s+['\"]?(?<depName>@?[^@]+)(?:@(?<currentValue>[^'\"\\s]*))?"
       ],
