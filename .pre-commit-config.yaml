@@ -44,7 +44,7 @@ repos:
           # renovate: datasource=npm
           - '@trivago/prettier-plugin-sort-imports@5.2.2'
           # renovate: datasource=npm
-          - prettier-plugin-toml@2.0.4
+          - prettier-plugin-toml@2.0.5
 
       - id: ruff-lint
         name: ruff-lint
