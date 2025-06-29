@@ -7,7 +7,7 @@ requires-python = "==3.12.11"
 dependencies = [
   "aiohttp==3.12.13",
   "boto3==1.38.46",
-  "fastapi-slim==0.115.13",
+  "fastapi-slim==0.115.14",
   "orjson==3.10.18",
   "python-gitlab==5.6.0",
   "structlog==25.3.0",
