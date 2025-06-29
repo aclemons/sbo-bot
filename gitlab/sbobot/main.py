@@ -1,28 +1,24 @@
 import os
+from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
 
+import gitlab
+from aiohttp import ClientSession, ClientTimeout
+from fastapi import FastAPI
+from fastapi.responses import ORJSONResponse
+
 import sbobot
+from sbobot.api import webhook_router
+from sbobot.config import JenkinsConfiguration
+from sbobot.healthcheck import healthcheck_router
+from sbobot.parser import PayloadParser
 from sbobot.state import StateHolder, initialise_app_state
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
-    from fastapi import FastAPI
-
 
 def build_uvicorn_app() -> "FastAPI":
-    from contextlib import asynccontextmanager
-
-    import gitlab
-    from aiohttp import ClientSession, ClientTimeout
-    from fastapi import FastAPI
-    from fastapi.responses import ORJSONResponse
-
-    from sbobot.api import webhook_router
-    from sbobot.config import JenkinsConfiguration
-    from sbobot.healthcheck import healthcheck_router
-    from sbobot.parser import PayloadParser
-
     @asynccontextmanager
     async def lifespan(app: "FastAPI") -> "AsyncIterator[None]":
         payload_parser = PayloadParser()
