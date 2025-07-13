@@ -21,7 +21,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@aws-sdk/client-ssm": "3.840.0",
+    "@aws-sdk/client-ssm": "3.844.0",
     "axios": "1.10.0",
     "probot": "13.4.7"
   },
