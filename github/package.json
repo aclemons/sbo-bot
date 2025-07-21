@@ -32,7 +32,7 @@
     "@types/node": "22.16.5",
     "eslint-plugin-jest": "29.0.1",
     "jest": "30.0.4",
-    "nock": "14.0.5",
+    "nock": "14.0.6",
     "prettier": "3.6.2",
     "smee-client": "4.3.1",
     "ts-jest": "29.4.0",
