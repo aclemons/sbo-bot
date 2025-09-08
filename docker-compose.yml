@@ -34,7 +34,7 @@ services:
       - GHE_PROTOCOL=http
       - WEBHOOK_PATH=/
   github-local-api-gateway:
-    image: bref/local-api-gateway:latest@sha256:b088b7f7a2ce0d288502469e6696088945dba12d0ce8c97f619a11ad5f8f1b33
+    image: bref/local-api-gateway:latest@sha256:825021fa792dc93577b627a0f42df36cf2b9d619bfb67b8df1e9c38572307c76
     environment:
       - TARGET=gw:9001
     ports:
@@ -61,7 +61,7 @@ services:
       - GITLAB_ADMINS=testadmin1,testadmin2
       - GITLAB_URL=http://gw:9100
   gitlab-local-api-gateway:
-    image: bref/local-api-gateway:latest@sha256:b088b7f7a2ce0d288502469e6696088945dba12d0ce8c97f619a11ad5f8f1b33
+    image: bref/local-api-gateway:latest@sha256:825021fa792dc93577b627a0f42df36cf2b9d619bfb67b8df1e9c38572307c76
     environment:
       - TARGET=gw:9002
     ports:
