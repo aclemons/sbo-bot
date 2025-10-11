@@ -23,7 +23,7 @@
   "dependencies": {
     "@aws-sdk/client-ssm": "3.896.0",
     "axios": "1.12.2",
-    "probot": "13.4.7"
+    "probot": "14.1.0"
   },
   "devDependencies": {
     "@eslint/js": "9.36.0",
