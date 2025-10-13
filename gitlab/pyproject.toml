@@ -2,7 +2,7 @@
 name = "sbobot"
 version = "0.0.1"
 description = ""
-requires-python = "==3.12.11"
+requires-python = "==3.12.12"
 
 dependencies = [
   "aiohttp==3.12.15",
@@ -15,8 +15,8 @@ dependencies = [
   "yarl==1.20.1",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   "boto3-stubs-lite[ssm]==1.40.45",
   "pyright==1.1.405",
   "pytest==8.4.2",
