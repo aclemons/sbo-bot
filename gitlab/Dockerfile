@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.17.1@sha256:38387523653efa0039f8e1c89bb74a30504e76ee9f565e25c9a09841f9427b05
+# syntax=docker/dockerfile:1.19.0@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
 
 FROM aclemons/slackware:current@sha256:57fe5cb7469eb69ce1a1287f71473641272ba25c4eb19c37ed6900ff6e622341 AS base
 
