@@ -11,7 +11,7 @@ dependencies = [
   "orjson==3.11.3",
   "python-gitlab==6.4.0",
   "structlog==25.4.0",
-  "uvicorn[standard]==0.35.0",
+  "uvicorn[standard]==0.37.0",
   "yarl==1.20.1",
 ]
 
