@@ -59,6 +59,15 @@ wheels = [
 ]
 
 [[package]]
+name = "annotated-doc"
+version = "0.0.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d7/a6/dc46877b911e40c00d395771ea710d5e77b6de7bacd5fdcd78d70cc5a48f/annotated_doc-0.0.3.tar.gz", hash = "sha256:e18370014c70187422c33e945053ff4c286f453a984eba84d0dbfa0c935adeda", size = 5535, upload-time = "2025-10-24T14:57:10.718Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/02/b7/cf592cb5de5cb3bade3357f8d2cf42bf103bbe39f459824b4939fd212911/annotated_doc-0.0.3-py3-none-any.whl", hash = "sha256:348ec6664a76f1fd3be81f43dffbee4c7e8ce931ba71ec67cc7f4ade7fbbb580", size = 5488, upload-time = "2025-10-24T14:57:09.462Z" },
+]
+
+[[package]]
 name = "annotated-types"
 version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
@@ -213,16 +222,17 @@ wheels = [
 
 [[package]]
 name = "fastapi-slim"
-version = "0.119.0"
+version = "0.120.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
+    { name = "annotated-doc" },
     { name = "pydantic" },
     { name = "starlette" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4b/ab/850ea280c9c5adc2888b74aeb1636eb289be3f9df9291147429cd7bfc70f/fastapi_slim-0.119.0.tar.gz", hash = "sha256:96f1e65ce3872674525df1b0ee4de3cf505b298fd9a6b19ff5ec15777eda3e2e", size = 336851, upload-time = "2025-10-11T17:13:54.821Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e5/d8/6372b479d6da1d0a30773e36d576f2b2775196862927fb9f2cac5512bbd5/fastapi_slim-0.120.0.tar.gz", hash = "sha256:91478eda0f463c600b854b328d85973375c3277d71696ea6f303c5c614b26a5c", size = 337502, upload-time = "2025-10-23T20:56:32.446Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d7/10/fa7efcd27976a958f2bee1fcc3018790a26ab2cec29def4a129dd88571fb/fastapi_slim-0.119.0-py3-none-any.whl", hash = "sha256:00e5a556532a2e8efb2186401cafd86accb2f52d7a367a333033c5eb2fb79b46", size = 107150, upload-time = "2025-10-11T17:13:52.244Z" },
+    { url = "https://files.pythonhosted.org/packages/43/25/cf4d4e1b9839614cb86866b673a33916cc316fa6457c18a16b68dd0ff86d/fastapi_slim-0.120.0-py3-none-any.whl", hash = "sha256:159176f90fd6bbea910d4102b33eb3e9e19274fe943cf2d72acaaec3f921e571", size = 108295, upload-time = "2025-10-23T20:56:30.634Z" },
 ]
 
 [[package]]
@@ -692,7 +702,7 @@ dev = [
 requires-dist = [
     { name = "aiohttp", specifier = "==3.13.0" },
     { name = "boto3", specifier = "==1.40.55" },
-    { name = "fastapi-slim", specifier = "==0.119.0" },
+    { name = "fastapi-slim", specifier = "==0.120.0" },
     { name = "orjson", specifier = "==3.11.3" },
     { name = "python-gitlab", specifier = "==6.4.0" },
     { name = "structlog", specifier = "==25.4.0" },
