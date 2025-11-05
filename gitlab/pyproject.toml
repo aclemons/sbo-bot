@@ -10,7 +10,7 @@ dependencies = [
   "fastapi-slim==0.120.4",
   "orjson==3.11.4",
   "python-gitlab==6.5.0",
-  "structlog==25.4.0",
+  "structlog==25.5.0",
   "uvicorn[standard]==0.37.0",
   "yarl==1.22.0",
 ]
