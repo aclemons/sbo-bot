@@ -134,7 +134,7 @@ jobs:
       contents: read
     env:
       # renovate: datasource=pypi depName=pre-commit
-      PRE_COMMIT_VERSION: '4.4.0'
+      PRE_COMMIT_VERSION: '4.5.0'
       # renovate: datasource=pypi depName=uv
       UV_VERSION: '0.9.17'
     steps:
