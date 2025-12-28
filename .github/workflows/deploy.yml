@@ -110,8 +110,8 @@ jobs:
 
       - name: Tofu apply
         run:
-          tofu apply -auto-approve -input=false -var docker_image_version=${{
-          env.DOCKER_IMAGE_VERSION }}
+          tofu apply -auto-approve -input=false -var
+          "docker_image_version=$DOCKER_IMAGE_VERSION"
         working-directory: tf
 
       - name: Clean up old lambda versions
