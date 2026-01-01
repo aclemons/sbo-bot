@@ -165,6 +165,7 @@ resource "aws_lambda_function" "githubapp_lambda" {
       GITHUB_ADMINS = "aclemons,willysr,Ponce,fourtysixand2,sbo-bot[bot]"
       GITHUB_CONTRIBUTORS = "bassmadrigal,Ythogtha,maramon,mac-a-r0ni,earies,isaackwy,pghvlaans,ArTourter,atelszewski,rizitis,antonioleal,fsLeg"
       WEBHOOK_PATH  = "/"
+      LOG_LEVEL      = "info"
     }
   }
 

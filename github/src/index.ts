@@ -7,7 +7,7 @@ const shutdown = () => {
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 
-export = (app: Probot) => {
+const app = (app: Probot) => {
   const allowedCommentors = (process.env.GITHUB_ADMINS ?? '').split(',');
   const allowedContributors = (process.env.GITHUB_CONTRIBUTORS ?? '').split(',');
 
@@ -22,7 +22,7 @@ export = (app: Probot) => {
     }
 
     const comment = payload.comment.body.trim();
-    const commentator = payload.comment.user.login;
+    const commentator = payload.comment.user?.login || '';
     const owner = payload.issue.user.login;
 
     let matches = null;
@@ -92,7 +92,7 @@ export = (app: Probot) => {
 
       if (status === 200 && data.jobs['slackbuilds.org-pr-check-build-package'].triggered) {
         context.log.info('Build was successfully scheduled.');
-        await context.octokit.reactions.createForIssueComment({
+        await context.octokit.rest.reactions.createForIssueComment({
           owner: context.repo().owner,
           repo: context.repo().repo,
           comment_id: payload.comment.id,
@@ -152,7 +152,7 @@ export = (app: Probot) => {
 
         if (status === 200 && data.jobs['slackbuilds.org-pr-check-build-package'].triggered) {
           context.log.info('Build (x86_64) was successfully scheduled.');
-          await context.octokit.reactions.createForIssueComment({
+          await context.octokit.rest.reactions.createForIssueComment({
             owner: context.repo().owner,
             repo: context.repo().repo,
             comment_id: payload.comment.id,
@@ -168,3 +168,5 @@ export = (app: Probot) => {
     }
   });
 };
+
+export default app;
