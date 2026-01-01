@@ -1,11 +1,24 @@
 import Express from 'express';
 
+import { pinoHttp } from 'pino-http';
+import pino from 'pino';
+
 import { createNodeMiddleware, createProbot } from 'probot';
 
 import app from './index.ts';
 
 const probot = createProbot({ env: process.env });
 const express = Express();
+
+const customLogger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+});
+
+const httpLogger = pinoHttp({
+  logger: customLogger.child({ name: 'http' }),
+});
+
+express.use(httpLogger);
 
 const middleware = await createNodeMiddleware(app, {
   probot,
