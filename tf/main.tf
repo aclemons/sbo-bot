@@ -163,7 +163,7 @@ resource "aws_lambda_function" "githubapp_lambda" {
   environment {
     variables = {
       GITHUB_ADMINS = "aclemons,willysr,Ponce,fourtysixand2,sbo-bot[bot]"
-      GITHUB_CONTRIBUTORS = "bassmadrigal,Ythogtha,maramon,mac-a-r0ni,earies,isaackwy,pghvlaans,ArTourter,atelszewski,rizitis,antonioleal,fsLeg"
+      GITHUB_CONTRIBUTORS = "bassmadrigal,Ythogtha,maramon,mac-a-r0ni,earies,isaackwy,pghvlaans,ArTourter,atelszewski,rizitis,antonioleal,fsLeg,cwilling,rizitis,linrs,r1w1s1,newHeiko,RezaT4795"
       WEBHOOK_PATH  = "/"
       LOG_LEVEL      = "info"
     }
