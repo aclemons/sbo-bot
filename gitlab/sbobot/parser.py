@@ -3,11 +3,11 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Literal, Protocol
 
 MR_COMMENT_RE = re.compile(
-    "^(?:@|/)sbo-bot:? (rebuild|build|lint) ((x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$"
+    "^(?:@|/)sbo-bot:? (rebuild|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+)$"
 )
 
 ISSUE_COMMENT_RE = re.compile(
-    "^(?:@|/)sbo-bot:? (rebuild|build|lint) ((x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+|all)$"
+    "^(?:@|/)sbo-bot:? (rebuild|build|lint) ((amd64|x86_64|arm|i586) )?([a-zA-z]+\\/[a-zA-Z0-9\\+\\-\\._]+|all)$"
 )
 
 ArchValue = Literal["arm", "i586", "x86_64"]
@@ -88,7 +88,7 @@ class PayloadParser:
                 build_arch = "arm"
             case "i586":
                 build_arch = "i586"
-            case "x86_64":
+            case "x86_64" | "amd64":
                 build_arch = "x86_64"
             case None:
                 build_arch = None
