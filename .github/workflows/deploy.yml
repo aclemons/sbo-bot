@@ -137,7 +137,7 @@ jobs:
       # renovate: datasource=pypi depName=pre-commit
       PRE_COMMIT_VERSION: '4.5.1'
       # renovate: datasource=pypi depName=uv
-      UV_VERSION: '0.9.21'
+      UV_VERSION: '0.9.24'
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
