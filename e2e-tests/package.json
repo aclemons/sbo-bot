@@ -29,6 +29,6 @@
     "wiremock-captain": "4.1.3"
   },
   "engines": {
-    "node": "22.21.1"
+    "node": "22.22.0"
   }
 }
