@@ -30,7 +30,7 @@ jobs:
 
       - name: Start docker compose base services
         run: |
-          nohup docker compose up -d --wait --quiet-pull github-local-api-gateway gitlab-local-api-gateway localstack wiremock &
+          nohup docker compose up -d --wait --quiet-pull github-local-api-gateway gitlab-local-api-gateway moto wiremock &
           echo "COMPOSE_PID=$!" >> "$GITHUB_ENV"
 
       - name: Install uv
