@@ -1,12 +1,10 @@
 ---
 services:
-  localstack:
-    image: localstack/localstack:4.12.0@sha256:0df3a97da57de03a588c05d9b8f390f15c7033fc7c4512f94619d344bc3cd317
+  moto:
+    image: motoserver/moto:5.1.20@sha256:d2711655244df58411ce0be34236c95736390db17886370d21e12ae2b1e36f79
+    command: ['-p', '4566', '-H', '0.0.0.0']
     environment:
-      - EAGER_SERVICE_LOADING=1
-      - SERVICES=events,ssm
-      - DOCKER_HOST=unix:///var/run/docker.sock
-      - DEBUG=${DEBUG-}
+      - TZ=UTC
     ports:
       - 4566:4566
     volumes:
