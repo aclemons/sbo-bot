@@ -40,7 +40,7 @@ repos:
         require_serial: false
         additional_dependencies:
           # renovate: datasource=npm
-          - prettier@3.8.0
+          - prettier@3.8.1
           # renovate: datasource=npm
           - '@trivago/prettier-plugin-sort-imports@6.0.2'
           # renovate: datasource=npm
