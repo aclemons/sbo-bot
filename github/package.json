@@ -37,7 +37,7 @@
     "nock": "14.0.10",
     "prettier": "3.8.1",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.54.0"
+    "typescript-eslint": "8.55.0"
   },
   "engines": {
     "node": "22.22.0"
