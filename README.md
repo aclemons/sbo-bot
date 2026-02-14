@@ -17,4 +17,4 @@ gitlab for submission tarballs uploaded on slackbuilds.org.
 
 ## License
 
-[MIT](LICENSE) © 2023-2024 Andrew Clemons
+[MIT](LICENSE) © 2023-2026 Andrew Clemons
