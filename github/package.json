@@ -21,7 +21,7 @@
     "start": "probot run ./lib/index.js"
   },
   "dependencies": {
-    "@aws-sdk/client-ssm": "3.983.0",
+    "@aws-sdk/client-ssm": "3.987.0",
     "axios": "1.13.5",
     "express": "5.2.1",
     "pino": "10.3.1",
