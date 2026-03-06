@@ -241,18 +241,6 @@ wheels = [
 ]
 
 [[package]]
-name = "fastapi-slim"
-version = "0.129.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "fastapi" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/21/97/391c68c930c564b18452af527496affa5e80edd0592c18eec34a27bab4c8/fastapi_slim-0.129.0.tar.gz", hash = "sha256:fb07de2463bea4a4855a7897177e6c717614d21b8068c0227d5105875532e3b4", size = 5949, upload-time = "2026-02-12T13:54:52.258Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9c/38/6b647e01e9e3576d0d1a1771fafeaca0859491fdc2928d5d3a52e90c0171/fastapi_slim-0.129.0-py3-none-any.whl", hash = "sha256:f525ba9713087b1736ebb25fcfd6961ece9a1450c30229027cde1235c90393cf", size = 3231, upload-time = "2026-02-12T13:54:53.439Z" },
-]
-
-[[package]]
 name = "frozenlist"
 version = "1.8.0"
 source = { registry = "https://pypi.org/simple" }
@@ -699,7 +687,7 @@ source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
     { name = "boto3" },
-    { name = "fastapi-slim" },
+    { name = "fastapi" },
     { name = "orjson" },
     { name = "python-gitlab" },
     { name = "structlog" },
@@ -721,7 +709,7 @@ dev = [
 requires-dist = [
     { name = "aiohttp", specifier = "==3.13.3" },
     { name = "boto3", specifier = "==1.42.49" },
-    { name = "fastapi-slim", specifier = "==0.129.0" },
+    { name = "fastapi", specifier = "==0.129.0" },
     { name = "orjson", specifier = "==3.11.7" },
     { name = "python-gitlab", specifier = "==8.0.0" },
     { name = "structlog", specifier = "==25.5.0" },
