@@ -26,7 +26,7 @@
     "express": "5.2.1",
     "pino": "10.3.1",
     "pino-http": "11.0.0",
-    "probot": "14.2.4"
+    "probot": "14.3.0"
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
