@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-ssm": "3.987.0",
-    "axios": "1.13.5",
+    "axios": "1.13.6",
     "express": "5.2.1",
     "pino": "10.3.1",
     "pino-http": "11.0.0",
