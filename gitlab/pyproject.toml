@@ -20,7 +20,7 @@ dev = [
   "boto3-stubs-lite[ssm]==1.42.73",
   "pyright==1.1.408",
   "pytest==9.0.2",
-  "pytest-dotenv==0.5.2",
+  "pytest-env==1.6.0",
   "ruff==0.15.7",
 ]
 
@@ -34,14 +34,12 @@ reportUnnecessaryTypeIgnoreComment = "error"
 typeCheckingMode = "strict"
 
 [tool.pytest.ini_options]
-env_override_existing_values = 1
-env_files = [".test.env"]
-filterwarnings = [
-  "error",
-  "ignore:datetime.datetime.utcnow",               # TODO boto3 currently emits a Warning on python 3.12.
-  "ignore:datetime.datetime.utcfromtimestamp",     # TODO boto3 currently emits a Warning on python 3.12.
-]
+filterwarnings = ["error"]
 
+[tool.pytest_env]
+env_files = [".test.env"]
+
+always_override = true
 
 [tool.ruff]
 lint.select = ["ALL"]
