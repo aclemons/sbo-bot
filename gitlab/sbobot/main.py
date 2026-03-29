@@ -5,11 +5,11 @@ from typing import TYPE_CHECKING
 import gitlab
 from aiohttp import ClientSession, ClientTimeout
 from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
 
 import sbobot
 from sbobot.api import webhook_router
 from sbobot.config import JenkinsConfiguration
+from sbobot.fastapi import ORJSONResponse
 from sbobot.healthcheck import healthcheck_router
 from sbobot.parser import PayloadParser
 from sbobot.state import StateHolder, initialise_app_state
