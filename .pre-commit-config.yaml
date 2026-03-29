@@ -70,7 +70,7 @@ repos:
 
       - id: pyright
         name: pyright
-        entry: bash -c 'cd gitlab && uv run pyright'
+        entry: bash -c 'unset VIRTUAL_ENV && cd gitlab && uv run pyright'
         language: python
         require_serial: true
         types_or: [python, pyi]

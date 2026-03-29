@@ -9,7 +9,6 @@ services:
       - 4566:4566
   github:
     image: sbobot/bot:github-app-latest
-    platform: linux/arm64/v8
     build:
       context: github
       dockerfile: Dockerfile
@@ -39,7 +38,6 @@ services:
       - 'gw:host-gateway'
   gitlab:
     image: sbobot/bot:gitlab-webhook-latest
-    platform: linux/arm64/v8
     build:
       context: gitlab
       dockerfile: Dockerfile
