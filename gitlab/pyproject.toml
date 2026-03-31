@@ -6,7 +6,7 @@ requires-python = "==3.12.13"
 
 dependencies = [
   "aiohttp==3.13.3",
-  "boto3==1.42.73",
+  "boto3==1.42.79",
   "fastapi==0.135.2",
   "orjson==3.11.7",
   "python-gitlab==8.1.0",
@@ -17,7 +17,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-  "boto3-stubs-lite[ssm]==1.42.73",
+  "boto3-stubs-lite[ssm]==1.42.79",
   "pyright==1.1.408",
   "pytest==9.0.2",
   "pytest-env==1.6.0",
