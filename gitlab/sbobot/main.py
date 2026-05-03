@@ -15,12 +15,12 @@ from sbobot.parser import PayloadParser
 from sbobot.state import StateHolder, initialise_app_state
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncIterator
+    from collections.abc import AsyncGenerator
 
 
 def build_uvicorn_app() -> "FastAPI":
     @asynccontextmanager
-    async def lifespan(app: "FastAPI") -> "AsyncIterator[None]":
+    async def lifespan(app: "FastAPI") -> "AsyncGenerator[None, None]":
         payload_parser = PayloadParser()
 
         gitlab_client = gitlab.Gitlab(
