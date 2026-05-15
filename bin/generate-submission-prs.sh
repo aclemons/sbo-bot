@@ -50,6 +50,10 @@ printf 'Syncing data...\n'
    find "$TMP_FOLDER/pending" -name '*.tar*' -type f -maxdepth 1 -printf '%T@ %p\0' | sort -zk 1n | sed -z 's/^[^ ]* //' | xargs -0 -I xx basename xx | sed 's/\.tar.*$//' | while read -r package ; do
     printf "Checking submission %s\n" "$package"
 
+    printf 'Details:\n\n'
+    ssh slackbuilds.org /slackbuilds/bin/sbodb -S "$package" || true
+    printf '\n\n'
+
     checksum="$(md5sum "$TMP_FOLDER/pending"/"$package".tar* | awk '{ print $1 }')"
 
     (
@@ -64,7 +68,7 @@ printf 'Syncing data...\n'
     if [ "" = "$found" ] ; then
       printf 'New submission found %s\n' "$package"
 
-      printf 'Please find the submission email and enter the category: '
+      printf 'Please enter the category from the submission details: '
       read -u 3 -r category
       printf 'Now please enter the short description for the commit message. Only the part which will appear between the brackets: '
       read -u 3 -r msg
