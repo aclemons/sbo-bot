@@ -28,6 +28,9 @@ dev = [
 requires = ["hatchling==1.29.0"]
 build-backend = "hatchling.build"
 
+[tool.uv]
+exclude-newer = "7d"
+
 [tool.pyright]
 reportMissingTypeStubs = "none"
 reportUnnecessaryTypeIgnoreComment = "error"

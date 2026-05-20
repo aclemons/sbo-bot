@@ -1,4 +1,3 @@
----
 name: Build and deploy sbo-bot infrastructure
 
 on:
@@ -190,7 +189,7 @@ jobs:
       - name: Install python dependencies
         working-directory: gitlab
         run: |
-          uv sync --all-extras --dev
+          uv sync --all-extras --dev --frozen
 
       - name: Install e2e-tests dependencies
         working-directory: e2e-tests

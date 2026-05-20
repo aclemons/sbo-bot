@@ -36,6 +36,7 @@
     "workarounds:typesNodeVersioning"
   ],
   "ignoreTests": false,
+  "minimumReleaseAge": "7 days",
   "packageRules": [
     {
       "description": "Disable pyproject.toml python updates, we sync this to AWS lambda/python Docker image",
@@ -66,5 +67,8 @@
     "enabled": true
   },
   "rangeStrategy": "pin",
-  "timezone": "Asia/Tokyo"
+  "timezone": "Asia/Tokyo",
+  "vulnerabilityAlerts": {
+    "minimumReleaseAge": "0 days"
+  }
 }
