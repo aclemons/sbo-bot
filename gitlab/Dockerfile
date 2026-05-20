@@ -65,14 +65,14 @@ FROM python-base AS requirements
 
 WORKDIR /tmp/work
 
-ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_SYSTEM_PYTHON=1
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_SYSTEM_PYTHON=1 UV_NO_INSTALLER_METADATA=1
 
 RUN --mount=from=ghcr.io/astral-sh/uv:0.11.9@sha256:6b6fa841d71a48fbc9e2c55651c5ad570e01104d7a7d701f57b2b22c0f58e9b1,source=/uv,target=/bin/uv \
     --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     mkdir -p /tmp/requirements/ && \
-    uv export --no-editable --no-dev --no-emit-project --output-file /tmp/requirements/requirements.txt
+    uv export --frozen --no-emit-workspace --no-dev --no-editable --format requirements-txt --output-file /tmp/requirements/requirements.txt --quiet
 
 
 FROM python-base AS wheels
