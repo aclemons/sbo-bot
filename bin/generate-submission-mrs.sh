@@ -47,7 +47,7 @@ printf 'Syncing data...\n'
     printf "Checking submission %s\n" "$package"
 
     printf 'Details:\n\n'
-    ssh slackbuilds.org /slackbuilds/bin/sbodb -S "$package" || true
+    ssh -n slackbuilds.org /slackbuilds/bin/sbodb -S "$package" || true
     printf '\n\n'
 
     checksum="$(md5sum "$TMP_FOLDER/pending"/"$package".tar* | awk '{ print $1 }')"
