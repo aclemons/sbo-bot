@@ -8,7 +8,7 @@ dependencies = [
   "aiohttp==3.13.5",
   "boto3==1.43.3",
   "fastapi==0.136.1",
-  "orjson==3.11.8",
+  "orjson==3.11.9",
   "python-gitlab==8.3.0",
   "structlog==25.5.0",
   "uvicorn[standard]==0.46.0",
