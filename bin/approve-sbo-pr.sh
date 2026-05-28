@@ -6,7 +6,7 @@ set -o pipefail
 print_help() {
   printf "Usage: %s <prid>\n" "$0"
   printf "Approve an pull request in the SlackBuilds.org GitHub organisation:\n"
-  printf "  Make sure the working director is your clone and that you have two remotes: origin and github:\n"
+  printf "  Make sure the working directory is your clone and that you have two remotes: origin and github:\n"
   printf "Arguments:\n"
   printf "  <prid>   The id of the PR to approve.\n"
   printf "Options:\n"
