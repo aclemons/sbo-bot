@@ -6,6 +6,7 @@ locals {
   github_admins = [
     "Ponce",
     "aclemons",
+    "cwilling",
     "fourtysixand2",
     "sbo-bot[bot]",
     "willysr",
@@ -20,7 +21,6 @@ locals {
     "antonioleal",
     "atelszewski",
     "bassmadrigal",
-    "cwilling",
     "earies",
     "fsLeg",
     "isaackwy",
