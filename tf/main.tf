@@ -2,6 +2,47 @@ locals {
   project_name                = "sbobot"
   githubapp_function_name     = "${local.project_name}-github-app"
   gitlabwebhook_function_name = "${local.project_name}-gitlab-webhook"
+
+  github_admins = [
+    "Ponce",
+    "aclemons",
+    "fourtysixand2",
+    "sbo-bot[bot]",
+    "willysr",
+  ]
+
+  github_contributors = [
+    "ArTourter",
+    "RezaT4795",
+    "Ythogtha",
+    "afhpayne",
+    "andy5995",
+    "antonioleal",
+    "atelszewski",
+    "bassmadrigal",
+    "cwilling",
+    "earies",
+    "fsLeg",
+    "isaackwy",
+    "lecramyajiv",
+    "linrs",
+    "mac-a-r0ni",
+    "maramon",
+    "mattegger",
+    "newHeiko",
+    "perrin4869",
+    "pghvlaans",
+    "pyllyukko",
+    "r1w1s1",
+    "rizitis",
+    "wkdjgf534",
+  ]
+
+  gitlab_admins = [
+    "Ponce",
+    "clemonsa",
+    "willysr",
+  ]
 }
 
 resource "aws_ecr_repository" "sbo_bot" {
@@ -162,10 +203,10 @@ resource "aws_lambda_function" "githubapp_lambda" {
 
   environment {
     variables = {
-      GITHUB_ADMINS = "aclemons,willysr,Ponce,fourtysixand2,sbo-bot[bot]"
-      GITHUB_CONTRIBUTORS = "bassmadrigal,Ythogtha,maramon,mac-a-r0ni,earies,isaackwy,pghvlaans,ArTourter,atelszewski,rizitis,antonioleal,fsLeg,cwilling,linrs,r1w1s1,newHeiko,RezaT4795,mattegger,afhpayne,lecramyajiv,wkdjgf534,perrin4869,pyllyukko,andy5995"
-      WEBHOOK_PATH  = "/"
-      LOG_LEVEL      = "info"
+      GITHUB_ADMINS       = join(",", local.github_admins)
+      GITHUB_CONTRIBUTORS = join(",", local.github_contributors)
+      WEBHOOK_PATH        = "/"
+      LOG_LEVEL           = "info"
     }
   }
 
@@ -215,7 +256,7 @@ resource "aws_lambda_function" "gitlabwebhook_lambda" {
 
   environment {
     variables = {
-      GITLAB_ADMINS = "clemonsa,willysr,Ponce"
+      GITLAB_ADMINS = join(",", local.gitlab_admins)
     }
   }
 
