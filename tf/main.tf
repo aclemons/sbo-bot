@@ -40,6 +40,7 @@ locals {
 
   gitlab_admins = [
     "Ponce",
+    "chris.willing",
     "clemonsa",
     "willysr",
   ]
