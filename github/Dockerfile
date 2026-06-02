@@ -63,7 +63,7 @@ RUN groupadd --gid 1000 node && \
     mkdir -p /usr/src/app && chown node:node /usr/src/app
 
 
-FROM public.ecr.aws/awsguru/aws-lambda-adapter:1.0.0@sha256:b4da35991627bdac98a81c377d0cc28e6989687359576dfda9f0b64be835d648 AS aws-lambda-adapter
+FROM public.ecr.aws/awsguru/aws-lambda-adapter:1.0.1@sha256:1e5ab4d9242167500ed8a7bed8a79b448228aaa51cf382fb51fe4bf8a5f9a811 AS aws-lambda-adapter
 
 
 FROM node-base AS builder
