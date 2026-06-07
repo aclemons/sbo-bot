@@ -18,7 +18,7 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
   exit 0
 fi
 
-if ! command -v gh ; then
+if ! command -v gh > /dev/null 2>&1 ; then
   >&2 printf "This script depends on gh-cli, install it and try again.\n"
   exit 1
 fi

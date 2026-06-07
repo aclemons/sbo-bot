@@ -18,7 +18,7 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
   exit 0
 fi
 
-if ! command -v glab ; then
+if ! command -v glab > /dev/null 2>&1 ; then
   >&2 printf "This script depends on glab, install it and try again.\n"
   exit 1
 fi
