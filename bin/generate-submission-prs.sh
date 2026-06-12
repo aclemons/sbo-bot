@@ -68,10 +68,14 @@ printf 'Syncing data...\n'
     if [ "" = "$found" ] ; then
       printf 'New submission found %s\n' "$package"
 
-      printf 'Please enter the category from the submission details: '
+      printf 'Please enter the category from the submission email: '
       read -u 3 -r category
       printf 'Now please enter the short description for the commit message. Only the part which will appear between the brackets: '
       read -u 3 -r msg
+      printf "Please enter the maintainer's name from the submission email: "
+      read -u 3 -r maintainer
+      printf 'Please enter the actual email in the New upload line from the submission email: '
+      read -u 3 -r email
 
       dir="$package"
 
@@ -86,7 +90,7 @@ printf 'Syncing data...\n'
         . "$dir".info
 
         git add .
-        git commit --author "$MAINTAINER <$EMAIL>" -m "$category/$PRGNAM: Added ($msg)." --no-verify
+        git commit --author "$maintainer <$email>" -m "$category/$PRGNAM: Added ($msg)." --no-verify
       )
     else
       printf 'Update for an existing script found %s => %s\n' "$package" "$found"
@@ -111,12 +115,18 @@ printf 'Syncing data...\n'
         . "$dir".info
 
         git add .
+
+        printf "Please enter the maintainer's name from the submission email: "
+        read -u 3 -r maintainer
+        printf 'Please enter the actual email in the New upload line from the submission email: '
+        read -u 3 -r email
+
         if [ "$VERSION" = "$OLD_VERSION" ] ; then
           printf 'Looks like the version did not change. Please enter the commit message: '
           read -u 3 -r msg
-          git commit --author "$MAINTAINER <$EMAIL>" -m "$category/$PRGNAM: $msg." --no-verify
+          git commit --author "$maintainer <$email>" -m "$category/$PRGNAM: $msg." --no-verify
         else
-          git commit --author "$MAINTAINER <$EMAIL>" -m "$category/$PRGNAM: Updated for version $VERSION." --no-verify
+          git commit --author "$maintainer <$email>" -m "$category/$PRGNAM: Updated for version $VERSION." --no-verify
         fi
       )
     fi
