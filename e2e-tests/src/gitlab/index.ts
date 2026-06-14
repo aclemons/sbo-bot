@@ -97,6 +97,42 @@ export const mockCommentAck = async ({
   mrId?: number | null;
   commentId: number;
 }): Promise<null> => {
+  return mockCommentAckWithStatus({
+    mrId,
+    issueId,
+    commentId,
+    status: 200,
+  });
+};
+
+export const mockCommentAckFailure = async ({
+  mrId,
+  issueId,
+  commentId,
+}: {
+  issueId?: number | null;
+  mrId?: number | null;
+  commentId: number;
+}): Promise<null> => {
+  return mockCommentAckWithStatus({
+    mrId,
+    issueId,
+    commentId,
+    status: 500,
+  });
+};
+
+const mockCommentAckWithStatus = async ({
+  mrId,
+  issueId,
+  commentId,
+  status,
+}: {
+  issueId?: number | null;
+  mrId?: number | null;
+  commentId: number;
+  status: number;
+}): Promise<null> => {
   const wiremockEndpoint = 'http://localhost:9100';
   const mock = new WireMock(wiremockEndpoint);
   let gitlabRequest: IWireMockRequest;
@@ -119,7 +155,7 @@ export const mockCommentAck = async ({
     };
   }
   const gitlabResponse: IWireMockResponse = {
-    status: 200,
+    status,
     body: {},
   };
   await mock.register(gitlabRequest, gitlabResponse);

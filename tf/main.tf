@@ -3,6 +3,11 @@ locals {
   githubapp_function_name   = "${local.project_name}-github-app"
   webhook_api_function_name = "${local.project_name}-webhook-api"
 
+  codeberg_admins = [
+    "aclemons",
+    "chris_willing",
+  ]
+
   github_admins = [
     "Ponce",
     "aclemons",
@@ -257,7 +262,8 @@ resource "aws_lambda_function" "webhook_api_lambda" {
 
   environment {
     variables = {
-      GITLAB_ADMINS = join(",", local.gitlab_admins)
+      CODEBERG_ADMINS = join(",", local.codeberg_admins)
+      GITLAB_ADMINS   = join(",", local.gitlab_admins)
     }
   }
 

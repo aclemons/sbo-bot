@@ -1,4 +1,8 @@
-import { buildCommentWebhookPayload, mockCommentAck } from '../../src/gitlab';
+import {
+  buildCommentWebhookPayload,
+  mockCommentAck,
+  mockCommentAckFailure,
+} from '../../src/gitlab';
 import { mockJenkinsSingleMrBuild } from '../../src/jenkins';
 import { beforeEach, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest';
@@ -25,6 +29,28 @@ describe('gitlab webhook', () => {
 
         await mockJenkinsSingleMrBuild({ mrId, build });
         await mockCommentAck({ mrId, commentId });
+
+        const res = await supertest('http://localhost:9012')
+          .post('/gitlab/webhook')
+          .set('x-gitlab-token', '123456')
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          .send(payload);
+
+        expect(res.statusCode).toBe(204);
+      });
+
+      it('still returns success when adding the ack reaction fails', async () => {
+        expect.assertions(1);
+
+        const build = 'system/fzf';
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const { payload, mrId, commentId } = buildCommentWebhookPayload({
+          username: 'testadmin1',
+          build,
+        });
+
+        await mockJenkinsSingleMrBuild({ mrId, build });
+        await mockCommentAckFailure({ mrId, commentId });
 
         const res = await supertest('http://localhost:9012')
           .post('/gitlab/webhook')

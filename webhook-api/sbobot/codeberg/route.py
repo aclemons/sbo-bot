@@ -3,48 +3,48 @@ from typing import TYPE_CHECKING, Annotated, Any
 
 import structlog
 from fastapi import APIRouter, Depends, Response, status
-from gitlab.exceptions import GitlabError
+from pyforgejo.core.api_error import ApiError as PyforgejoApiError
 
+from sbobot.codeberg.auth import auth
 from sbobot.deps import (
     get_aiohttp_session,
-    get_gitlab,
-    get_gitlab_payload_parser,
+    get_codeberg,
+    get_codeberg_payload_parser,
     get_jenkins_configuration,
 )
 from sbobot.fastapi import ORJSONRoute
-from sbobot.gitlab.auth import auth
 from sbobot.jenkins import schedule_builds
 from sbobot.permissions import is_command_authorised
 
 if TYPE_CHECKING:
-    import gitlab
     from aiohttp import ClientSession
+    from pyforgejo import AsyncPyforgejoApi
 
     from sbobot.config import JenkinsConfiguration
     from sbobot.parser import PayloadParserProtocol
 
 router = APIRouter(tags=["webhook"], route_class=ORJSONRoute)
 
-ALLOWED_COMMENTATORS = (os.environ.get("GITLAB_ADMINS") or "").split(",")
-ALLOWED_CONTRIBUTORS = (os.environ.get("GITLAB_CONTRIBUTORS") or "").split(",")
+ALLOWED_COMMENTATORS = (os.environ.get("CODEBERG_ADMINS") or "").split(",")
+ALLOWED_CONTRIBUTORS = (os.environ.get("CODEBERG_CONTRIBUTORS") or "").split(",")
 
 log = structlog.get_logger()
 
 
 @router.post(
-    "/gitlab/webhook",
+    "/codeberg/webhook",
     status_code=status.HTTP_204_NO_CONTENT,
     dependencies=[Depends(auth)],
 )
-async def gitlab_webhook(
+async def codeberg_webhook(
     payload: dict[str, Any],
-    gitlab: Annotated["gitlab.Gitlab", Depends(get_gitlab)],
     http_client: Annotated["ClientSession", Depends(get_aiohttp_session)],
+    codeberg: Annotated["AsyncPyforgejoApi", Depends(get_codeberg)],
     jenkins_configuration: Annotated[
         "JenkinsConfiguration", Depends(get_jenkins_configuration)
     ],
     payload_parser: Annotated[
-        "PayloadParserProtocol", Depends(get_gitlab_payload_parser)
+        "PayloadParserProtocol", Depends(get_codeberg_payload_parser)
     ],
 ) -> Response:
     log.info("Processing incoming webhook payload", payload=payload)
@@ -62,40 +62,40 @@ async def gitlab_webhook(
     ):
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-    if command.mr_id is not None:
-        mr = gitlab.projects.get(command.project_id, lazy=True).mergerequests.get(
-            command.mr_id, lazy=True
-        )
-        note = mr.notes.get(command.comment_id, lazy=True)
-
-    elif command.issue_id is not None:
-        issue = gitlab.projects.get(command.project_id, lazy=True).issues.get(
-            command.issue_id, lazy=True
-        )
-        note = issue.notes.get(command.comment_id, lazy=True)
-    else:
-        msg = "Invalid state"
-        raise ValueError(msg)
-
     async def on_all_success() -> None:
-        try:
-            note.awardemojis.create({"name": "thumbsup"})
-        except GitlabError as exc:
+        if "/" not in command.repo:
             log.warning(
-                "Failed to add gitlab thumbs-up reaction.",
-                project_id=command.project_id,
+                "Build succeeded but repo name was not owner/repo.",
+                repo=command.repo,
+                comment_id=command.comment_id,
+            )
+            return
+
+        owner, repo = command.repo.split("/", maxsplit=1)
+
+        try:
+            await codeberg.issue.post_comment_reaction(
+                owner=owner,
+                repo=repo,
+                id=command.comment_id,
+                content="+1",
+            )
+        except PyforgejoApiError as exc:
+            log.warning(
+                "Failed to add codeberg thumbs-up reaction.",
+                repo=command.repo,
                 comment_id=command.comment_id,
                 error=str(exc),
             )
             return
 
-        log.info("Confirmed build triggering by thumbs-upping comment.")
+        log.info("Confirmed build triggering for codeberg command.")
 
     await schedule_builds(
         command=command,
         http_client=http_client,
         jenkins_configuration=jenkins_configuration,
-        id_keys=("gl_mr", "gl_issue"),
+        id_keys=("cb_pr", "cb_issue"),
         on_all_success=on_all_success,
     )
 
