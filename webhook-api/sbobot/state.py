@@ -7,14 +7,16 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from sbobot.config import JenkinsConfiguration
-    from sbobot.parser import PayloadParserProtocol
+    from sbobot.gitlab.parser import (
+        PayloadParserProtocol as GitlabPayloadParserProtocol,
+    )
 
     class State(Protocol):
         aiohttp_session: "ClientSession"
         gitlab: "gitlab.Gitlab"
         gitlab_token: str
         jenkins_configuration: "JenkinsConfiguration"
-        payload_parser: "PayloadParserProtocol"
+        gitlab_payload_parser: "GitlabPayloadParserProtocol"
 
 
 @dataclass
@@ -23,7 +25,7 @@ class StateHolder:
     gitlab: "gitlab.Gitlab"
     gitlab_token: str
     jenkins_configuration: "JenkinsConfiguration"
-    payload_parser: "PayloadParserProtocol"
+    gitlab_payload_parser: "GitlabPayloadParserProtocol"
 
 
 # https://github.com/encode/starlette/discussions/2562

@@ -5,23 +5,23 @@ from typing import TYPE_CHECKING, Annotated, Any
 import structlog
 from fastapi import APIRouter, Depends, status
 
-from sbobot.auth import auth
 from sbobot.deps import (
     get_aiohttp_session,
     get_gitlab,
+    get_gitlab_payload_parser,
     get_jenkins_configuration,
-    get_payload_parser,
 )
 from sbobot.fastapi import ORJSONRoute
+from sbobot.gitlab.auth import auth
 
 if TYPE_CHECKING:
     import gitlab
     from aiohttp import ClientSession
 
     from sbobot.config import JenkinsConfiguration
-    from sbobot.parser import PayloadParserProtocol
+    from sbobot.gitlab.parser import PayloadParserProtocol
 
-webhook_router = APIRouter(tags=["webhook"], route_class=ORJSONRoute)
+router = APIRouter(tags=["webhook"], route_class=ORJSONRoute)
 
 ALLOWED_COMMENTORS = (os.environ.get("GITLAB_ADMINS") or "").split(",")
 ALLOWED_CONTRIBUTORS = (os.environ.get("GITLAB_CONTRIBUTORS") or "").split(",")
@@ -29,19 +29,21 @@ ALLOWED_CONTRIBUTORS = (os.environ.get("GITLAB_CONTRIBUTORS") or "").split(",")
 log = structlog.get_logger()
 
 
-@webhook_router.post(
-    "/webhook",
+@router.post(
+    "/gitlab/webhook",
     status_code=status.HTTP_204_NO_CONTENT,
     dependencies=[Depends(auth)],
 )
-async def webhook(
+async def gitlab_webhook(
     payload: dict[str, Any],
     gitlab: Annotated["gitlab.Gitlab", Depends(get_gitlab)],
     http_client: Annotated["ClientSession", Depends(get_aiohttp_session)],
     jenkins_configuration: Annotated[
         "JenkinsConfiguration", Depends(get_jenkins_configuration)
     ],
-    payload_parser: Annotated["PayloadParserProtocol", Depends(get_payload_parser)],
+    payload_parser: Annotated[
+        "PayloadParserProtocol", Depends(get_gitlab_payload_parser)
+    ],
 ) -> None:
     log.info("Processing incoming webhook payload", payload=payload)
 

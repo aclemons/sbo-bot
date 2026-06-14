@@ -27,7 +27,7 @@ describe('gitlab webhook', () => {
         await mockCommentAck({ mrId, commentId });
 
         const res = await supertest('http://localhost:9012')
-          .post('/webhook')
+          .post('/gitlab/webhook')
           .set('x-gitlab-token', '123456')
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           .send(payload);
@@ -52,7 +52,7 @@ describe('gitlab webhook', () => {
         await mockCommentAck({ issueId, commentId });
 
         const res = await supertest('http://localhost:9012')
-          .post('/webhook')
+          .post('/gitlab/webhook')
           .set('x-gitlab-token', '123456')
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           .send(payload);
@@ -73,7 +73,7 @@ describe('gitlab webhook', () => {
         });
 
         const res = await supertest('http://localhost:9012')
-          .post('/webhook')
+          .post('/gitlab/webhook')
           .set('x-gitlab-token', '123456')
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           .send(payload);

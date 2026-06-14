@@ -2,7 +2,7 @@ from typing import Any, Literal
 
 import pytest
 
-from sbobot.parser import BuildCommand, PayloadParser
+from sbobot.gitlab.parser import BuildCommand, PayloadParser
 
 
 def test_push_event() -> None:

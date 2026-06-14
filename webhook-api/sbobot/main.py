@@ -7,11 +7,11 @@ from aiohttp import ClientSession, ClientTimeout
 from fastapi import FastAPI
 
 import sbobot
-from sbobot.api import webhook_router
 from sbobot.config import JenkinsConfiguration
 from sbobot.fastapi import ORJSONResponse
+from sbobot.gitlab.parser import PayloadParser as GitlabPayloadParser
+from sbobot.gitlab.route import router as gitlab_router
 from sbobot.healthcheck import healthcheck_router
-from sbobot.parser import PayloadParser
 from sbobot.state import StateHolder, initialise_app_state
 
 if TYPE_CHECKING:
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 def build_uvicorn_app() -> "FastAPI":
     @asynccontextmanager
     async def lifespan(app: "FastAPI") -> "AsyncGenerator[None, None]":
-        payload_parser = PayloadParser()
+        gitlab_payload_parser = GitlabPayloadParser()
 
         gitlab_client = gitlab.Gitlab(
             private_token=os.environ["GITLAB_AUTH_TOKEN"],
@@ -39,7 +39,7 @@ def build_uvicorn_app() -> "FastAPI":
                 gitlab=gitlab_client,
                 gitlab_token=gitlab_token,
                 jenkins_configuration=jenkins_configuration,
-                payload_parser=payload_parser,
+                gitlab_payload_parser=gitlab_payload_parser,
             )
 
             initialise_app_state(state, app.state)
@@ -50,8 +50,8 @@ def build_uvicorn_app() -> "FastAPI":
     app = FastAPI(
         default_response_class=ORJSONResponse,
         separate_input_output_schemas=False,
-        title="sbo-bot Gitlab Webhook",
-        description="Webhook for events from slackbuilds.org gitlab.",
+        title="sbo-bot Webhook API",
+        description="Handle webhook api calls for events for slackbuilds.org repos.",
         contact={"name": "SBo Admins"},
         version=sbobot.__version__,
         responses={},
@@ -61,7 +61,7 @@ def build_uvicorn_app() -> "FastAPI":
     )
 
     app.include_router(healthcheck_router)
-    app.include_router(webhook_router)
+    app.include_router(gitlab_router)
 
     return app
 

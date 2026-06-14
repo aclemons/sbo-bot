@@ -6,9 +6,15 @@
 
 A webhook for requesting builds of Github PRs. See [github](github) for details.
 
-## Gitlab
+## Webhook API
 
-A webhook for requesting builds of Gitlab MRs. See [gitlab](gitlab) for details.
+An API for processing webhook requests. See [webhook-api](webhook-api) for
+details.
+
+Currently handles:
+
+- [gitlab](https://gitlab.com/SlackBuilds.org/slackbuilds) — requests builds of
+  Gitlab MRs.
 
 ## Scripts
 

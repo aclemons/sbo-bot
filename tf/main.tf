@@ -1,7 +1,7 @@
 locals {
-  project_name                = "sbobot"
-  githubapp_function_name     = "${local.project_name}-github-app"
-  gitlabwebhook_function_name = "${local.project_name}-gitlab-webhook"
+  project_name              = "sbobot"
+  githubapp_function_name   = "${local.project_name}-github-app"
+  webhook_api_function_name = "${local.project_name}-webhook-api"
 
   github_admins = [
     "Ponce",
@@ -91,7 +91,7 @@ resource "aws_ecr_lifecycle_policy" "sbo_bot" {
             "description": "Keep that last 2 git sha tagged images (last 2 merges to master).",
             "selection": {
                 "tagStatus": "tagged",
-                "tagPrefixList": ["gitlab-webhook-git"],
+                "tagPrefixList": ["webhook-api-git"],
                 "countType": "imageCountMoreThan",
                 "countNumber": 2
             },
@@ -170,9 +170,9 @@ resource "aws_ssm_parameter" "accounts_data" {
   }
 }
 
-resource "aws_ssm_parameter" "gitlab_webhook_env" {
-  name        = "/${local.project_name}/gitlab-webhook/env"
-  description = "Env file for gitlab webhook"
+resource "aws_ssm_parameter" "webhook_api_webhook_env" {
+  name        = "/${local.project_name}/webhook-api/env"
+  description = "Env file for webhook-api"
   type        = "SecureString"
   tier        = "Intelligent-Tiering"
   value       = "[]"
@@ -236,18 +236,18 @@ resource "aws_lambda_function_url" "github_app" {
 }
 
 
-resource "aws_cloudwatch_log_group" "sbo_bot_gitlab_webhook_lambda" {
-  name              = "/aws/lambda/${local.project_name}-gitlab-webhook"
+resource "aws_cloudwatch_log_group" "sbo_bot_webhook_api_lambda" {
+  name              = "/aws/lambda/${local.project_name}-webhook-api"
   retention_in_days = 14
 }
 
-resource "aws_lambda_function" "gitlabwebhook_lambda" {
-  function_name = local.gitlabwebhook_function_name
-  description   = "sbo-bot gitlab webhook"
+resource "aws_lambda_function" "webhook_api_lambda" {
+  function_name = local.webhook_api_function_name
+  description   = "sbo-bot webhook-api"
   role          = aws_iam_role.iam_for_sbo_bot_lambda.arn
 
   package_type = "Image"
-  image_uri    = "${aws_ecr_repository.sbo_bot.repository_url}:gitlab-webhook-${var.docker_image_version}"
+  image_uri    = "${aws_ecr_repository.sbo_bot.repository_url}:webhook-api-${var.docker_image_version}"
 
   timeout = 30
 
@@ -262,25 +262,25 @@ resource "aws_lambda_function" "gitlabwebhook_lambda" {
   }
 
   depends_on = [
-    aws_cloudwatch_log_group.sbo_bot_gitlab_webhook_lambda
+    aws_cloudwatch_log_group.sbo_bot_webhook_api_lambda
   ]
 }
 
-resource "aws_lambda_alias" "gitlab_current" {
+resource "aws_lambda_alias" "webhook_api_current" {
   name        = "current"
   description = "Current version of lambda"
 
-  depends_on = [aws_lambda_function.gitlabwebhook_lambda]
+  depends_on = [aws_lambda_function.webhook_api_lambda]
 
-  function_name    = local.gitlabwebhook_function_name
-  function_version = aws_lambda_function.gitlabwebhook_lambda.version
+  function_name    = local.webhook_api_function_name
+  function_version = aws_lambda_function.webhook_api_lambda.version
 }
 
-resource "aws_lambda_function_url" "gitlab_webhook" {
-  function_name      = aws_lambda_alias.gitlab_current.arn
+resource "aws_lambda_function_url" "webhook_api" {
+  function_name      = aws_lambda_alias.webhook_api_current.arn
   authorization_type = "NONE"
 
   depends_on = [
-    aws_lambda_function.gitlabwebhook_lambda
+    aws_lambda_function.webhook_api_lambda
   ]
 }

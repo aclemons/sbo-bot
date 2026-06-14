@@ -29,7 +29,7 @@ jobs:
 
       - name: Start docker compose base services
         run: |
-          nohup docker compose up -d --wait --quiet-pull github-local-api-gateway gitlab-local-api-gateway moto wiremock &
+          nohup docker compose up -d --wait --quiet-pull github-local-api-gateway webhook-api-local-api-gateway moto wiremock &
           echo "COMPOSE_PID=$!" >> "$GITHUB_ENV"
 
       - name: Install uv
@@ -37,7 +37,7 @@ jobs:
         with:
           version: ${{ env.UV_VERSION }}
           enable-cache: true
-          cache-dependency-glob: 'gitlab/uv.lock'
+          cache-dependency-glob: 'webhook-api/uv.lock'
 
       - name: Configure pre-commit repo cache
         uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
@@ -73,10 +73,10 @@ jobs:
 
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version-file: 'gitlab/.python-version'
+          python-version-file: 'webhook-api/.python-version'
 
       - name: Install python dependencies
-        working-directory: gitlab
+        working-directory: webhook-api
         run: |
           uv sync --all-extras --dev --frozen
 
@@ -98,18 +98,18 @@ jobs:
           tags: |
             sbobot/bot:github-app-latest
 
-      - name: Build gitlab-webhook
+      - name: Build webhook-api
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
-          cache-from: type=gha,scope=gitlabwebhook
-          context: gitlab
-          file: gitlab/Dockerfile
+          cache-from: type=gha,scope=webhook-api
+          context: webhook-api
+          file: webhook-api/Dockerfile
           load: true
           platforms: linux/arm64/v8
           provenance: false
           push: false
           tags: |
-            sbobot/bot:gitlab-webhook-latest
+            sbobot/bot:webhook-api-latest
 
       - name: Start remaining docker compose services
         run: |
@@ -124,7 +124,7 @@ jobs:
           pre-commit run --all-files --color=always --show-diff-on-failure
 
       - name: Run pytests
-        working-directory: gitlab
+        working-directory: webhook-api
         run: |
           uv run pytest
 

@@ -47,7 +47,7 @@ async def amain() -> None:
     with closing(cast("SSMClient", boto3.session.Session().client("ssm"))) as client:
         write_config(
             client=client,
-            parameter_name="/sbobot/gitlab-webhook/env",
+            parameter_name="/sbobot/webhook-api/env",
             target_file="/tmp/.env",  # noqa: S108
         )
 

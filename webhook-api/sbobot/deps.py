@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from sbobot.config import JenkinsConfiguration
-    from sbobot.parser import PayloadParserProtocol
+    from sbobot.gitlab.parser import PayloadParserProtocol
     from sbobot.state import State
 
 
@@ -40,7 +40,7 @@ async def get_jenkins_configuration(
     return state.jenkins_configuration
 
 
-async def get_payload_parser(
+async def get_gitlab_payload_parser(
     state: "State" = Depends(get_state),
 ) -> "PayloadParserProtocol":
-    return state.payload_parser
+    return state.gitlab_payload_parser

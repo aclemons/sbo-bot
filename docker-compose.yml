@@ -35,10 +35,10 @@ services:
       - 9011:8000
     extra_hosts:
       - 'gw:host-gateway'
-  gitlab:
-    image: sbobot/bot:gitlab-webhook-latest
+  webhook-api:
+    image: sbobot/bot:webhook-api-latest
     build:
-      context: gitlab
+      context: webhook-api
       dockerfile: Dockerfile
     ports:
       - 9002:8080
@@ -53,7 +53,7 @@ services:
       - AWS_SESSION_TOKEN=session
       - GITLAB_ADMINS=testadmin1,testadmin2
       - GITLAB_URL=http://gw:9100
-  gitlab-local-api-gateway:
+  webhook-api-local-api-gateway:
     image: bref/local-api-gateway:latest@sha256:825021fa792dc93577b627a0f42df36cf2b9d619bfb67b8df1e9c38572307c76
     environment:
       - TARGET=gw:9002

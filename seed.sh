@@ -12,7 +12,7 @@ WEBHOOK_SECRET=AL1lYqj3G6Va3DnhUNkXKU93EtdShteb
 EOF
 }
 
-build_gitlab_env() {
+build_webhook_api_env() {
   cat << EOF
 GITLAB_AUTH_TOKEN=glapikey-123456
 GITLAB_TOKEN=ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413
@@ -30,5 +30,5 @@ EOF
   export AWS_SESSION_TOKEN=session
 
   aws --no-cli-pager --endpoint-url=http://localhost:4566 ssm put-parameter --name /sbobot/github-app/env --type SecureString --value "$(build_github_env)"
-  aws --no-cli-pager --endpoint-url=http://localhost:4566 ssm put-parameter --name /sbobot/gitlab-webhook/env --type SecureString --value "$(build_gitlab_env)"
+  aws --no-cli-pager --endpoint-url=http://localhost:4566 ssm put-parameter --name /sbobot/webhook-api/env --type SecureString --value "$(build_webhook_api_env)"
 )
