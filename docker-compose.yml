@@ -1,6 +1,6 @@
 services:
   moto:
-    image: motoserver/moto:5.2.1@sha256:fe6575dcd878842124f05d20e4ffde2d1126e1e38ad03e196353b9e53649bcdf
+    image: motoserver/moto:5.2.2@sha256:d8ae5edc2bf080e7e4c13f9bd4b29b53ac3b4427e92956318db3dbe23ec43eb7
     command: ['-p', '4566', '-H', '0.0.0.0']
     environment:
       - TZ=UTC
