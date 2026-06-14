@@ -21,7 +21,7 @@ dev = [
   "pyright==1.1.410",
   "pytest==9.0.3",
   "pytest-env==1.6.0",
-  "ruff==0.15.15",
+  "ruff==0.15.16",
 ]
 
 [build-system]
