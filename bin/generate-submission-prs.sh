@@ -90,7 +90,7 @@ printf 'Syncing data...\n'
         . "$dir".info
 
         git add .
-        git commit --author "$maintainer <$email>" -m "$category/$PRGNAM: Added ($msg)." --no-verify
+        GIT_AUTHOR_NAME="$maintainer" GIT_AUTHOR_EMAIL="$email" git commit -m "$category/$PRGNAM: Added ($msg)." --no-verify
       )
     else
       printf 'Update for an existing script found %s => %s\n' "$package" "$found"
@@ -124,9 +124,9 @@ printf 'Syncing data...\n'
         if [ "$VERSION" = "$OLD_VERSION" ] ; then
           printf 'Looks like the version did not change. Please enter the commit message: '
           read -u 3 -r msg
-          git commit --author "$maintainer <$email>" -m "$category/$PRGNAM: $msg." --no-verify
+          GIT_AUTHOR_NAME="$maintainer" GIT_AUTHOR_EMAIL="$email" git commit -m "$category/$PRGNAM: $msg." --no-verify
         else
-          git commit --author "$maintainer <$email>" -m "$category/$PRGNAM: Updated for version $VERSION." --no-verify
+          GIT_AUTHOR_NAME="$maintainer" GIT_AUTHOR_EMAIL="$email" git commit -m "$category/$PRGNAM: Updated for version $VERSION." --no-verify
         fi
       )
     fi
