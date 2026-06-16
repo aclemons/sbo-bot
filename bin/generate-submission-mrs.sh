@@ -134,5 +134,30 @@ printf 'Syncing data...\n'
     )
 
     ssh -n slackbuilds@slackbuilds.org "mv ~/www/pending/$package.tar* ~/ARCHIVE/"
+
+    (
+      cd "$TMP_FOLDER/slackbuilds"
+      mr_number="$(GITLAB_TOKEN="$GITLAB_TOKEN" glab mr list --source-branch "$package-$checksum" --repo="$GIT_REPO" --output json | jq -r '.[].iid')"
+
+      printf 'Successfully created an MR for %s with number %s\n' "$category/$dir" "$mr_number"
+
+      printf "Would you like to schedule a build for %s: " "$category/$dir"
+
+      read -u 3 -r answer
+
+      if [ "$answer" = "y" ] || [ "$answer" = "yes" ] ; then
+        printf "I'll output the MR diff now. Please inspect it *carefully*:\n"
+
+        GITLAB_TOKEN="$GITLAB_TOKEN" glab mr diff --repo="$GIT_REPO" "$mr_number"
+
+        printf "Really queue builds? "
+
+        read -u 3 -r answer
+
+        if [ "$answer" = "y" ] || [ "$answer" = "yes" ] ; then
+          GITLAB_TOKEN="$GITLAB_TOKEN" glab mr note --repo="$GIT_REPO" "$mr_number" -m "@sbo-bot: build $category/$dir"
+        fi
+      fi
+    )
   done
 } 3<&0
