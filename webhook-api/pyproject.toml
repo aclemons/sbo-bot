@@ -7,7 +7,7 @@ requires-python = "==3.12.13"
 dependencies = [
   "aiohttp==3.14.1",
   "boto3==1.43.36",
-  "fastapi==0.138.0",
+  "fastapi==0.138.1",
   "orjson==3.11.9",
   "pyforgejo==2.0.7",
   "python-gitlab==8.4.0",
@@ -32,7 +32,7 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 exclude-newer = "7d"
-exclude-newer-package = { boto3 = "2026-06-28T12:00:00Z", boto3-stubs-lite = "2026-06-28T12:00:00Z", pyright = "2026-06-28T12:00:00Z", botocore = "2026-06-28T12:00:00Z", ruff = "2026-06-28T12:00:00Z" }
+exclude-newer-package = { boto3 = "2026-06-28T12:00:00Z", boto3-stubs-lite = "2026-06-28T12:00:00Z", pyright = "2026-06-28T12:00:00Z", botocore = "2026-06-28T12:00:00Z", ruff = "2026-06-28T12:00:00Z", fastapi = "2026-06-28T12:00:00Z" }
 
 [tool.pyright]
 reportMissingTypeStubs = "none"
