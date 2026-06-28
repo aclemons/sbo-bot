@@ -20,7 +20,7 @@ dependencies = [
 dev = [
   "boto3-stubs-lite[ssm]==1.43.36",
   "pyright==1.1.411",
-  "pytest==9.0.3",
+  "pytest==9.1.1",
   "pytest-asyncio==1.4.0",
   "pytest-env==1.6.0",
   "ruff==0.15.20",
@@ -32,7 +32,7 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 exclude-newer = "7d"
-exclude-newer-package = { boto3 = "2026-06-28T12:00:00Z", boto3-stubs-lite = "2026-06-28T12:00:00Z", pyright = "2026-06-28T12:00:00Z", botocore = "2026-06-28T12:00:00Z" }
+exclude-newer-package = { boto3 = "2026-06-28T12:00:00Z", boto3-stubs-lite = "2026-06-28T12:00:00Z", pyright = "2026-06-28T12:00:00Z", botocore = "2026-06-28T12:00:00Z", ruff = "2026-06-28T12:00:00Z" }
 
 [tool.pyright]
 reportMissingTypeStubs = "none"
