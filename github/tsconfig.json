@@ -4,6 +4,7 @@
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "forceConsistentCasingInFileNames": true,
+    "rootDir": "./src",
     "outDir": "./lib",
     "rewriteRelativeImportExtensions": true,
     "skipLibCheck": true,
