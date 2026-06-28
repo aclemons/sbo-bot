@@ -1,7 +1,7 @@
 import { buildCommentWebhookPayload, mockCommentAck } from '../../src/github';
 import { mockJenkinsSinglePrBuild } from '../../src/jenkins';
-import { beforeEach, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { WireMock } from 'wiremock-captain';
 
 describe('github webhook', () => {

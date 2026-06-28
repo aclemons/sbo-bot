@@ -1,5 +1,5 @@
 import js from '@eslint/js';
-import jestPlugin from 'eslint-plugin-jest';
+import vitest from '@vitest/eslint-plugin';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -30,7 +30,7 @@ const tsConfig = tseslint.config({
     ...tseslint.configs.stylisticTypeChecked,
     {
       files: ['tests/**'],
-      ...jestPlugin.configs['flat/all'],
+      ...vitest.configs['flat/all'],
     },
   ],
   languageOptions: {
@@ -38,9 +38,6 @@ const tsConfig = tseslint.config({
       tsconfigRootDir: import.meta.dirname,
       project: ['./tsconfig.json'],
     },
-  },
-  rules: {
-    'jest/no-hooks': 'off',
   },
 });
 
