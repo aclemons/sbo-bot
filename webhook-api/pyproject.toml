@@ -30,9 +30,9 @@ dev = [
 requires = ["hatchling==1.30.1"]
 build-backend = "hatchling.build"
 
-# [tool.uv]
-# exclude-newer = "7d"
-# exclude-newer-package = { ruff = "2026-06-18T19:30:00Z", boto3 = "2026-06-19T20:00:00Z", boto3-stubs-lite = "2026-06-19T21:00:00Z", botocore = "2026-06-19T20:00:00Z", s3transfer = "2026-06-16T20:00:00Z" }
+[tool.uv]
+exclude-newer = "7d"
+exclude-newer-package = { boto3 = "2026-06-28T12:00:00Z", boto3-stubs-lite = "2026-06-28T12:00:00Z", pyright = "2026-06-28T12:00:00Z", botocore = "2026-06-28T12:00:00Z" }
 
 [tool.pyright]
 reportMissingTypeStubs = "none"
