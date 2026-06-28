@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write src",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "lint-fix-pre-commit": "eslint --fix",

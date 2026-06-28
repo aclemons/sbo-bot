@@ -69,11 +69,17 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'npm'
           cache-dependency-path: |
+            github/package-lock.json
             e2e-tests/package-lock.json
 
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version-file: 'webhook-api/.python-version'
+
+      - name: Install github dependencies
+        working-directory: github
+        run: |
+          npm ci
 
       - name: Install python dependencies
         working-directory: webhook-api
@@ -122,6 +128,11 @@ jobs:
           # shellcheck source=/dev/null
           . ~/.pre-commit-venv/bin/activate
           pre-commit run --all-files --color=always --show-diff-on-failure
+
+      - name: Run TypeScript type-checks
+        run: |
+          npm run --prefix github typecheck
+          npm run --prefix e2e-tests typecheck
 
       - name: Run pytests
         working-directory: webhook-api
