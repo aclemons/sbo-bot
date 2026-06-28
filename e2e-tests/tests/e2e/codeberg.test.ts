@@ -4,8 +4,8 @@ import {
   mockCommentAckFailure,
 } from '../../src/codeberg';
 import { mockJenkinsSingleCodebergBuild } from '../../src/jenkins';
-import { beforeEach, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { WireMock } from 'wiremock-captain';
 
 describe('codeberg webhook', () => {
