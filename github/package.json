@@ -34,7 +34,7 @@
     "@trivago/prettier-plugin-sort-imports": "6.0.2",
     "@tsconfig/node-lts": "24.0.0",
     "@types/express": "5.0.6",
-    "@types/node": "24.13.2",
+    "@types/node": "24.13.3",
     "globals": "17.6.0",
     "prettier": "3.8.4",
     "typescript": "6.0.3",
