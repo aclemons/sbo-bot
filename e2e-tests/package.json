@@ -24,7 +24,7 @@
     "supertest": "7.2.2",
     "ts-node": "10.9.2",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.62.0",
+    "typescript-eslint": "8.62.1",
     "vitest": "4.1.9",
     "wiremock-captain": "4.1.3"
   },
