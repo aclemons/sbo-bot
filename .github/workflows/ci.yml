@@ -24,6 +24,10 @@ jobs:
           show-progress: false
           persist-credentials: false
 
+      # tests our custom action during renovate updates etc
+      - name: Setup opentofu
+        uses: ./.github/actions/setup-opentofu
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
 
