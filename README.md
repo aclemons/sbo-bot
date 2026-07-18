@@ -13,13 +13,15 @@ details.
 
 Currently handles:
 
+- [codeberg](https://codeberg.org/SlackBuildsOrg/slackbuilds) — requests builds
+  of Codeberg PRs.
 - [gitlab](https://gitlab.com/SlackBuilds.org/slackbuilds) — requests builds of
   Gitlab MRs.
 
 ## Scripts
 
-In [bin](bin), there are some scripts for generating PRs on github or MRs on
-gitlab for submission tarballs uploaded on slackbuilds.org.
+In [bin](bin), there are some scripts for generating PRs on github or codeberg
+or MRs on gitlab for submission tarballs uploaded on slackbuilds.org.
 
 ## License
 
