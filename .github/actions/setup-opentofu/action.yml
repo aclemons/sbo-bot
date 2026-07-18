@@ -1,0 +1,67 @@
+name: Setup OpenTofu
+description: Setup opentofu.
+runs:
+  using: composite
+  steps:
+    - name: Validate version from tf/.opentofu-version
+      id: load
+      shell: bash
+      run: |
+        set -e
+
+        tofu_version="$(head -n1 tf/.opentofu-version | tr -d '\r')"
+        if [[ ! "$tofu_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z]+)*$ ]]; then
+          printf "Invalid TOFU_VERSION in tf/.opentofu-version: '%s'\n" "$tofu_version" >&2
+          exit 1
+        fi
+
+        printf "tofu_version=%s\n" "$tofu_version" >> "$GITHUB_OUTPUT"
+
+    - name: Setup opentofu
+      uses: opentofu/setup-opentofu@a1320f892987e89d278cc92dc5adc984fb93aca4 # v2.0.2
+      with:
+        tofu_version: ${{ steps.load.outputs.tofu_version }}
+        tofu_wrapper: false
+        # values from:
+        # https://github.com/opentofu/opentofu/releases/download/v${version}/tofu_${version}_SHA256SUMS
+        checksums: |
+          0a70d1f598266e8598dad5f8a32dafaeab8e9ce3f65be2ca72437b0733705d61
+          1695fe3bd9ff34cd64fbbb41113453b140019a7c1d6df30ce7c5e9a5275fd31a
+          16a8d272e368c8e4fdb5c665fb9dbb4bc89b505cf32895bc4d81c21dfd6beda9
+          2803313c74870e81d52131e3468bde227770f4dfcdbae1992e8b968a4457b29d
+          2d66e39670ede771cc50383ec009983d6c30bc5f1153ddd09654269419dee029
+          321b3c0b5dab0030faa0722e9f717f42ab0ff38f43ee933fb4bff782d3072947
+          323fc57e8dbb648d9061f54191d0df0404bdcdc474e5fef5a4b65c3ba84879f7
+          3bab47a45e012d3c6fadf73212db543139307b37e94210f854a2743a4fa5b5b3
+          3bc49a5802265b1345aba1be33266385ac2421548b3c08c7b56201566debd34a
+          49930ab805bcacd7fd9073fdf474cd9e13fb55a24100312d1f51ee8817593018
+          699e2261536e316d45964bd01fd11e3b02d91c3a51955c67a3abab69c4c9d0ad
+          7004fffb813b77bc262941141d056115df674254264472c1b850ee6257490cba
+          7a0ed09288fe98dc8114f93d2633837e0dc04efaa77a3284624f3dca634001ac
+          7c06e4390d9ccd467773e37ff1c3d833c7ca0c24742cd9e9ad47284bea472247
+          7d4c43f0cba5d4207fdafeaac0c4e2a46c79fa92ff520fd65ad2f149d3ede779
+          7d73ba5e0bb229f5115f1fdb57b6560d17d25826f7a81f396588a90b6be17695
+          81836d0f12b4fe9013b85586349f993def9429b6383bb77cdd6c2f3a9d9aac24
+          8824a37a1aee0a826889b63145f1aa6181395b206237576d2b17ea89703388de
+          8cc8bebdc33dfd45142822dec1c581d1b3e51f3e7bbc9c47daa3a4f72def079b
+          90bdac91e3d163711f50a149cc88daa9843d9df7831f49424f4cc7cf3166d796
+          97f8c3e6261cd60df24957f680d5e4d449807947e876bd4e57d407894693493e
+          a3b01db857c7c650768ffa8ad9119dc2db82fe1b98125b7238392a160aca7f8a
+          a4af0eb473526caf5bdf6d79371cf493acb4fc00c41aa3ea3abe70eb46a23d70
+          a4d86a07755c8d151f20f945e6cfb5b40deeed942af36a9bd385c5c2e965d5dd
+          ad6f200bd8422cb00204990011c8a04927cd04f17bcb9060c18030efa0a52749
+          b216af61ee1029c19f5d8a5053c2ab67caceee76739f2b7d5ef5039d3e6d7745
+          b4f8f3b7f7e51a6d50e1976381281582793700b60ca4be60c8613e26f8d3a704
+          bfef0dc78bc5f3343e9a2a33a6c144bccf7496f7e8ba4bd4963952873bb57266
+          c6f56f10d4a671892400991f313df568a89ccc37f83105ec0f20cede5347e953
+          cb24c6d54bf8c6dca4e491c172d2878414c6e8dad315ebd7093e97b7919b221f
+          d3d3b11fdf5e4d43b94c7d185b3a1e6e2ab6f73dd159cb0fffa64add2f8efc75
+          dc7bfcd93ce9795a86c58fbf71efd013c39dcd1febb13c9cd3555c43b9c2403a
+          e5e8db9c2dd2c657a8b46931e41cd8dd1d89e5a30aebd742f4f8eafcf1815a35
+          ea95fcb928d566f4a8ef86167e57957b10b34d8f4aa424bc4f1a7bd6ec4b3fc5
+          ead1d2ce643addb4ffeb93240b9377ae1c2fd793a6bd22d65922ac37adfdf546
+          f5d2ae8a0efcddd3722546b3e0f2f2f0648ce5e5a3e411176041adcb7dccc1e8
+          fb2ab41e3349d0fa9fb123b1f68d873adcefb52946a9abe9aa56b2ead1fdc4f0
+          fc75647269efcd34c76d6c356f2d9b2afdef8668d8a35a80dc2ea3df81068ba3
+          fde6c269b441e1b4ff5a2890960d78f9b4320fba7549916863b839f7f9b52574
+          ff4d49559157697b4e3651868aead7ce0e85744242e1b60679f29d6ddc777a45
