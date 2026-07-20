@@ -125,7 +125,7 @@ printf 'Syncing data...\n'
       pr_output="$(fj -H codeberg.org pr create --repo="$GIT_REPO" --base master --head "$package-$checksum" --autofill)"
       printf '%s\n' "$pr_output"
 
-      pr_number="$(printf '%s' "$pr_output" | grep -oE 'pulls/[0-9]+' | grep -oE '[0-9]+' | head -n1 || true)"
+      pr_number="$(fj -H codeberg.org pr search --repo="$GIT_REPO" --state open | sed 1d | sed -n 1p | cut -d: -f1 | sed 's/#//' || true)"
       if [ -n "$pr_number" ] ; then
         fj -H codeberg.org pr edit "$pr_number" labels -a submission-form \
           || printf 'Could not add the submission-form label. Please add it to PR %s manually.\n' "$pr_number"
