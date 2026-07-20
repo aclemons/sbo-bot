@@ -8,6 +8,10 @@ locals {
     "chris_willing",
   ]
 
+  codeberg_contributors = [
+    "ArTourter"
+  ]
+
   github_admins = [
     "Ponce",
     "aclemons",
@@ -262,8 +266,9 @@ resource "aws_lambda_function" "webhook_api_lambda" {
 
   environment {
     variables = {
-      CODEBERG_ADMINS = join(",", local.codeberg_admins)
-      GITLAB_ADMINS   = join(",", local.gitlab_admins)
+      CODEBERG_ADMINS       = join(",", local.codeberg_admins)
+      CODEBERG_CONTRIBUTORS = join(",", local.codeberg_contributors)
+      GITLAB_ADMINS         = join(",", local.gitlab_admins)
     }
   }
 
