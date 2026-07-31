@@ -23,6 +23,37 @@ if ! command -v glab > /dev/null 2>&1 ; then
   exit 1
 fi
 
+wait_for_pipeline() {
+  local mr="$1"
+
+  printf "Waiting for pipeline"
+
+  while true; do
+    local status
+
+    status=$(glab mr view "$mr" --web=false --output=json | jq -r '.head_pipeline.status // "none"')
+
+    case "$status" in
+      success)
+        printf "\nPipeline passed.\n"
+        return 0
+        ;;
+      failed|canceled)
+        printf "\nPipeline %s, aborting.\n" "$status"
+        return 1
+        ;;
+      none)
+        printf "\nNo pipeline found, aborting.\n"
+        return 1
+        ;;
+      *)
+        printf "."
+        sleep 10
+        ;;
+    esac
+  done
+}
+
 mr="$1"
 
 if [ -z "$mr" ] ; then
@@ -34,6 +65,7 @@ glab mr diff "$mr"
 glab mr view "$mr" --comments
 
 read -r approve
+
 if [ "$approve" != "y" ] ; then
    exit 0
 fi
@@ -44,16 +76,31 @@ git commit --amend --no-verify
 glab mr update "$mr" --target-branch gitlab
 
 glab mr approve "$mr"
-glab mr note "$mr" -m "LGTM"
+glab mr note create "$mr" -m "LGTM" --resolvable
 
-source_branch=$(glab mr view "$mr" --web=false --output=json | jq -r .source_branch)
-git push gitlab HEAD:"$source_branch" -f
+mr_json=$(glab mr view "$mr" --web=false --output=json)
+source_branch=$(echo "$mr_json" | jq -r .source_branch)
+source_project_id=$(echo "$mr_json" | jq -r .source_project_id)
+target_project_id=$(echo "$mr_json" | jq -r .target_project_id)
 
-git push origin gitlab
+if [ "$source_project_id" = "$target_project_id" ]; then
+  git push gitlab HEAD:"$source_branch" -f
 
-echo "Waiting for pipeline..."
-sleep 45
+  git push origin gitlab
 
-glab mr merge "$mr" --rebase --remove-source-branch --yes --auto-merge=false
+  wait_for_pipeline "$mr"
+
+  glab mr merge "$mr" --rebase --remove-source-branch --yes --auto-merge=false
+else
+  glab mr rebase "$mr"
+
+  wait_for_pipeline "$mr"
+
+  glab mr merge "$mr" --yes --auto-merge=false
+
+  git push gitlab HEAD:gitlab -f
+
+  git push origin gitlab
+fi
 
 git remote update --prune gitlab
