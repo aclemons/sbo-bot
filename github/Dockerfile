@@ -68,6 +68,7 @@ FROM public.ecr.aws/awsguru/aws-lambda-adapter:1.0.1@sha256:1e5ab4d9242167500ed8
 
 FROM node-base AS builder
 WORKDIR /usr/src/app
+# hadolint ignore=DL3066
 USER node
 
 RUN npm config set update-notifier false
@@ -90,6 +91,7 @@ FROM node-base
 COPY --link --from=aws-lambda-adapter /lambda-adapter /opt/extensions/lambda-adapter
 
 WORKDIR /usr/src/app
+# hadolint ignore=DL3066
 USER node
 
 COPY lambda-entrypoint.sh /lambda-entrypoint.sh
