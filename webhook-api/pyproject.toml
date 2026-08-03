@@ -32,7 +32,7 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 exclude-newer = "7d"
-exclude-newer-package = { boto3 = "2026-07-18T00:00:00Z", boto3-stubs-lite = "2026-07-18T00:00:00Z", botocore = "2026-07-18T00:00:00Z", ruff = "2026-07-17T00:00:00Z" }
+exclude-newer-package = { ruff = "2026-07-23T20:10:46Z" }
 
 [tool.pyright]
 reportMissingTypeStubs = "none"
@@ -58,6 +58,7 @@ lint.ignore = [
  "E501", # black handles long line wrapping
  "COM812", # conflicts with ruff format
  "ISC001", # conflicts with ruff format
+ "CPY001", # no copyright notices in every file.
 ]
 target-version = "py312"
 
