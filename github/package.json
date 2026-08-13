@@ -37,7 +37,7 @@
     "@types/node": "24.13.3",
     "globals": "17.9.0",
     "prettier": "3.9.6",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "typescript-eslint": "8.65.0"
   },
   "engines": {
