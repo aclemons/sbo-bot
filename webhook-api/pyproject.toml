@@ -12,7 +12,7 @@ dependencies = [
   "pyforgejo==2.0.7",
   "python-gitlab==8.5.0",
   "structlog==26.1.0",
-  "uvicorn[standard]==0.52.1",
+  "uvicorn[standard]==0.52.4",
   "yarl==1.24.5",
 ]
 
