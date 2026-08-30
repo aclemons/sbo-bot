@@ -23,7 +23,7 @@ dev = [
   "pytest==9.1.1",
   "pytest-asyncio==1.4.0",
   "pytest-env==1.7.0",
-  "ruff==0.16.1",
+  "ruff==0.16.4",
 ]
 
 [build-system]
