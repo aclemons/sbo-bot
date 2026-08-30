@@ -16,7 +16,7 @@ jobs:
       # renovate: datasource=github-releases depName=docker/buildx
       BUILDX_VERSION: 'v0.36.1'
       # renovate: datasource=pypi depName=pre-commit
-      PRE_COMMIT_VERSION: '4.6.1'
+      PRE_COMMIT_VERSION: '4.6.2'
       # renovate: datasource=pypi depName=uv
       UV_VERSION: '0.12.3'
 
