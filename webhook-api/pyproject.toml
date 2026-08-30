@@ -32,7 +32,6 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 exclude-newer = "7d"
-exclude-newer-package = { ruff = "2026-08-09T20:00:00Z" }
 
 [tool.pyright]
 reportMissingTypeStubs = "none"
