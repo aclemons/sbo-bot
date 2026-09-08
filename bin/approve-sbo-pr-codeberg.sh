@@ -60,7 +60,7 @@ if [ "$pr_author" = "$current_user" ] ; then
 else
   curl -f -s "https://codeberg.org/api/v1/repos/SlackBuildsOrg/slackbuilds/pulls/$pr/reviews" \
        -H "Authorization: token $CODEBERG_TOKEN" \
-       --json '{"body": "LGTM", "event": "approve"}' | jq
+       --json '{"body": "LGTM", "event": "APPROVED"}' | jq
 fi
 
 git push origin && git push codeberg
