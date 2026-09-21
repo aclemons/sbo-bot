@@ -47,7 +47,11 @@ pr_author="$(curl -f -s "https://codeberg.org/api/v1/repos/SlackBuildsOrg/slackb
      -H "Authorization: token $CODEBERG_TOKEN" | jq -r .user.login)"
 
 fj -H codeberg.org pr view "$pr" diff --patch | git am -s
-git commit --amend
+if [ "$(git rev-list --count origin/codeberg..HEAD)" -gt 1 ] ; then
+  GIT_SEQUENCE_EDITOR="sed -i '1s/^pick/r/'" git rebase -i origin/codeberg
+else
+  git commit --amend
+fi
 
 curl -f -s -X PATCH "https://codeberg.org/api/v1/repos/SlackBuildsOrg/slackbuilds/pulls/$pr" \
      -H "Authorization: token $CODEBERG_TOKEN" \
