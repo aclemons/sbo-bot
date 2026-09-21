@@ -1,6 +1,28 @@
 #!/bin/bash
 
 # Open MRs for slackbuilds submitted via the form on the slackbuilds.org website.
+#
+# This script needs a gitlab token. You can put it in the env when invoking the script. For example:
+#
+# GITLAB_TOKEN=$(pass gitlab-pat) ./bin/generate-submission-mrs.sh
+#
+# You can also put it in a file called `.env` in the root of the project (it is
+# gitignored) as:
+#
+# GITLAB_TOKEN=tokenvalue
+#
+# In eithe case, you need to create the token in the gitlab ui. Create a fine
+# grained token with these permissions:
+#
+# Group and project access
+#  SlackBuilds.org
+#   Repository
+#    Branch: Create
+#    Code: Read, Push
+#    Merge Request: Create, Update, Read
+# User Permissions
+#  System Access
+#   User: Read
 
 set -e
 set -o pipefail
@@ -40,6 +62,7 @@ printf 'Syncing data...\n'
 
   cd slackbuilds
   git config --local commit.gpgsign false
+  git remote set-url origin "https://gitlab-ci-token:$GITLAB_TOKEN@gitlab.com/$GIT_REPO.git"
 )
 
 {
@@ -129,15 +152,15 @@ printf 'Syncing data...\n'
 
     (
       cd "$TMP_FOLDER/slackbuilds"
-      git push --set-upstream "https://gitlab-ci-token:$GITLAB_TOKEN@gitlab.com/$GIT_REPO.git" HEAD
-      GITLAB_TOKEN="$GITLAB_TOKEN" glab mr create --source-branch "$package-$checksum" --repo="$GIT_REPO" --label submission-form --fill --yes
+      git push --set-upstream origin HEAD
+      glab mr create --source-branch "$package-$checksum" --label submission-form --fill --yes
     )
 
     ssh -n slackbuilds@slackbuilds.org "mv ~/www/pending/$package.tar* ~/ARCHIVE/"
 
     (
       cd "$TMP_FOLDER/slackbuilds"
-      mr_number="$(GITLAB_TOKEN="$GITLAB_TOKEN" glab mr list --source-branch "$package-$checksum" --repo="$GIT_REPO" --output json | jq -r '.[].iid')"
+      mr_number="$(glab mr list --source-branch "$package-$checksum" --repo="$GIT_REPO" --output json | jq -r '.[].iid')"
 
       printf 'Successfully created an MR for %s with number %s\n' "$category/$dir" "$mr_number"
 
@@ -148,14 +171,14 @@ printf 'Syncing data...\n'
       if [ "$answer" = "y" ] || [ "$answer" = "yes" ] ; then
         printf "I'll output the MR diff now. Please inspect it *carefully*:\n"
 
-        GITLAB_TOKEN="$GITLAB_TOKEN" glab mr diff --repo="$GIT_REPO" "$mr_number"
+        glab mr diff --repo="$GIT_REPO" "$mr_number"
 
         printf "Really queue builds? "
 
         read -u 3 -r answer
 
         if [ "$answer" = "y" ] || [ "$answer" = "yes" ] ; then
-          GITLAB_TOKEN="$GITLAB_TOKEN" glab mr note create --repo="$GIT_REPO" "$mr_number" -m "@sbo-bot: build $category/$dir"
+          glab mr note create --repo="$GIT_REPO" "$mr_number" -m "@sbo-bot: build $category/$dir"
         fi
       fi
     )
