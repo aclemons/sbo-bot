@@ -13,7 +13,7 @@ dependencies = [
   "python-gitlab==8.5.0",
   "structlog==26.1.0",
   "uvicorn[standard]==0.53.0",
-  "yarl==1.24.5",
+  "yarl==1.25.1",
 ]
 
 [dependency-groups]
