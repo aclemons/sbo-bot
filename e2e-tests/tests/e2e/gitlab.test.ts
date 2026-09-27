@@ -33,7 +33,7 @@ describe('gitlab webhook', () => {
         const res = await supertest('http://localhost:9012')
           .post('/gitlab/webhook')
           .set('x-gitlab-token', '123456')
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
           .send(payload);
 
         expect(res.statusCode).toBe(204);
@@ -55,7 +55,7 @@ describe('gitlab webhook', () => {
         const res = await supertest('http://localhost:9012')
           .post('/gitlab/webhook')
           .set('x-gitlab-token', '123456')
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
           .send(payload);
 
         expect(res.statusCode).toBe(204);
@@ -80,7 +80,7 @@ describe('gitlab webhook', () => {
         const res = await supertest('http://localhost:9012')
           .post('/gitlab/webhook')
           .set('x-gitlab-token', '123456')
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
           .send(payload);
 
         expect(res.statusCode).toBe(204);
@@ -101,7 +101,7 @@ describe('gitlab webhook', () => {
         const res = await supertest('http://localhost:9012')
           .post('/gitlab/webhook')
           .set('x-gitlab-token', '123456')
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
           .send(payload);
 
         expect(res.statusCode).toBe(204);
