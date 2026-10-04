@@ -5,7 +5,7 @@ terraform {
     region  = "eu-central-1"
     encrypt = true
 
-    dynamodb_table = "caffe-terraform"
+    use_lockfile = true
   }
 
   required_providers {
