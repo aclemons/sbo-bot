@@ -15,7 +15,7 @@ terraform {
     }
   }
 
-  required_version = "1.12.6"
+  required_version = "1.12.7"
 }
 
 provider "aws" {
