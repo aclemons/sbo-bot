@@ -5,7 +5,7 @@ description = ""
 requires-python = "==3.12.14"
 
 dependencies = [
-  "aiohttp==3.14.3",
+  "aiohttp==3.14.5",
   "boto3==1.43.103",
   "fastapi==0.143.0",
   "orjson==3.12.0",
