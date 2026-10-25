@@ -22,7 +22,7 @@ dev = [
   "pyright==1.1.414",
   "pytest==9.1.1",
   "pytest-asyncio==1.4.0",
-  "pytest-env==1.8.0",
+  "pytest-env==1.8.1",
   "ruff==0.16.10",
 ]
 
