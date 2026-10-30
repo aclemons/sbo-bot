@@ -23,6 +23,8 @@ if ! command -v fj > /dev/null 2>&1 ; then
   exit 1
 fi
 
+REMOTE=${REMOVE:-codeberg}
+
 pr="$1"
 
 if [ -z "$pr" ] ; then
@@ -30,8 +32,8 @@ if [ -z "$pr" ] ; then
   exit 1
 fi
 
-fj -H codeberg.org pr view "$pr" diff | bat --paging=always
-fj -H codeberg.org pr view "$pr" comments
+fj -H codeberg.org pr --remote "$REMOTE" view "$pr" diff | bat --paging=always
+fj -H codeberg.org pr --remote "$REMOTE" view "$pr" comments
 
 read -r approve
 
@@ -46,7 +48,7 @@ current_user="$(curl -f -s "https://codeberg.org/api/v1/user" \
 pr_author="$(curl -f -s "https://codeberg.org/api/v1/repos/SlackBuildsOrg/slackbuilds/pulls/$pr" \
      -H "Authorization: token $CODEBERG_TOKEN" | jq -r .user.login)"
 
-fj -H codeberg.org pr view "$pr" diff --patch | git am -s
+fj -H codeberg.org pr --remote "$REMOTE" view "$pr" diff --patch | git am -s
 if [ "$(git rev-list --count origin/codeberg..HEAD)" -gt 1 ] ; then
   GIT_SEQUENCE_EDITOR="sed -i '1s/^pick/r/'" git rebase -i origin/codeberg
 else
@@ -67,7 +69,7 @@ else
        --json '{"body": "LGTM", "event": "APPROVED"}' | jq
 fi
 
-git push origin && git push codeberg
+git push origin HEAD:codeberg && git push codeberg HEAD:codeberg
 
 sha="$(git rev-parse HEAD)"
 curl -f -s "https://codeberg.org/api/v1/repos/SlackBuildsOrg/slackbuilds/pulls/$pr/merge" \
