@@ -19,7 +19,7 @@
     "@types/node": "24.19.2",
     "@types/supertest": "7.2.1",
     "@vitest/eslint-plugin": "1.6.28",
-    "globals": "17.13.0",
+    "globals": "17.14.0",
     "prettier": "3.9.10",
     "supertest": "7.3.1",
     "ts-node": "10.9.2",
