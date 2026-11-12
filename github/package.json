@@ -34,13 +34,13 @@
     "@trivago/prettier-plugin-sort-imports": "6.0.2",
     "@tsconfig/node-lts": "24.0.1",
     "@types/express": "5.0.6",
-    "@types/node": "24.19.2",
+    "@types/node": "26.6.6",
     "globals": "17.14.0",
     "prettier": "3.9.10",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.1"
   },
   "engines": {
-    "node": "24.22.2"
+    "node": "26.13.0"
   }
 }
