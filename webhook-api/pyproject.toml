@@ -18,7 +18,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-  "boto3-stubs-lite[ssm]==1.43.126",
+  "boto3-stubs-lite[ssm]==1.44.3",
   "pyright==1.1.414",
   "pytest==9.2.0",
   "pytest-asyncio==1.4.1.post1",
